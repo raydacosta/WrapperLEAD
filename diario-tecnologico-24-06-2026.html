@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 24/06/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+      font-size: 17px;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    .radar-java ul {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0 20px;
+    }
+
+    .radar-java ul li {
+      color: #a7f3d0;
+      opacity: 0.85;
+      padding: 6px 0 6px 20px;
+      position: relative;
+      font-size: 15px;
+    }
+
+    .radar-java ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: #34d399;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section {
+      opacity: 0.75;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(20%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-top: 24px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 24 de junho de 2026</div>
+      <h1>Diário Tecnológico — 24 de junho de 2026</h1>
+      <p class="excerpt">Spring AI 2.0 GA chegou em 12/06 e muda o stack Java para IA de vez. Helidon 4.4 sobe LangChain4j 1.11 com agentes nativos. EU AI Act aperta o prazo: agosto 2026 está batendo à porta.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-green">LangChain4j</span>
+        <span class="tag tag-amber">Spring AI</span>
+        <span class="tag tag-red">Anthropic</span>
+        <span class="tag tag-cyan">MCP</span>
+        <span class="tag tag-violet">Agentes</span>
+        <span class="tag tag-amber">EU AI Act</span>
+        <span class="tag tag-green">RAG</span>
+        <span class="tag tag-red">FinOps</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Para quem trabalha no cruzamento entre Java e IA aplicada, essa semana está sendo particularmente densa. Há doze dias, em 12 de junho, o Spring AI 2.0 chegou ao status GA — General Availability — trazendo uma mudança de paradigma que ainda está sendo digerida pela maioria dos times. Não se trata de mais uma atualização incremental: o ecossistema Spring decidiu tratar agentes de IA como cidadãos de primeira classe, não como uma camada de integração colada por cima de um framework que foi feito para outra coisa. Isso tem impacto direto em como vamos estruturar os próximos projetos na Wrapper Sistemas.</p>
+      <p>No lado dos modelos, a Anthropic continua num ritmo de lançamentos que não dá folga. O Claude Opus 4.8, lançado em 28 de maio, passou as últimas semanas sendo testado por times de automação corporativa, e os dois recursos que mais têm chamado atenção são o sistema de <strong>Dynamic Workflows</strong> no Claude Code e o controle granular de esforço computacional — ambos com impacto direto em custo e arquitetura de agentes.</p>
+      <p>No campo regulatório, agosto de 2026 não é mais um horizonte distante. As regras de transparência do EU AI Act entram em vigor em questão de semanas, e cada empresa que processa dados de usuários europeus com sistemas de IA precisa ter sua documentação, logs de decisão e comunicações ao usuário final alinhadas com o regulamento. Esse é o tipo de coisa que time técnico procrastina e time jurídico lembra tarde demais.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1: Spring AI 2.0 GA -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Spring AI 2.0 GA — o stack Java para IA chegou à maturidade</h3>
+        <p>Em 12 de junho de 2026, o Spring lançou a versão 2.0 em General Availability. Para quem acompanha o ecossistema Java, é um marco comparável ao lançamento do Spring Boot: uma mudança de paradigma que vai levar tempo para ser totalmente absorvida, mas cujas implicações são claras desde agora. A maior mudança estrutural é a incorporação do <strong>MCP (Model Context Protocol) ao core do framework</strong>. As anotações <code>@McpTool</code> e <code>@McpToolParam</code> não são mais de um módulo opcional — fazem parte do Spring AI Core. Isso significa que integrar ferramentas em agentes Spring virou quase tão simples quanto criar um <code>@RestController</code>, com a mesma familiaridade que o ecossistema Spring já oferece.</p>
+        <p>O Spring AI 2.0 também consolidou dois protocolos emergentes como abstrações estáveis: o <strong>ACP (Agent Client Protocol)</strong>, que padroniza a comunicação cliente-agente, e o <strong>A2A (Agent-to-Agent)</strong>, que habilita colaboração direta entre agentes. A inclusão nativa de spans Micrometer e métricas OpenTelemetry para interações MCP é outro sinal de que o framework está mirando produção de verdade, não apenas prototipagem. O meu aviso para times Java: não pulem para o 2.0 sem ler a nova API de Advisors e entender o modelo de memória — quem migrar com pressa vai criar débito técnico que vai doer.</p>
+        <a class="card-source" href="https://spring.io/blog/2026/06/12/spring-ai-2-0-0-GA-available-now/" target="_blank" rel="noopener">🔗 Spring Blog — Spring AI 2.0.0 GA Available Now</a>
+      </div>
+
+      <!-- DESTAQUE 2: Claude Opus 4.8 Dynamic Workflows -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Claude Opus 4.8 — Dynamic Workflows e controle de custo em agentes</h3>
+        <p>O Claude Opus 4.8, lançado pela Anthropic em 28 de maio, está completando um mês em produção, e os relatos de quem trabalha com automação de tarefas complexas estão consistentes: o sistema de <strong>Dynamic Workflows no Claude Code</strong> é genuinamente útil para problemas de grande escala. A ideia é simples na superfície — um agente orquestrador pode disparar dezenas ou centenas de subagentes em paralelo — mas a execução estável disso em escala não é trivial. O Opus 4.8 também introduziu o controle explícito de esforço computacional: o modelo pode ser calibrado para gastar mais ou menos processamento antes de responder, o que tem impacto direto no custo por requisição.</p>
+        <p>O <strong>Fast Mode</strong> do Opus 4.8 opera a 2,5× a velocidade da versão anterior, por um terço do preço — o que começa a tornar o modelo viável para fluxos de maior volume onde antes só os modelos menores cabiam no orçamento. O contexto de <strong>1 milhão de tokens por padrão</strong> (disponível na API Anthropic, Amazon Bedrock e Vertex AI) continua sendo o diferencial mais concreto para RAG com documentos extensos, análise de codebases grandes ou workflows que precisam manter histórico longo de interações. Para quem ainda está no Opus 4.7, vale avaliar a migração — a Anthropic manteve o mesmo preço base.</p>
+        <a class="card-source" href="https://www.anthropic.com/news/claude-opus-4-8" target="_blank" rel="noopener">🔗 Anthropic — Introducing Claude Opus 4.8</a>
+      </div>
+
+      <!-- DESTAQUE 3: Helidon 4.4 + LangChain4j 1.11 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Helidon 4.4 + LangChain4j 1.11 — a Oracle entra sério no jogo dos agentes Java</h3>
+        <p>Em abril de 2026, a Oracle lançou o Helidon 4.4, e o ponto mais relevante para o ecossistema Java-IA é a integração aprofundada com o <strong>LangChain4j 1.11</strong>. Não é só uma atualização de versão: o Helidon 4.4 adiciona dois padrões de execução agentic nativos — <strong>workflows programáticos</strong>, para orquestrar múltiplos agentes com controle explícito de fluxo, e <strong>dynamic agents</strong>, um supervisor agent pronto para uso que gerencia subagentes automaticamente. O suporte ao MCP 1.1 também foi atualizado, com compatibilidade com o mecanismo de Elicitation — onde um servidor MCP pode solicitar input estruturado adicional ao cliente durante o processamento de uma requisição, o que abre caminho para diálogos agênticos mais sofisticados.</p>
+        <p>Para equipes que já operam com Helidon em microserviços sobre Oracle Cloud, esse release elimina uma parte significativa da fricção de adoção de IA. A pergunta deixa de ser "como integro IA no meu stack Oracle?" e passa a ser "qual padrão agentic faz sentido para o meu caso de uso?". O LangChain4j 1.11 suporta mais de 20 providers de LLM e mais de 30 embedding stores — cobertura de cenários enterprise bastante ampla.</p>
+        <a class="card-source" href="https://medium.com/helidon/helidon-4-4-0-released-d10be2fb8039" target="_blank" rel="noopener">🔗 Helidon Blog — Helidon 4.4.0 Released</a>
+        <a class="card-source" href="https://www.infoq.com/news/2026/04/helidon-4-4-released/" target="_blank" rel="noopener" style="margin-left: 16px;">🔗 InfoQ — Helidon 4.4 Released</a>
+      </div>
+
+      <!-- DESTAQUE 4: EU AI Act -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>EU AI Act — agosto 2026 não é mais distante, é agora</h3>
+        <p>Em 7 de maio de 2026, um acordo político foi alcançado sobre o chamado <strong>"AI omnibus"</strong> — um conjunto de propostas para simplificar e racionalizar a implementação do Regulamento de IA europeu. A boa notícia é que houve simplificação. A notícia que muita empresa ainda não processou: as regras de <strong>transparência do EU AI Act entram em vigor em agosto de 2026</strong>. Isso não é o horizonte de 2027 ou 2028 que costuma aparecer nas apresentações de compliance — é em dois meses.</p>
+        <p>Para empresas que operam em contextos B2B com clientes europeus ou que têm operações na Europa, as obrigações de transparência cobrem uma faixa mais ampla do que os "sistemas de alto risco". Comunicar ao usuário final que está interagindo com um sistema de IA, manter rastreabilidade de decisões automatizadas e ter documentação técnica acessível já são requisitos concretos. Além disso, cada Estado-Membro da UE deve estabelecer pelo menos uma sandbox regulatória de IA a nível nacional até 2 de agosto de 2026 — o que vai gerar movimentação de oportunidade para empresas que quiserem testar soluções num ambiente regulado antes do enforcement completo.</p>
+        <a class="card-source" href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">🔗 Comissão Europeia — EU AI Act</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar — priorizados pelo impacto prático para quem trabalha com sistemas Java e IA corporativa:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🌱</span>
+          <h3>Spring AI 2.0 Migration Guide</h3>
+          <p>Quem já usa Spring AI 1.x precisa entender as quebras de API antes de migrar. A documentação oficial detalha a nova API de Advisors, o modelo de memória e as mudanças no ChatClient.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔌</span>
+          <h3>MCP Spec 2025-11-25 (com Elicitation)</h3>
+          <p>A versão mais recente da especificação do Model Context Protocol inclui o mecanismo de Elicitation, já suportado no Helidon 4.4. Entender a spec antes do framework é a abordagem certa.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🤝</span>
+          <h3>A2A (Agent-to-Agent Protocol)</h3>
+          <p>Protocolo emergente para comunicação direta entre agentes, já integrado ao Spring AI 2.0. Vai ser padrão de facto em arquiteturas multi-agente corporativas nos próximos 12 meses.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Agentic RAG — Survey do ArXiv</h3>
+          <p>O survey "Agentic Retrieval-Augmented Generation" (ArXiv 2501.09136) consolida os padrões de RAG agêntico: reflexão, planejamento, uso de ferramentas e colaboração multi-agente. Leitura obrigatória para arquitetos.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">👁️</span>
+          <h3>LLM Observability em 2026</h3>
+          <p>TrueFoundry comparou as principais plataformas de observabilidade para LLMs em 2026. Rastreamento de prompts, custo por token, latência e detecção de alucinações são itens não-negociáveis em produção.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>FinOps para LLMs — Guia Prático</h3>
+          <p>O Finout.io publicou um guia prático para CPOs e engenheiros sobre como controlar custo em workflows com RAG, agentes e LLMs. Quando IA agêntica entra em produção, FinOps precisa estar na mesa.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção imediata. Hoje, estes temas podem esperar — ou ser descartados sem culpa:</p>
+
+      <div class="highlight-card">
+        <h3>Narrativa "IA vai substituir todos os programadores em 2026"</h3>
+        <p>Esse ciclo de hype volta com força toda vez que um modelo novo é lançado. O que está acontecendo é automação de tarefas específicas e repetitivas — não substituição de raciocínio arquitetural, tomada de decisão contextual ou liderança técnica. Tempo gasto se preocupando com isso é tempo roubado de aprender a usar as ferramentas direito.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Plataformas "No-Code AI" como solução enterprise</h3>
+        <p>Ferramentas no-code continuam evoluindo, mas o gap de customização, segurança, auditabilidade e integração com sistemas legados as mantém fora do radar de arquitetura séria. Para PoC e exploração interna, tudo bem. Para sistema de produção crítico, não.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Modelos open-source acima de 100B sem tooling enterprise</h3>
+        <p>A qualidade dos modelos abertos cresce consistentemente, mas sem observabilidade, guardrails, suporte a SLA e integração com stack corporativo, ficam como experimento de laboratório. Não é hora de apostar nesses modelos para produção enterprise sem uma equipe dedicada de MLOps.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O ecossistema Java para IA está no seu momento mais maduro até agora em 2026. Três abordagens principais competem pelo espaço, com propostas bem distintas:</p>
+
+        <h3>Spring AI 2.0 GA — o caminho de menor resistência</h3>
+        <p>Para quem já está no ecossistema Spring, o 2.0 é a escolha natural para projetos novos. A API de <code>ChatClient</code> com DSL fluente, advisors configuráveis, MCP como cidadão de primeira classe e integração nativa com Micrometer/OpenTelemetry formam o stack mais completo disponível hoje em Java para IA em produção. O ponto de atenção é a migração: a API de 1.x para 2.0 tem quebras significativas que exigem atenção.</p>
+
+        <h3>LangChain4j 1.11 — controle granular com cobertura ampla</h3>
+        <p>Escolha sólida para quem quer controle mais granular ou está num stack Oracle/Helidon. Com suporte a mais de 20 providers de LLM e mais de 30 embedding stores, a cobertura de cenários enterprise é a mais ampla disponível em Java. O módulo MCP client está estável, e o módulo STDIO server — recentemente contribuído pela comunidade — abre caminho para criar servidores MCP diretamente em Java sem boilerplate excessivo.</p>
+
+        <h3>O padrão que estou observando nos times mais avançados</h3>
+        <p>A combinação que tem aparecido nas arquiteturas mais sofisticadas: <strong>Spring AI 2.0</strong> para a camada de aplicação e ChatClient, e <strong>LangChain4j</strong> para componentes RAG mais específicos e tool-calling granular. Não é uma escolha excludente — é composição. Cada framework tem seu ponto forte.</p>
+
+        <h3>Exemplo prático — Spring AI 2.0 com MCP em produção</h3>
+        <p>Com base no artigo do Java Code Geeks sobre Spring AI 2.0 + MCP, este é o padrão básico de um agente com ferramentas:</p>
+
+        <pre><code>// Spring AI 2.0 — Agente com tool calling via MCP
+@Service
+public class AnalisadorContratosAgent {
+
+    private final ChatClient chatClient;
+
+    AnalisadorContratosAgent(ChatClient.Builder builder) {
+        this.chatClient = builder
+            .defaultSystem("""
+                Você é um assistente especializado em análise de contratos.
+                Use as ferramentas disponíveis para buscar dados antes de responder.
+                Sempre cite o número do contrato nas suas análises.
+                """)
+            .build();
+    }
+
+    public String consultar(String pergunta) {
+        return chatClient.prompt(pergunta).call().content();
+    }
+}
+
+@Component
+public class ContratoTools {
+
+    private final ContratoRepository repo;
+
+    ContratoTools(ContratoRepository repo) {
+        this.repo = repo;
+    }
+
+    @McpTool(description = "Busca contratos ativos por cliente")
+    public List&lt;String&gt; buscarContratos(
+            @McpToolParam(description = "Nome ou CNPJ do cliente") String cliente) {
+        return repo.findNumerosAtivos(cliente);
+    }
+
+    @McpTool(description = "Retorna o valor total de contratos vigentes")
+    public BigDecimal valorTotalVigente(
+            @McpToolParam(description = "Ano de vigência") int ano) {
+        return repo.sumValorByAno(ano);
+    }
+}</code></pre>
+
+        <p>O ponto de atenção: <code>@McpTool</code> e <code>@McpToolParam</code> são agora do core do Spring AI 2.0, não de um módulo externo. A integração com o bean do Spring acontece automaticamente via injeção de dependência — sem configuração manual de tool registry.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p style="color: var(--text-muted); line-height: 1.8;">Hoje foi um dia de processar mudanças que já foram anunciadas, mas cujas implicações práticas estão começando a se materializar. O Spring AI 2.0 GA vai dominar conversas técnicas em times Java nas próximas semanas. O EU AI Act vai dominar conversas executivas para quem tem exposição europeia. E o Claude Opus 4.8 continua redefinindo o que significa ter um agente de orquestração confiável — algo que eu acompanho de perto tanto para uso interno quanto para os projetos que construímos na Wrapper. Se você está montando uma estratégia de IA corporativa em Java, agora é o momento de parar de observar e começar a construir. O stack está maduro. O timing é agora. Deixa aqui nos comentários qual desses temas você está acompanhando mais de perto — quero saber o que está na agenda de quem lê esse diário.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
