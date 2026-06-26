@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 26/06/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+      font-size: 17px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    .radar-java a {
+      color: #34d399;
+      border-bottom-color: rgba(52,211,153,0.3);
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section {
+      opacity: 0.75;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 32px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    .alert-banner {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-left: 4px solid var(--red);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .alert-banner .alert-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .alert-banner p {
+      margin: 0;
+      font-size: 14px;
+      color: #fca5a5;
+    }
+
+    .alert-banner strong {
+      color: #f87171;
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 26/06/2026</div>
+      <h1>Diário Tecnológico — 26 de Junho de 2026</h1>
+      <p class="excerpt">O governo dos EUA suspende acesso ao Claude Fable 5 por controle de exportação; EU AI Act chega em agosto. LangChain4j 1.10.x consolida MCP e agentes nativos no ecossistema Java.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-red">Anthropic</span>
+        <span class="tag tag-green">EU AI Act</span>
+        <span class="tag tag-violet">Spring AI</span>
+        <span class="tag tag-cyan">MCP</span>
+        <span class="tag tag-amber">Agentic RAG</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Hoje não é um dia comum no ecossistema de IA. A notícia que domina as conversas técnicas não é um novo modelo, uma nova versão de SDK ou uma benchmark impressionante — é uma ordem do governo dos Estados Unidos suspendendo o acesso ao Claude Fable 5 e ao Mythos 5 da Anthropic para qualquer pessoa que não seja cidadão americano. O que parecia uma questão teórica sobre soberania tecnológica virou um fato operacional: empresas ao redor do mundo que dependiam dessas APIs acordaram hoje sem acesso.</p>
+
+      <p>Esse episódio é um sinal claro de algo que venho repetindo para clientes e parceiros: <strong>dependência de um único provedor de LLM é risco de negócio</strong>, não só de arquitetura. A decisão da Anthropic em cumprir a diretiva foi correta — eles não tinham alternativa — mas o impacto real cai sobre quem construiu sistemas críticos sobre essas APIs sem estratégia de fallback. É o momento de revisar abstrações e camadas de orquestração.</p>
+
+      <p>No lado Java, o ecossistema continua amadurecendo em ritmo acelerado. O LangChain4j 1.10.x consolida suporte nativo a MCP e ao novo módulo <code>langchain4j-agentic</code>, e o Spring AI 2.0.0-M2 avança sobre as fundações do Spring Boot 4. E enquanto isso, o prazo do EU AI Act — 2 de agosto de 2026 — se aproxima com muita pressão sobre times de engenharia que ainda estão descobrindo o que precisam fazer para não violar a lei.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1 — Claude Fable 5 suspenso -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Claude Fable 5 e Mythos 5 suspensos por ordem de exportação dos EUA</h3>
+        <p>Em 12 de junho, o Departamento de Comércio dos EUA emitiu uma diretiva de controle de exportação barindo a Anthropic de distribuir os modelos Fable 5 e Mythos 5 para qualquer pessoa que não seja cidadã americana — incluindo estrangeiros residentes no próprio território norte-americano e os próprios funcionários da Anthropic sem cidadania. O modelo havia sido lançado em 9 de junho com janela de contexto de 1 milhão de tokens e capacidade de até 128 mil tokens de saída, ao preço de US$ 10 por milhão de tokens de entrada e US$ 50 de saída.</p>
+        <p>A razão declarada pelo governo: uma técnica de bypass específica que desbloqueava as capacidades de cibersegurança do Mythos 5. A Anthropic contestou a amplitude da medida, argumentando que o jailbreak era estreito e não representava uma falha universal. Mesmo assim, não teve escolha a não ser desabilitar os modelos para todos os usuários. Os modelos de menor capacidade — incluindo o Opus 4.8 — seguem disponíveis normalmente.</p>
+        <p>Para mim, o impacto prático aqui é duplo: primeiro, qualquer sistema produtivo que estava rodando sobre Fable 5 via API parou ontem. Segundo, e mais importante para o longo prazo, isso deixa claro que a camada de orquestração precisa ser tratada como infraestrutura crítica — com fallback configurado para outro provedor ou para modelos locais via Ollama. Quem projetou o sistema com abstração de provedor (como o LangChain4j faz nativamente) não sentiu quase nada. Quem hardcodou o endpoint da Anthropic está corrigindo código agora.</p>
+        <a class="card-source" href="https://www.anthropic.com/news/fable-mythos-access" target="_blank" rel="noopener">🔗 Anthropic — Statement on Fable 5 and Mythos 5 suspension</a>
+      </div>
+
+      <!-- DESTAQUE 2 — EU AI Act -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>EU AI Act: 37 dias para o prazo de agosto/2026 e a maioria das empresas não está pronta</h3>
+        <p>Em 2 de agosto de 2026, entram em vigor as obrigações vinculantes do EU AI Act para sistemas de IA de alto risco — os Artigos 9 a 17 para fornecedores e o Artigo 26 para implantadores. A lei não cria uma categoria separada para agentes autônomos: a classificação depende da tarefa que o agente executa. Um agente que avalia desempenho de funcionários é de alto risco pela Categoria 4 do Anexo III. Um agente que orquestra múltiplas subtarefas pode ser classificado como alto risco se <em>qualquer um</em> dos seus casos de uso cair dentro das categorias protegidas.</p>
+        <p>O que isso significa na prática: qualquer empresa européia ou que ofereça serviços para usuários na Europa, utilizando agentes de IA em HR, finanças, saúde ou infraestrutura crítica, precisa — até 2 de agosto — de rastreabilidade de agentes (identidade, logs, trilha de auditoria), documentação de risco, mecanismos de supervisão humana e capacidade de revogação rápida. Segundo o Cloud Security Alliance, o gap de prontidão nas empresas de médio porte é significativo e a janela está se fechando.</p>
+        <p>Para os times que desenvolvem soluções com Spring AI ou LangChain4j e vendem para o mercado europeu: observabilidade não é opcional mais. É compliance. Integrar OpenTelemetry e exportar traces de cada decisão do agente virou requisito legal, não boa prática.</p>
+        <a class="card-source" href="https://www.covasant.com/blogs/eu-ai-act-compliance-autonomous-agents-enterprise-2026" target="_blank" rel="noopener">🔗 Covasant — EU AI Act Compliance for Autonomous AI Agents</a>
+      </div>
+
+      <!-- DESTAQUE 3 — Agentic RAG -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>O RAG de inferência está morrendo — e a camada de compilação de conhecimento chega para ficar</h3>
+        <p>Uma análise publicada esta semana pelo VentureBeat aponta algo que já venho observando na prática: o RAG clássico — recuperar documentos em tempo de inferência, injetar no contexto e torcer para o modelo responder certo — está chegando ao seu limite em cenários agentic. Quando um agente precisa planejar, executar, criticar e iterar em loop, o overhead de recuperação em cada etapa vira gargalo de latência e custo.</p>
+        <p>A arquitetura emergente é o que estão chamando de "knowledge compilation layer": estruturar o conhecimento <em>antes</em> da inferência, em tempo de compilação, transformando documentos brutos em grafos de conhecimento tipados, resumos hierárquicos e índices semânticos densos. O agente, em tempo de execução, acessa estruturas já processadas — não documentos crus. O resultado é uma redução drástica no número de chamadas de recuperação e uma melhoria na precisão das respostas em cenários complexos.</p>
+        <p>Isso não elimina o RAG — elimina o RAG ingênuo. Sistemas bem projetados continuarão usando recuperação vetorial, mas como um dos componentes de uma stack mais sofisticada, não como a estratégia principal.</p>
+        <a class="card-source" href="https://venturebeat.com/data/the-rag-era-is-ending-for-agentic-ai-a-new-compilation-stage-knowledge-layer-is-what-comes-next" target="_blank" rel="noopener">🔗 VentureBeat — The RAG era is ending for agentic AI</a>
+      </div>
+
+      <!-- DESTAQUE 4 — GPT-5.5 e aposentadorias OpenAI -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>OpenAI aposenta GPT-5.2 e atualiza GPT-5.5 Instant — ciclo de depreciação acelera</h3>
+        <p>A OpenAI confirmou em 12 de junho a retirada dos modelos GPT-5.2 Instant, GPT-5.2 Thinking e GPT-5.2 Pro do ChatGPT. O GPT-4.5 segue para aposentadoria em 27 de junho, completando o sunset de 30 dias. Paralelamente, o GPT-5.5 Instant recebeu atualização com melhoria em contexto, seguimento de instruções e personalização — disponível para usuários Go e Free desde 9 de junho.</p>
+        <p>O que me chama atenção aqui não é a atualização em si, mas o ritmo: o ciclo de vida dos modelos OpenAI está comprimindo. Quem ainda usa GPT-4.5 em produção tem menos de dois dias para migrar. Isso reforça minha convicção de que abstração de modelo — via LangChain4j, Spring AI ou qualquer orquestrador — não é over-engineering, é gestão de risco operacional.</p>
+        <a class="card-source" href="https://help.openai.com/en/articles/9624314-model-release-notes" target="_blank" rel="noopener">🔗 OpenAI — Model Release Notes</a>
+      </div>
+
+      <!-- DESTAQUE 5 — Gemini 3.5 Flash -->
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>Gemini 3.5 Flash em GA e Agentic 2.0 CLI substitui o Gemini CLI</h3>
+        <p>O Google lançou o Gemini 3.5 Flash em disponibilidade geral (GA), posicionado como o modelo mais inteligente para tarefas agentic sustentadas e coding. Em paralelo, o Agentic 2.0 CLI substituiu o Gemini CLI com suporte nativo a automação multi-agente, agendamento e orquestração de workflows — o CLI anterior chegou ao fim da vida em 18 de junho. Para times enterprise usando Google Cloud, o Antigravity Agent (agente gerenciado) entrou em preview público com capacidade de planejar, raciocinar, escrever código e gerenciar arquivos em sandbox.</p>
+        <a class="card-source" href="https://sumatosolutions.com/blog-google-ai-updates-2026-gemini-flash-agentic-app-builder/" target="_blank" rel="noopener">🔗 Sumato Solutions — Google AI Updates June 2026</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar — com foco no que gera resultado prático para times de engenharia Java e arquitetos de IA corporativa:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🔌</span>
+          <h3>Model Context Protocol (MCP) no LangChain4j</h3>
+          <p>O módulo <code>langchain4j-mcp</code> agora suporta MCP como servidor STDIO além de cliente. Com o episódio do Fable 5, entender como conectar ferramentas via MCP e trocar de provider sem reescrever lógica de negócio virou prioridade.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Knowledge Compilation Layer e Agentic RAG</h3>
+          <p>Estudar a diferença entre RAG de inferência e pré-compilação de conhecimento. LlamaIndex e LangGraph têm implementações de referência. Para Java, o LangChain4j EasyRAG e IngestingDocuments são pontos de entrada.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚖️</span>
+          <h3>EU AI Act — Checklist de Compliance para Agentes</h3>
+          <p>Ler o guia do Covasant sobre EU AI Act para agentes autônomos. Mapear quais sistemas sua empresa tem em produção que se enquadram em alto risco pelo Anexo III. O prazo de 2 de agosto não espera.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>TokenOps — FinOps aplicado a LLMs</h3>
+          <p>A disciplina de TokenOps está madura o suficiente para aplicar agora. Estudar model tiering (roteamento para modelos mais baratos em tarefas simples), semantic caching e rastreamento de custo por usuário via metadata de API.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🏗️</span>
+          <h3>Multi-Provider Abstraction com Spring AI 2.0</h3>
+          <p>Spring AI 2.0.0-M2 sobre Spring Boot 4 traz Advisors API e Structured Output. Com o cenário de suspensão de modelos virando realidade, aprender a configurar fallback de provider dentro do Spring AI é fundamental.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔭</span>
+          <h3>Observabilidade de Agentes com OpenTelemetry</h3>
+          <p>Para atender o EU AI Act e ter visibilidade operacional real, integrar OpenTelemetry em pipelines de agentes é o próximo passo. O Traceloop oferece instrumentação específica para LLMs que funciona bem com Java.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados sem culpa:</p>
+
+      <div class="highlight-card">
+        <h3>Gemini app redesign — "Neural Expressive" e feedback háptico</h3>
+        <p>O Google relançou a interface do Gemini com novo design, animações fluidas e feedback háptico no Android. Interessante para UX consumer, absolutamente irrelevante para arquitetura enterprise. Passe adiante.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>GPT-Rosalind — modelo da OpenAI para ciências da vida</h3>
+        <p>Modelo altamente especializado em raciocínio biológico, química medicinal e genômica. Se você não está construindo soluções para biotech, farmácia ou pesquisa clínica, não há ação imediata aqui. Marque para revisar quando surgir caso de uso.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Polymarket sobre rescisão do ban do Fable 5</h3>
+        <p>Há apostas circulando sobre quando o governo dos EUA revogaria a diretiva de exportação. Especulação pura. Até isso se concretizar com um prazo real, não vale o tempo de acompanhamento. Foque no plano B operacional.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O ecossistema Java para IA aplicada está em um dos momentos mais produtivos da sua história. Com o LangChain4j em <strong>1.10.x</strong> e o Spring AI avançando para a versão <strong>2.0.0-M2</strong> (sobre Spring Boot 4), os dois frameworks principal mais usados em produção Java estão convergindo para suporte nativo a MCP, agents e RAG estruturado.</p>
+
+        <h3>LangChain4j 1.10.x — módulo agentic e MCP nativo</h3>
+        <p>A grande mudança arquitetural do LangChain4j 1.x foi separar as capacidades agentic em um módulo dedicado: <code>langchain4j-agentic</code>, com sub-módulos para MCP (<code>langchain4j-mcp</code>), protocolo A2A (Agent-to-Agent) e padrões agentic comuns. O que antes exigia wiring manual agora tem suporte de primeira classe. O módulo MCP suporta tanto o protocolo STDIO quanto HTTP, e o servidor MCP em STDIO — lançado este ano — permite que aplicações Java exponham ferramentas consumíveis por outros agentes, inclusive fora do ecossistema JVM.</p>
+
+        <h3>Spring AI 2.0.0-M2</h3>
+        <p>Construído sobre Spring Boot 4, o Spring AI 2.0 consolida a Advisors API (interceptores de pipeline de AI), Structured Output com validação nativa, e suporte a 20+ backends de modelos. Para quem já está no Spring Boot, a curva de adoção é mínima. O ponto de atenção: ainda é milestone, não GA — avaliar para projetos novos, mas manter 1.1.x em produção por ora.</p>
+
+        <h3>O episódio Fable 5 e a abstração de provider no Java</h3>
+        <p>O episódio da suspensão do Fable 5 hoje mostrou na prática o valor da abstração de provider. Em LangChain4j, trocar o modelo subjacente é questão de alterar a instância de <code>ChatLanguageModel</code> injetada. Um sistema bem projetado só precisa mudar a configuração — não a lógica de negócio. Abaixo um exemplo minimalista de configuração com fallback:</p>
+
+        <pre><code>// LangChain4j 1.10.x — Configuração com fallback de provider
+@Configuration
+public class LlmConfig {
+
+    @Bean
+    @Primary
+    public ChatLanguageModel primaryModel() {
+        // Anthropic Opus 4.8 — não afetado pela suspensão do Fable 5
+        return AnthropicChatModel.builder()
+                .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+                .modelName("claude-opus-4-8-20251101")
+                .maxTokens(4096)
+                .build();
+    }
+
+    @Bean
+    @Qualifier("fallback")
+    public ChatLanguageModel fallbackModel() {
+        // OpenAI GPT-5.5 como fallback de provider
+        return OpenAiChatModel.builder()
+                .apiKey(System.getenv("OPENAI_API_KEY"))
+                .modelName("gpt-5.5-instant")
+                .maxTokens(4096)
+                .build();
+    }
+}
+
+// Serviço com lógica de fallback manual
+@Service
+public class AiService {
+
+    private final ChatLanguageModel primary;
+    private final ChatLanguageModel fallback;
+
+    public String chat(String userMessage) {
+        try {
+            return primary.generate(userMessage);
+        } catch (Exception e) {
+            log.warn("Primary model failed, switching to fallback: {}", e.getMessage());
+            return fallback.generate(userMessage);
+        }
+    }
+}</code></pre>
+
+        <h3>Java 26 e IA nativa na JVM</h3>
+        <p>O Java 26, lançado este ano, está "apostando pesado em IA" segundo a comunidade — com avanços em Project Valhalla (value types) que reduzem overhead de objetos em pipelines de processamento de embeddings, e melhorias no Panama para acesso nativo a bibliotecas de inferência. Para quem trabalha com volumes altos de vetores e embeddings em Java, isso importa.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>Hoje foi um daqueles dias que lembram por que arquitetura importa mais do que conveniência. A suspensão do Claude Fable 5 não é uma curiosidade de política internacional — é um teste de resiliência para times de engenharia ao redor do mundo. Quem tem abstração de provider não sentiu nada. Quem não tem está reescrevendo código com urgência. E isso se soma ao prazo do EU AI Act, que chega em 37 dias e ainda pega muita gente de surpresa.</p>
+
+      <p>Se você ainda não mapeou seus sistemas de IA em produção contra os critérios do EU AI Act, amanhã é tarde. E se você não tem um plano B de provider configurado e testado, hoje é o dia de criar um. Esses dois itens são a prioridade da semana — não a próxima feature.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
