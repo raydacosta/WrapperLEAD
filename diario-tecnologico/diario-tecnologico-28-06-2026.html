@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 28/06/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+      font-size: 17px;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.9;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      color: #6ee7b7;
+      line-height: 1.7;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      opacity: 0.75;
+    }
+
+    .ignore-section .highlight-card:hover {
+      box-shadow: none;
+      transform: none;
+      opacity: 0.85;
+    }
+
+    .ignore-section h3 {
+      color: var(--text-muted);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 32px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    .stat-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    .stat-pill {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-pill .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-pill .stat-value {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+      .stat-row { gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 28/06/2026</div>
+      <h1>Diário Tecnológico — 28 de junho de 2026</h1>
+      <p class="excerpt">Anthropic confirma IPO de $965 bilhões e lança Claude Fable 5. Colorado revoga seu AI Act. Java + IA amadurece: LangChain4j consolida A2A 1.0 e MCP STDIO.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-red">Anthropic</span>
+        <span class="tag tag-green">Regulação IA</span>
+        <span class="tag tag-cyan">Agentic RAG</span>
+        <span class="tag tag-violet">Spring AI</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section id="intro">
+      <p>Junho de 2026 está sendo um mês de consolidação e movimento real no ecossistema de IA. Não é mais a corrida pela capacidade bruta dos modelos — o que os especialistas estão chamando de "platô da fronteira" chegou, com GPT-5.2, Claude Opus 4.5 e Gemini 3 Pro tecnicamente equivalentes em pontuação em benchmarks padrão. O campo de batalha se deslocou: agora a disputa é por enterprise, governança e orquestração de agentes.</p>
+
+      <p>No lado das plataformas, a Anthropic dominou as manchetes com dois movimentos simultâneos: o lançamento do Claude Fable 5 e o protocolo confidencial de IPO junto à SEC, com valuation estimado em $965 bilhões. No lado regulatório, uma surpresa: Colorado — o primeiro estado americano a aprovar uma lei abrangente de IA — deu meia-volta em maio e substituiu sua legislação original por um modelo mais leve de disclosure. Enquanto isso, a EU AI Act se aproxima da entrada em vigor total, prevista para agosto de 2026. O mundo regulatório de IA está em ebulição.</p>
+
+      <p>No ecossistema Java, o cenário continua amadurecendo em ritmo acelerado. O LangChain4j consolida seu módulo agentic, eleva o A2A ao status 1.0.0.Final e adiciona suporte nativo a MCP via STDIO. O Spring AI avança para a trilha 2.0. É exatamente esse tipo de maturação que eu precisava ver para recomendar Java com confiança para projetos de IA em produção.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Anthropic: Claude Fable 5, IPO de $965B e domínio enterprise</h3>
+        <p>A Anthropic está vivendo sua melhor fase desde a fundação. Em 10 de junho, a empresa lançou o <strong>Claude Fable 5</strong> — o modelo público mais potente da companhia até hoje, com uma arquitetura dual inédita: o Fable 5 é a versão comercial disponível para todos, enquanto a versão subjacente idêntica, o <strong>Mythos 5</strong>, permanece restrita a parceiros de governo e cibersegurança sob o chamado "Project Glasswing". Essa estratégia de dois níveis é interessante porque permite à Anthropic maximizar receita comercial enquanto controla acesso ao modelo mais capaz para casos de uso sensíveis.</p>
+        <p>Mas o movimento de maior impacto foi o protocolo confidencial de IPO junto à SEC em 1º de junho, com valuation estimado em <strong>$965 bilhões</strong>. A empresa projeta listagem ainda em outubro de 2026. Para contextualizar o que está acontecendo com a receita: de $9 bilhões anualizados no final de 2025, a Anthropic saltou para <strong>$44 bilhões até maio de 2026</strong> — um crescimento de quase 5x em menos de seis meses. O Claude Code sozinho passou de $1 bilhão em receita anualizada. Pelo ângulo enterprise, a Anthropic ultrapassou a OpenAI em market share (34,4% vs 32,3% em abril), com 80% da receita vindo de clientes corporativos.</p>
+        <p>Para mim, o dado mais relevante é o crescimento de clientes pagando acima de $1 milhão por ano: de 500 em fevereiro para mais de 1.000 em abril — dobrou em dois meses. Isso muda completamente a conversa sobre adoção de IA no enterprise. Não é mais sobre experimentação; é sobre comprometimento orçamentário real.</p>
+        <div class="stat-row">
+          <div class="stat-pill"><span class="stat-label">Receita Anualizada (mai/26)</span><span class="stat-value">$44B</span></div>
+          <div class="stat-pill"><span class="stat-label">Valuation IPO</span><span class="stat-value">$965B</span></div>
+          <div class="stat-pill"><span class="stat-label">Market Share Enterprise</span><span class="stat-value">34,4%</span></div>
+        </div>
+        <a class="card-source" href="https://dataconomy.com/2026/06/10/anthropic-claude-fable-5-ipo-965-billion/" target="_blank" rel="noopener">🔗 Dataconomy — Anthropic Claude Fable 5 + IPO</a>
+        <a class="card-source" href="https://www.cnbc.com/2026/06/01/anthropic-ipo-s1-prospectus.html" target="_blank" rel="noopener" style="margin-left: 12px;">🔗 CNBC — IPO Filing</a>
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Colorado revoga seu AI Act e muda a equação regulatória nos EUA</h3>
+        <p>Em 14 de maio de 2026, o governador Jared Polis sancionou o <strong>Senate Bill 26-189</strong>, que revoga o SB 24-205 — a pioneira lei de IA do Colorado, aprovada em 2024 e referenciada internacionalmente como modelo de governança baseado em risco. O novo framework que entra em vigor em <strong>1º de janeiro de 2027</strong> abandona completamente a abordagem inspirada no EU AI Act e adota um modelo focado em <strong>disclosure e direitos de automação</strong>, muito mais próximo da filosofia americana de autorregulação.</p>
+        <p>O gatilho foi pressão direta da Casa Branca contra qualquer legislação estadual que pudesse criar fricção à "liderança americana em IA". Colorado recuou. Isso não é sinal de fraqueza regulatória — é um reposicionamento estratégico num momento em que o ambiente federal americano é explicitamente pró-indústria. O impacto prático: empresas que já vinham se preparando para conformidade com o modelo original de Colorado precisam rever seus roadmaps de compliance nos EUA.</p>
+        <p>O contraste com a Europa é gritante. O <strong>EU AI Act entra em plena vigência em agosto de 2026</strong>, com multas de até €35 milhões ou 7% da receita global para não-conformidade. Para quem opera em ambos os mercados, o cenário é de dupla pressão: disclosure leve nos EUA, governança estrutural rigorosa na Europa. Meu conselho: não terceirize a decisão de conformidade para o jurídico — ela é decisão de arquitetura de sistemas.</p>
+        <a class="card-source" href="https://www.carpedatumlaw.com/2026/05/colorados-ai-reset-two-weeks-a-white-house-callout-and-a-pivot-away-from-the-eu-model/" target="_blank" rel="noopener">🔗 Carpe Datum Law — Colorado AI Reset</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>LangChain4j consolida módulo agentic, eleva A2A para 1.0.0.Final e adiciona MCP STDIO</h3>
+        <p>O ecossistema Java de IA continua avançando em terreno sólido. O LangChain4j — na linha 1.x, com releases mensais constantes desde a estabilização em maio de 2025 — formalizou duas atualizações que eu acompanhei de perto. A primeira é a <strong>elevação do A2A (Agent-to-Agent) para a versão 1.0.0.Final</strong>, consolidando o protocolo de comunicação entre agentes como componente estável da plataforma. A segunda é a adição de um <strong>módulo MCP server para o protocolo STDIO</strong>, complementando o cliente MCP já existente.</p>
+        <p>O <strong>módulo langchain4j-agentic</strong> — que organiza os padrões de orquestração multi-agente incluindo supervisor agent, sub-agentes especializados e integração com MCP e A2A — agora tem todos os blocos fundamentais em status estável. Isso significa que é possível, hoje, construir sistemas de agentes Java em produção sem depender de APIs experimentais. Para mim, é o sinal de verde que eu precisava para recomendar LangChain4j como stack primária em projetos enterprise novos.</p>
+        <a class="card-source" href="https://github.com/langchain4j/langchain4j/releases" target="_blank" rel="noopener">🔗 GitHub — LangChain4j Releases</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Agentic RAG se torna o padrão de arquitetura — e não é mais opcional</h3>
+        <p>Em 2026, o debate "usar RAG ou não" ficou para trás. A conversa avançou para <strong>qual padrão de Agentic RAG adotar</strong>. A diferença fundamental: no RAG passivo clássico, o modelo recupera contexto e gera resposta. No Agentic RAG, o modelo <strong>decide dinamicamente o que buscar, quando e como combinar</strong> — podendo iterar, reformular queries e tomar ações no meio do processo de recuperação.</p>
+        <p>O stack mais adotado em produção hoje é <strong>LlamaIndex (retrieval + indexação) + LangGraph (orquestração de estado e fluxo de agentes)</strong>. Mas no mundo Java, o cenário equivalente está sendo construído com LangChain4j agentic + vector stores integrados. A evolução arquitetural vai de naive RAG (2023-2024) para Graph RAG e Adaptive RAG (2025-2026), com sistemas capazes de multi-hop reasoning e otimização dinâmica de custo e latência.</p>
+        <a class="card-source" href="https://jobsbyculture.com/blog/agentic-rag-guide-2026" target="_blank" rel="noopener">🔗 Jobs by Culture — Agentic RAG Guide 2026</a>
+        <a class="card-source" href="https://www.cio.com/article/4134741/how-agentic-ai-will-reshape-engineering-workflows-in-2026.html" target="_blank" rel="noopener" style="margin-left: 12px;">🔗 CIO — Agentic AI Engineering 2026</a>
+      </div>
+
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>Singapura publica primeiro framework mundial de governança para IA agêntica</h3>
+        <p>A IMDA (Infocomm Media Development Authority) de Singapura publicou em janeiro de 2026 o primeiro framework governamental do mundo focado especificamente em IA agêntica. A iniciativa documenta requisitos de auditabilidade, rastreabilidade de decisões de agentes e controles de supervisão humana. Baixa relevância imediata para operações no Brasil, mas vale monitorar como referência de mercado para futuras exigências regulatórias locais.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar agora — não "eventualmente", agora:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🕸️</span>
+          <h3>Agentic RAG — Arquiteturas de Produção</h3>
+          <p>O padrão consolidou. Se você ainda está em RAG passivo, está uma geração atrás. Estude Graph RAG e Adaptive RAG com foco em multi-hop reasoning e controle dinâmico de retrieval.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>LangChain4j Agentic Module + A2A</h3>
+          <p>Com A2A em 1.0.0.Final e MCP STDIO estável, o módulo agentic do LangChain4j está pronto para produção. Hora de montar provas de conceito reais com supervisor agent e sub-agentes especializados em Java.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚖️</span>
+          <h3>EU AI Act — Compliance para Agosto 2026</h3>
+          <p>A vigência plena do AI Act europeu é em agosto de 2026. Se você tem clientes ou operações na Europa, a janela de adequação está fechando. Não é questão jurídica — é questão de arquitetura de sistemas de IA.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🌱</span>
+          <h3>Spring AI 2.0.0-M2 (Spring Boot 4)</h3>
+          <p>A milestone 2 do Spring AI 2.0 chegou em janeiro de 2026 com JSpecify null-safety e fundações em Spring Boot 4. Se sua stack é Spring, vale mapear as mudanças de API antes que o GA chegue e force migração em produção.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🏗️</span>
+          <h3>Helidon 4.4 + LangChain4j Agentic</h3>
+          <p>O Helidon 4.4.0 adicionou suporte nativo a padrões agentic do LangChain4j e MCP 1.1. Para quem já usa Helidon em microserviços Java, é a integração mais limpa disponível hoje para adicionar IA agêntica.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧮</span>
+          <h3>FinOps para LLMs em Enterprise</h3>
+          <p>Com $44B em receita anualizada na Anthropic e o custo de tokens subindo com modelos maiores, a gestão de custo de inferência virou prioridade. Estude padrões de caching semântico, prompt compression e roteamento de modelos por complexidade de tarefa.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados sem remorso:</p>
+
+      <div class="highlight-card">
+        <h3>Comparativos de benchmark entre modelos frontier</h3>
+        <p>O "platô da fronteira" chegou. GPT-5.2, Claude Opus 4.5 e Gemini 3 Pro estão essencialmente empatados nos benchmarks padrão. Qualquer artigo comparando pontuações marginais entre eles é ruído puro — a escolha agora é feita por ecossistema, custo, latência e governança, não por benchmark.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Debates sobre AGI em redes sociais</h3>
+        <p>O tema virou entretenimento. Nenhum dos protagonistas tem evidência real — é especulação ancorada em narrativa de marketing. Meu tempo é mais bem investido em sistemas que funcionam hoje do que em previsões para sistemas hipotéticos de amanhã.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Soluções proprietárias de AI Governance ainda sem track record</h3>
+        <p>O mercado de AI governance explodiu em número de fornecedores. A maioria são plataformas de 12-18 meses sem caso de uso comprovado em ambiente regulado. Com o EU AI Act entrando em vigor agora, a única forma de avaliar essas ferramentas é pela evidência de conformidade real — não pela documentação de marketing.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Hype em torno de LLMs de código aberto para enterprise imediato</h3>
+        <p>Os modelos open-source têm evoluído, mas ainda existe um gap operacional relevante para uso enterprise — especialmente em latência, custo de infraestrutura de inferência e suporte de governança. Vale monitorar, mas não vale apostas de produção sem prova de conceito muito criteriosa.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+        <p>O ecossistema Java de IA entrou em fase de maturidade real. Não falo de versões experimentais ou APIs instáveis — falo de produção. Aqui está o panorama atual e o que estou monitorando de perto na Wrapper Sistemas:</p>
+
+        <h3>LangChain4j 1.x — Módulo Agentic em Produção</h3>
+        <p>O LangChain4j está na linha 1.10.x com releases mensais. A principal novidade recente foi a <strong>elevação do A2A para 1.0.0.Final</strong> e a adição do <strong>módulo MCP server para STDIO</strong>. A separação do módulo <code>langchain4j-agentic</code> como dependência independente é a decisão arquitetural mais importante da plataforma: ela permite que projetos usem apenas o que precisam, sem carregar toda a stack agêntica em aplicações mais simples.</p>
+
+        <h3>Spring AI 2.0.0-M2 — Atenção à Migração</h3>
+        <p>O Spring AI 2.0 está em milestone 2, com fundações em Spring Boot 4 e introdução de <strong>JSpecify null-safety annotations</strong> em toda a API. Isso vai quebrar código que não trata nulidade de forma explícita. Recomendo mapear as diferenças de API agora, antes do GA, para não ser surpreendido em projetos em produção.</p>
+
+        <h3>Helidon 4.4 — Integração Agentic Nativa</h3>
+        <p>Para equipes que já usam Helidon, o 4.4.0 trouxe suporte nativo a padrões agentic do LangChain4j e MCP 1.1 (alinhado com spec de junho de 2025). É a integração mais limpa disponível hoje para microserviços Java que precisam expor ou consumir ferramentas via protocolo MCP.</p>
+
+        <h3>Exemplo: Agente Java com MCP STDIO e Supervisor Pattern</h3>
+
+<pre><code>// LangChain4j 1.10.x — Supervisor Agent com MCP STDIO
+// pom.xml
+// &lt;dependency&gt;
+//   &lt;groupId&gt;dev.langchain4j&lt;/groupId&gt;
+//   &lt;artifactId&gt;langchain4j-agentic&lt;/artifactId&gt;
+//   &lt;version&gt;1.10.0&lt;/version&gt;
+// &lt;/dependency&gt;
+
+import dev.langchain4j.mcp.client.McpClient;
+import dev.langchain4j.mcp.client.transport.stdio.StdioMcpTransport;
+import dev.langchain4j.agent.tool.mcp.McpToolProvider;
+import dev.langchain4j.service.AiServices;
+import dev.langchain4j.agentic.supervisor.SupervisorAgent;
+
+// Conecta servidor MCP via STDIO
+McpClient mcpClient = McpClient.builder()
+    .transport(new StdioMcpTransport.Builder()
+        .command("python", "mcp_financeiro_server.py")
+        .build())
+    .build();
+mcpClient.start();
+
+// Agente especializado: analista financeiro
+AnalistaFinanceiro analistaFin = AiServices.builder(AnalistaFinanceiro.class)
+    .chatLanguageModel(claudeFable5Model)
+    .toolProvider(McpToolProvider.from(mcpClient))
+    .build();
+
+// Agente supervisor orquestra os sub-agentes
+SupervisorAgent supervisor = SupervisorAgent.builder()
+    .chatLanguageModel(claudeFable5Model)
+    .subAgents(analistaFin, analistaJuridico, analistaTecnico)
+    .maxIterations(10)
+    .build();
+
+String relatorio = supervisor.execute(
+    "Analise o contrato recebido, avalie risco financeiro, " +
+    "jurídico e técnico, e gere um sumário executivo consolidado."
+);
+</code></pre>
+
+        <p>Este padrão — supervisor + sub-agentes especializados + ferramentas via MCP — é exatamente o que estou estruturando internamente na Wrapper para automação de análise de contratos. A estabilidade do A2A 1.0.0.Final significa que a comunicação entre agentes não vai sofrer breaking changes nas próximas versões.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>Junho de 2026 marca um ponto de inflexão. A IA deixou de ser tecnologia de vanguarda para startups e virou infraestrutura de corporações — como a trajetória da Anthropic deixa claro. O platô dos modelos frontier muda a conversa de "qual modelo é melhor" para "quem sabe orquestrar, governar e operar sistemas de agentes com confiabilidade e custo controlado". É exatamente esse o campo onde a Wrapper Sistemas está investindo.</p>
+
+      <p>No lado regulatório, o desmonte do AI Act de Colorado e a iminência do EU AI Act criam uma janela importante: empresas que usarem os próximos dois meses para estruturar sua governança de IA vão entrar no segundo semestre em posição muito melhor do que as que esperarem o último minuto. Conformidade não é fardo — é vantagem competitiva para quem age antes da obrigatoriedade.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
