@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 30/06/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* RESET E BASE */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* BARRA DE PROGRESSO DECORATIVA */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* HEADER */
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    /* SEÇÕES */
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    /* CARDS DE DESTAQUE */
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      margin-right: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover {
+      color: var(--cyan);
+      border: none;
+    }
+
+    /* GRID DE CARDS */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* SEÇÃO RADAR JAVA */
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    /* SEÇÃO IGNORAR */
+    .ignore-section {
+      opacity: 0.7;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    /* TAGS */
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* FOOTER */
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 32px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    /* RESPONSIVO */
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 30 de junho de 2026</div>
+      <h1>Diário Tecnológico — 30 de junho de 2026</h1>
+      <p class="excerpt">EUA gate Mythos 5 e GPT-5.6 Sol sob aprovação governamental individual; Project Glasswing encontra mais de 10.000 falhas críticas em infraestrutura global.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-cyan">Spring AI</span>
+        <span class="tag tag-violet">Regulação IA</span>
+        <span class="tag tag-amber">Anthropic</span>
+        <span class="tag tag-cyan">OpenAI</span>
+        <span class="tag tag-violet">Cybersecurity</span>
+        <span class="tag tag-amber">RAG</span>
+        <span class="tag tag-cyan">FinOps</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Encerro junho de 2026 com a sensação de que cruzamos um limiar que não volta atrás. Nos últimos dias, dois dos maiores laboratórios de IA do mundo — Anthropic e OpenAI — perderam o controle sobre quem acessa seus modelos de fronteira. Não por decisão interna deles, mas por intervenção direta do governo norte-americano. O Mythos 5 da Anthropic e o GPT-5.6 Sol da OpenAI agora só chegam a novas organizações depois de veto ou aprovação individual do governo dos EUA. Isso muda o jogo de forma estrutural, e qualquer arquiteto ou gestor de tecnologia que ainda enxerga IA apenas como "ferramenta de produtividade" precisa revisar esse modelo mental com urgência.</p>
+      <p>Paralelamente, o Project Glasswing — iniciativa da Anthropic para colocar o Claude Mythos Preview a serviço da defesa cibernética — se expandiu para 150 novas organizações em mais de 15 países. Os números são impactantes: mais de 10.000 vulnerabilidades críticas identificadas em infraestruturas reais, incluindo sistemas de energia, água e saúde. A IA que antes achávamos que "talvez um dia" superasse humanos em segurança ofensiva já está operando nesse nível. Hoje.</p>
+      <p>No ecossistema Java, o avanço é discreto mas concreto: o protocolo A2A do LangChain4j chegou à versão 1.0.0.Final, estabilizando a comunicação entre agentes como infraestrutura de primeira classe na JVM. O Spring AI 2.0.0-M2 trouxe null-safety por padrão. São avanços silenciosos que vão importar muito para quem está construindo sistemas de IA em produção nos próximos meses.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>EUA gate Anthropic Mythos 5 e GPT-5.6 Sol: IA de fronteira sob controle governamental</h3>
+        <p>No dia 26 de junho, o governo norte-americano impôs um mecanismo inédito: o acesso ao Mythos 5 (Anthropic) e ao GPT-5.6 Sol (OpenAI) passou a ser condicionado a aprovação individual, cliente por cliente. A OpenAI afirmou ter permitido que o governo vette cada empresa que recebe acesso ao seu modelo mais avançado, descrevendo isso como "o caminho mais robusto para disponibilidade ampla nas próximas semanas" — mas ressaltando que esse tipo de controle não deve se tornar o padrão permanente.</p>
+        <p>Para mim, o dado mais revelador é o contexto político: dois grandes laboratórios de IA que competiam ferozmente agora enfrentam exatamente o mesmo problema, impostos pela mesma força externa. Isso quebra a narrativa de que a corrida de IA é entre empresas privadas — ela entrou definitivamente na esfera geopolítica. Para times construindo sobre APIs de fronteira, a mensagem prática é clara: mapeiem agora seus planos de contingência para modelos tier 2 e open-source. Dependência exclusiva de um único provider de fronteira é um risco operacional que este mês tornou visível.</p>
+        <a class="card-source" href="https://aitoolsrecap.com/Blog/ai-news-june-28-2026" target="_blank" rel="noopener">🔗 AIToolsRecap</a>
+        <a class="card-source" href="https://techcrunch.com/2026/06/26/its-not-about-anthropic-vs-openai-anymore/" target="_blank" rel="noopener">🔗 TechCrunch</a>
+        <a class="card-source" href="https://www.digitalapplied.com/blog/us-government-gated-ai-models-new-release-paradigm-2026" target="_blank" rel="noopener">🔗 Digital Applied</a>
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Project Glasswing se expande para 150 organizações em 15+ países com 10.000+ vulnerabilidades identificadas</h3>
+        <p>A Anthropic expandiu o acesso ao Claude Mythos Preview dentro do Project Glasswing para aproximadamente 150 novas organizações em mais de 15 países, ampliando para setores que não estavam representados na fase inicial: energia, água, saúde, comunicações e hardware. O projeto já acumulou mais de 10.000 falhas de severidade alta ou crítica encontradas por parceiros — em infraestruturas reais, não em ambientes de laboratório.</p>
+        <p>O dado que não consigo ignorar: o Mythos Preview já encontrou vulnerabilidades críticas em todos os principais sistemas operacionais e navegadores do mercado, superando a capacidade de todos os especialistas humanos exceto os mais especializados. Isso significa que a janela de tempo entre descoberta e exploração por atores maliciosos está encolhendo drasticamente. Para times de segurança corporativos, a urgência é imediata: se vocês ainda não têm um pipeline estruturado de resposta a vulnerabilidades identificadas por IA, a hora é agora — não em algum roadmap de 2027.</p>
+        <a class="card-source" href="https://www.anthropic.com/news/expanding-project-glasswing" target="_blank" rel="noopener">🔗 Anthropic Newsroom</a>
+        <a class="card-source" href="https://techcrunch.com/2026/06/02/anthropic-scales-claude-mythos-to-critical-infrastructure-in-15-countries/" target="_blank" rel="noopener">🔗 TechCrunch</a>
+        <a class="card-source" href="https://cyberscoop.com/anthropic-project-glasswing-expansion-critical-infrastructure-claude-mythos/" target="_blank" rel="noopener">🔗 CyberScoop</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Gemini 3.5 Pro adiado para julho: Flash em GA, Pro segue em preview restrito no Vertex AI</h3>
+        <p>O Google confirmou o adiamento do Gemini 3.5 Pro para julho de 2026. O modelo foi anunciado por Sundar Pichai no Google I/O (19/05) com previsão de GA em junho, mas a empresa optou por continuar refinando o desempenho antes do lançamento público. Até lá, o Pro segue disponível apenas em preview restrito para clientes enterprise selecionados via Vertex AI.</p>
+        <p>Enquanto isso, o Gemini 3.5 Flash está em disponibilidade geral desde o I/O — serve como padrão no app Gemini e no AI Mode do Search, com precificação de $1,50/$9,00 por milhão de tokens de entrada/saída. O Pro, quando lançado, deve custar aproximadamente $15/$60 por milhão de tokens e trará contexto de 2 milhões de tokens com o modo de raciocínio "Deep Think". Para projetos em produção agora: o Flash já é uma opção viável. Sobre o Pro: avalie quando estiver de fato disponível — não aloque capacidade de arquitetura baseada em preview.</p>
+        <a class="card-source" href="https://cryptobriefing.com/google-delays-gemini-35-pro-launch-to-july-2026/" target="_blank" rel="noopener">🔗 CryptoBriefing</a>
+        <a class="card-source" href="https://wavespeed.ai/blog/posts/june-2026-ai-launch-wave/" target="_blank" rel="noopener">🔗 WaveSpeed Blog</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Anthropic unifica tiers da API Claude: Start, Build e Scale com rate limits equalizados</h3>
+        <p>A Anthropic consolidou seus planos da Developer Platform em três camadas — Start, Build e Scale — e igualou os rate limits do Claude Sonnet e do Claude Haiku aos do Claude Opus em todos os tiers. Na prática, isso elimina uma fonte frequente de fricção operacional para times que migravam entre modelos por questão de limite de requisições, não por qualidade ou custo.</p>
+        <p>A simplificação de tiers geralmente precede uma expansão de adoção enterprise — e com o contexto político que mencionei antes, a plataforma precisa ser previsível e fácil de operar. Para quem está construindo sobre a API Claude: este é um bom momento para revisar sua arquitetura de fallback entre modelos e garantir que a lógica de seleção de tier está baseada em critérios de negócio, não em limitações operacionais que deixaram de existir.</p>
+        <a class="card-source" href="https://releasebot.io/updates/anthropic" target="_blank" rel="noopener">🔗 Releasebot — Anthropic Release Notes</a>
+        <a class="card-source" href="https://llm-stats.com/llm-updates" target="_blank" rel="noopener">🔗 LLM Stats — AI Updates</a>
+      </div>
+
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>EU AI Act: fase de cumprimento ativo inicia em junho de 2026</h3>
+        <p>A União Europeia entrou formalmente na fase de execução do AI Act: organizações passaram a ser obrigadas a categorizar seus sistemas por nível de risco, elaborar planos de supervisão humana, conduzir testes de red team e publicar informações de transparência. Reguladores estão menos interessados em declarações de intenção e mais em controles demonstráveis — documentação de dados de treinamento, avaliações de viés e planos de resposta a incidentes são agora requisitos auditáveis.</p>
+        <p>A relevância aqui é baixa para o dia a dia técnico, mas alta para gestão de risco. Se você atua em projetos com clientes europeus ou em setores regulados — saúde, finanças, infraestrutura — é o momento de mapear quais sistemas de IA estão em escopo e iniciar o processo de conformidade. Quem postergou até aqui está atrasado.</p>
+        <a class="card-source" href="https://www.credo.ai/blog/latest-ai-regulations-update-what-enterprises-need-to-know" target="_blank" rel="noopener">🔗 Credo AI Blog</a>
+        <a class="card-source" href="https://www.unifiedaihub.com/blog/current-state-of-ai-regulation-in-2026" target="_blank" rel="noopener">🔗 Unified AI Hub</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🎯</span>
+          <h3>Context Engineering</h3>
+          <p>A qualidade do contexto — não o volume de tokens — é o novo gargalo para agentes LLM em produção. Técnicas de deduplicação, sumarização e hierarquia de informações estão separando times avançados dos medianos. Estude retrieval quality e summarization strategies antes de simplesmente aumentar a janela de contexto.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🤝</span>
+          <h3>Protocolo A2A no LangChain4j</h3>
+          <p>Com a A2A 1.0.0.Final integrada ao módulo <code style="background:#1a1d2e;padding:2px 6px;border-radius:4px;font-size:12px;">langchain4j-agentic-a2a</code>, comunicação entre agentes via HTTP/REST é agora padrão estável na JVM. Entender o DefaultA2AClientBuilder e como expor e consumir agentes remotos é essencial para arquiteturas multi-agente em Java.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🛡️</span>
+          <h3>Defensive AI Security</h3>
+          <p>O Project Glasswing demonstrou que IA já supera humanos em encontrar vulnerabilidades críticas. Estudar como montar pipelines de análise de segurança com LLMs — e como os resultados se integram a SIEMs e fluxos de patch management — virou habilidade diferencial para arquitetos e times de segurança.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>FinOps para LLMs</h3>
+          <p>Rastreamento de custo por token, atribuição de gasto por feature e guardrails de orçamento em tempo real são requisitos de produção em 2026. Ferramentas como MLflow AI Observability e plataformas especializadas estão maduras. Instrumente antes da conta chegar — não depois.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚖️</span>
+          <h3>EU AI Act: categorização de risco</h3>
+          <p>Entender as quatro categorias de risco do AI Act — inaceitável, alto, limitado e mínimo — e como aplicá-las a sistemas reais é competência crítica para arquitetos em projetos com exposição europeia. Os guias da Credo AI e da Unified AI Hub são pontos de partida acessíveis.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔍</span>
+          <h3>Agentic RAG (2026)</h3>
+          <p>RAG evoluiu de pipeline fixo para sistemas autônomos que planejam, recuperam, raciocinam, criticam e reescrevem em loops. O survey "Agentic Retrieval-Augmented Generation" no ArXiv (2501.09136v4) e o artigo "Next-Generation Agentic RAG with LangGraph" no Medium são as melhores referências para entender o estado da arte agora.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados:</p>
+
+      <div class="highlight-card">
+        <h3>Rankings de "qual modelo de IA é o mais inteligente" em 2026</h3>
+        <p>GPT-5.2, Claude Opus 4.5 e Gemini 3 Pro atingiram o que especialistas chamam de "platô da fronteira" — as diferenças técnicas entre eles são marginais na maioria dos casos de uso reais. Artigos ranqueando qual modelo é "o melhor" agora são majoritariamente clickbait. Escolha com base em custo, latência, disponibilidade e integração com seu stack — não em benchmark de laboratório descontextualizado.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Gemini 3.5 Pro — análises e comparações prematuras</h3>
+        <p>O modelo ainda não está disponível para avaliação real. Qualquer análise técnica publicada agora é baseada em preview restrito ou especulação. Aguarde o GA em julho antes de incluir o Pro em qualquer decisão de arquitetura ou comparativo de plataforma.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Narrativas de "open-source como solução ao controle governamental de IA"</h3>
+        <p>A hipótese de que modelos open-source vão simplesmente contornar a regulação e resolver o problema de gating é sedutora, mas prematura. Os modelos open-source de fronteira ainda ficam gerações atrás dos modelos fechados em capacidade bruta para os casos de uso mais críticos. Para uso corporativo em produção, a equação de risco-benefício ainda favorece APIs gerenciadas na maioria dos cenários.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+        <p>O ecossistema Java continua sendo onde a IA vai para produção de verdade. Dois marcos concretos desta semana merecem atenção prática imediata.</p>
+
+        <p>O <strong>LangChain4j 1.x</strong> consolidou suporte a agentes com o módulo <code>langchain4j-agentic</code>, dividido em submódulos dedicados para MCP, A2A e padrões agênticos comuns — o que antes exigia wiring manual agora tem suporte de primeira classe. A novidade mais relevante é a atualização da A2A para <strong>1.0.0.Final</strong>, estabilizando o protocolo de comunicação entre agentes via HTTP/REST. Sistemas multi-agente em Java agora têm um protocolo maduro, documentado e versionado. O <code>DefaultA2AClientBuilder</code> é o ponto de entrada para consumir agentes remotos; o <code>McpService</code> expõe ferramentas MCP como agentes locais.</p>
+
+        <p>No lado do <strong>Spring AI 2.0.0-M2</strong>, a novidade estrutural é a adoção de <strong>JSpecify null-safety annotations</strong> com enforcement em tempo de compilação via NullAway. Para código de integração com LLMs — onde respostas nulas de modelos que não retornam campos esperados são um vetor frequente de NPE silencioso — isso elimina uma classe inteira de bugs antes que cheguem a produção. O 2.0 está sobre o Spring Boot 4. Ainda é milestone, não use em produção, mas já vale estudar o que muda na API.</p>
+
+        <pre><code>// LangChain4j 1.x — conectando a um agente remoto via protocolo A2A 1.0.0.Final
+import dev.langchain4j.agentic.a2a.DefaultA2AClientBuilder;
+import dev.langchain4j.agentic.a2a.A2AAgent;
+
+// O agente remoto pode estar rodando qualquer modelo — total transparência de implementação
+A2AAgent agenteAnalise = new DefaultA2AClientBuilder()
+    .baseUrl("https://agente-seguranca.empresa.com")
+    .build()
+    .createAgent();
+
+String resultado = agenteAnalise.execute(
+    "Analise os contratos do último trimestre e identifique cláusulas de rescisão atípicas."
+);
+
+System.out.println(resultado);</code></pre>
+
+        <p>Para o contexto de segurança trazido pelo Project Glasswing: se você está construindo pipelines de análise de vulnerabilidades com LLMs em Java, o módulo MCP do LangChain4j já tem suporte nativo para expor ferramentas de análise estática — SonarQube, OWASP Dependency Check — como MCP Servers, permitindo que um agente orquestre scans, colete resultados e priorize patches de forma autônoma. É exatamente o tipo de pipeline que o Glasswing está rodando em escala. A infraestrutura para fazer isso em Java já está disponível e estável.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>Junho de 2026 termina com um recado claro: IA deixou de ser uma conversa técnica isolada e entrou definitivamente na esfera política e regulatória global. Neste novo cenário, os times que construíram arquiteturas resilientes — com fallback de modelos, rastreamento de custo e conformidade documentada — vão operar com muito mais confiança do que os que apostaram tudo em um único provider de fronteira. A Wrapper Sistemas segue acompanhando de perto cada movimento deste ecossistema. Amanhã tem mais — e provavelmente com o Gemini 3.5 Pro finalmente em nossas mãos para uma avaliação real.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
