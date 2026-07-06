@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 06/07/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+      font-size: 17px;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.9;
+    }
+
+    .radar-java a {
+      color: #34d399;
+      border-bottom-color: rgba(52,211,153,0.3);
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      color: #6ee7b7;
+      line-height: 1.7;
+    }
+
+    .ignore-section {
+      opacity: 0.75;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(20%);
+    }
+
+    .ignore-section .highlight-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-top: 24px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    .breaking-change-notice {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: #fca5a5;
+    }
+
+    .breaking-change-notice strong {
+      color: #f87171;
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+      .article-header { padding: 60px 0 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 06/07/2026</div>
+      <h1>Diário Tecnológico — 06 de julho de 2026</h1>
+      <p class="excerpt">Fable 5 volta ao ar após bloqueio regulatório e Sonnet 5 chega com raciocínio adaptativo e preço agressivo. No Java, LangChain4j 1.x consolida agentes com MCP enquanto o paradigma de Context Architecture começa a substituir o RAG clássico.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-cyan">Anthropic</span>
+        <span class="tag tag-red">Breaking Changes</span>
+        <span class="tag tag-green">RAG</span>
+        <span class="tag tag-violet">Context Architecture</span>
+        <span class="tag tag-amber">FinOps</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Começo esta semana com a sensação de que julho de 2026 vai ser denso. Em menos de uma semana, a Anthropic entregou dois movimentos simultâneos que merecem atenção estratégica: o retorno do Fable 5 — que estava bloqueado por controles de exportação dos EUA desde 12 de junho — e o lançamento do Sonnet 5, o modelo mais agnóstico e autônomo da família Sonnet até hoje. São decisões arquitetônicas que precisam ser revistas.</p>
+      <p>Enquanto isso, no ecossistema de recuperação de informação, a narrativa começa a mudar de forma consistente: o RAG como arquitetura estática está cedendo espaço para o que o mercado está chamando de <strong>Context Architecture</strong> — uma abordagem onde o contexto é gerenciado como infraestrutura viva, não como payload pré-carregado. Os números do VentureBeat confirmam: a intenção de adoção de recuperação híbrida triplicou no primeiro trimestre de 2026. Isso não é hype — é sinal de adoção enterprise de verdade.</p>
+      <p>No universo Java, o LangChain4j 1.x e o Spring AI 1.1 já são considerados production-ready. O módulo <code>langchain4j-agentic</code>, com suporte nativo a MCP e A2A, muda a forma como construímos agentes no ecossistema JVM. Tenho acompanhado isso de perto porque é exatamente onde a Wrapper Sistemas está posicionando seus próximos entregáveis.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Claude Fable 5 retorna e Sonnet 5 muda as regras do jogo em pricing e autonomia</h3>
+        <p>O Fable 5 voltou ao ar em 1º de julho, após o governo dos EUA encerrar o bloqueio de exportação que o tirou de circulação em 12 de junho. Com <strong>80,3% no SWE-bench Pro</strong> e precificado em $10/$50 por milhão de tokens de entrada/saída, ele retoma a liderança em benchmarks de engenharia de software e raciocínio de longo horizonte. O ponto importante: o Fable 5 só opera com <strong>adaptive thinking</strong> — não há modo de raciocínio manual disponível. Isso tem impacto direto em como você controla latência e custo.</p>
+        <p>Mas o movimento que me chamou mais atenção foi o lançamento do <strong>Sonnet 5 em 30 de junho</strong>. Ele chega como o modelo mais agentic da linha Sonnet, com adaptive thinking ativado por padrão, janela de contexto de 1 milhão de tokens e <strong>63,2% no SWE-bench Pro</strong>. O pricing de introdução — $2/$10 até 31 de agosto — é agressivo. Após essa data, sobe para $3/$15. Matematicamente, o Sonnet 5 entrega 79% da capacidade do Fable 5 por 30% do preço. Para a maioria dos casos de uso enterprise, essa é a relação custo-benefício que vai direcionar os builds nos próximos meses.</p>
+
+        <div class="breaking-change-notice">
+          <strong>⚠️ Breaking Change crítico:</strong> O Sonnet 5 retorna erro HTTP 400 se você tentar usar <code>extended_thinking</code> manual ou configurar parâmetros de sampling fora do padrão. Se você tem pipelines que sobrescrevem temperatura ou top_p, revise antes de migrar.
+        </div>
+
+        <a class="card-source" href="https://www.anthropic.com/news/claude-sonnet-5" target="_blank" rel="noopener">🔗 Anthropic — Introducing Claude Sonnet 5</a>
+        <br>
+        <a class="card-source" href="https://platform.claude.com/docs/en/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5" target="_blank" rel="noopener">🔗 Anthropic Platform Docs — Fable 5 &amp; Mythos 5</a>
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Context Architecture está substituindo o RAG como paradigma de recuperação enterprise</h3>
+        <p>O VentureBeat publicou uma análise que resume bem o que tenho visto em conversas com clientes: o RAG clássico — aquele pipeline estático de chunk, embed e retrieve — está chegando no seu limite operacional quando o workload é agentic. Agentes fazem ordens de grandeza mais requisições de dados do que usuários humanos. A maioria das camadas de recuperação foi construída para o problema em escala humana. Não sobrevive ao volume agentico.</p>
+        <p>O dado que sustenta isso é concreto: a pesquisa <em>VB Pulse RAG Infrastructure Market Tracker</em> (Q1 2026) encontrou que a intenção de compra por recuperação híbrida triplicou — de <strong>10,3% para 33,3%</strong> entre janeiro e março. Além disso, o investimento em otimização de recuperação passou de 19% para 28,9%, ultrapassando pela primeira vez o gasto com avaliação de modelos. O mercado está dizendo algo claro: o gargalo agora é a recuperação, não o modelo.</p>
+        <p>A conclusão prática: empresas que definirem sua Context Architecture agora — com entidades de negócio, relacionamentos e regras de acesso versionadas como infraestrutura — não vão precisar reconstruir quando o volume de agentes escalar. Isso é exatamente o tipo de decisão de arquitetura que precisa ser tomada antes do projeto, não depois.</p>
+        <a class="card-source" href="https://venturebeat.com/data/context-architecture-is-replacing-rag-as-agentic-ai-pushes-enterprise-retrieval-to-its-limits" target="_blank" rel="noopener">🔗 VentureBeat — Context Architecture is Replacing RAG</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Google corta preços do Gemini para competir — mas o mercado ainda está cético</h3>
+        <p>O Google anunciou redução de 20% no plano AI Ultra e introdução de uma nova camada entry-level no ecossistema Gemini. O <strong>Gemini 3.5 Flash</strong> custa $1,50/$9 por milhão de tokens, e o Gemini 3.5 Pro está agendado para disponibilidade geral em julho após ter escorregado de junho. A pressão de pricing da Anthropic — com o Sonnet 5 em $2/$10 de introdução — está claramente forçando esse movimento.</p>
+        <p>Para equipes que já têm workloads no Google Cloud, pode ser o momento de revisar a composição de modelos e testar o Gemini 3.5 Flash para casos de uso de baixo custo. Para novos projetos standalone, ainda prefiro a API da Anthropic pela consistência da experiência de developer.</p>
+        <a class="card-source" href="https://www.tradingkey.com/analysis/stocks/us-stocks/261914133-google-gemini-ai-pricing-subscription-openai-claude-anthropic-market-share-token-cost-tradingkey" target="_blank" rel="noopener">🔗 TradingKey — Google Slashes Gemini Prices</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>FinOps para LLMs: semantic caching e model tiering como redutores reais de custo</h3>
+        <p>A maturidade do FinOps para sistemas LLM chegou a um ponto interessante em 2026. Plataformas como Traceloop e Vantage já oferecem atribuição em tempo real por equipe, por feature e por usuário — o que permite finalmente responsabilizar times específicos por picos de custo. O dado mais relevante que encontrei: <strong>semantic caching bem configurado reduz chamadas LLM em 30–60%</strong> em produção. Não é pequeno.</p>
+        <p>As alavancas de otimização que mais importam agora são três: (1) model tiering — rotear para modelos mais baratos quando a complexidade não justifica o custo; (2) semantic caching — evitar reprocessar prompts semanticamente similares; (3) gestão de janela de contexto — cortar memória desnecessária no sistema prompt. Qualquer projeto que não tem essas três em produção está deixando dinheiro na mesa.</p>
+        <a class="card-source" href="https://www.vantage.sh/blog/finops-for-ai-token-costs" target="_blank" rel="noopener">🔗 Vantage — AI Cost Observability: Measuring Token Spend</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Claude Sonnet 5 — migração e adaptive thinking</h3>
+          <p>Entender o novo comportamento padrão do adaptive thinking e os breaking changes de sampling. Documentação oficial da Anthropic é o caminho mais rápido antes de fazer upgrade em produção.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🏗️</span>
+          <h3>Context Architecture para agentes</h3>
+          <p>O artigo do VentureBeat e os relatórios do VB Pulse Q1 2026 são leitura obrigatória para quem arquiteta sistemas agenticos. O conceito de contexto como infraestrutura versionada vai mudar como você pensa em RAG.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>LangChain4j 1.x — módulo agentic e MCP</h3>
+          <p>O repositório oficial no GitHub e a documentação do módulo <code>langchain4j-agentic</code> são o ponto de partida. Foco em MCP client, A2A patterns e como a injeção de dependência funciona com Spring Boot e Quarkus.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>FinOps para LLMs — Traceloop e Vantage</h3>
+          <p>Configurar semantic caching e tagging de custo por feature antes de escalar qualquer workload LLM em produção. A redução de 30–60% no custo é real e mensurável desde o primeiro billing cycle.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">📊</span>
+          <h3>Comparativo Spring AI 1.1 vs LangChain4j 1.x</h3>
+          <p>O artigo da Java Code Geeks de março de 2026 faz uma análise honesta das diferenças. Para times Spring-heavy: Spring AI. Para flexibilidade máxima e suporte a mais providers: LangChain4j. Vale revisar agora que ambos estão maduros.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔬</span>
+          <h3>Claude Science — novo paradigma de IA científica</h3>
+          <p>A Anthropic conectou o Claude a mais de 60 bases de dados científicas. Para quem trabalha com dados estruturados ou domínios especializados, vale entender como isso pode ser integrado em fluxos de trabalho de pesquisa e análise.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados:</p>
+
+      <div class="highlight-card">
+        <h3>GPT-5.6 Sol — ainda em gated preview</h3>
+        <p>O modelo entrou em preview fechado em 26 de junho, mas não está disponível para uso geral. Não há data confirmada de GA. Monitorar, não agir — o ciclo de hype em torno de releases da OpenAI em gated preview consome energia que pode ir para o que já está disponível.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>GeneBench-Pro — benchmark de biologia sem aplicação prática imediata</h3>
+        <p>A OpenAI publicou esse benchmark onde o GPT-5.6 Sol falha em quase 70% das tarefas de biologia. Interessante para pesquisa científica, mas sem impacto direto em produtos enterprise. Para o contexto da Wrapper Sistemas, pode aguardar.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Hype em torno de "Context Window de 1M tokens" como feature de vendas</h3>
+        <p>O Sonnet 5 suporta 1M de tokens por padrão, e isso está sendo usado como argumento de marketing. Na prática, janelas de contexto gigantes aumentam custo e latência sem necessariamente melhorar qualidade. Não confundir capacidade técnica com necessidade arquitetônica.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O ecossistema Java para IA chegou em 2026 num ponto de maturidade que eu não via desde os primeiros anos do Spring. Os dois frameworks principais — <strong>LangChain4j 1.x</strong> e <strong>Spring AI 1.1</strong> — são production-ready, bem documentados e com comunidades ativas. A questão agora não é mais "qual usar", mas "para qual tipo de projeto cada um otimiza melhor".</p>
+
+        <h3>LangChain4j 1.x — módulo agentic como diferencial</h3>
+        <p>O lançamento 1.x formalizou o módulo <code>langchain4j-agentic</code>, com sub-módulos dedicados a MCP (Model Context Protocol), A2A (Agent-to-Agent) e padrões agenticos comuns. Coisas que antes exigiam wiring manual agora têm suporte de primeira classe. O framework mantém a filosofia framework-agnóstica: você pode usá-lo com Spring Boot, Quarkus ou standalone. Suporta mais de 20 provedores LLM e mais de 30 vector stores — o que é relevante quando você precisa trocar de provedor sem refatoração cirúrgica.</p>
+
+        <h3>Spring AI 1.1 — MCP nativo e Advisors API</h3>
+        <p>O Spring AI 1.1, lançado em novembro de 2025, trouxe integração completa com MCP, mais de 20 backends de modelos e a Advisors API estruturada — que permite interceptar e modificar o fluxo de chamadas ao LLM de forma declarativa. Para times já imersos no ecossistema Spring, a curva de aprendizado é mínima e a integração com Spring Security, Spring Data e Spring Boot Actuator (para observabilidade) é orgânica.</p>
+
+        <h3>Agentic RAG em Java — o que muda</h3>
+        <p>Com a evolução para Context Architecture que mencionei nos destaques, o padrão de RAG em Java também precisa ser revisitado. A tendência é usar agentes como camada de orquestração de recuperação — o modelo decide dinamicamente quando e como consultar o vector store, quando fazer busca web e quando usar uma ferramenta MCP. Isso muda o design do pipeline de estático para iterativo.</p>
+
+        <pre><code>// LangChain4j 1.x — Agente com suporte MCP e tool calling declarativo
+@AiService
+public interface AssistantAgent {
+    @SystemMessage("""
+        Você é um assistente técnico da Wrapper Sistemas.
+        Use as ferramentas disponíveis para responder com precisão.
+        """)
+    String chat(@UserMessage String userMessage);
+}
+
+// Configuração com Claude Sonnet 5 + MCP client
+ChatLanguageModel model = AnthropicChatModel.builder()
+    .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+    .modelName("claude-sonnet-5-20260630")
+    .build();
+
+McpClient mcpClient = McpClient.sync(
+    new StdioMcpTransport(
+        new ProcessBuilder(
+            "npx", "-y",
+            "@modelcontextprotocol/server-filesystem",
+            "/workspace/docs"
+        )
+    )
+).build();
+
+AssistantAgent agent = AiServices.builder(AssistantAgent.class)
+    .chatLanguageModel(model)
+    .tools(McpToolProvider.from(mcpClient))
+    .chatMemory(MessageWindowChatMemory.withMaxMessages(20))
+    .build();
+
+// Uso direto — o framework gerencia tool calling, memória e ciclo de raciocínio
+String resposta = agent.chat("Quais são os endpoints documentados no serviço de faturamento?");
+</code></pre>
+
+        <p>Esse padrão com <code>@AiService</code> e <code>McpToolProvider</code> é o que recomendo para novos projetos. A combinação de interface declarativa + MCP client permite trocar o servidor de ferramentas sem alterar a lógica de negócio. E com o Sonnet 5 no backend, você tem adaptive thinking ativado por padrão — sem necessidade de configurar manualmente o modo de raciocínio.</p>
+
+        <a href="https://github.com/langchain4j/langchain4j/" target="_blank" rel="noopener" style="color: #34d399; border-bottom-color: rgba(52,211,153,0.3);">🔗 LangChain4j no GitHub</a>
+        &nbsp;&nbsp;
+        <a href="https://www.javacodegeeks.com/2026/03/choosing-a-java-llm-integration-strategy-in-2026-spring-ai-1-1-vs-langchain4j-vs-direct-api-calls.html" target="_blank" rel="noopener" style="color: #34d399; border-bottom-color: rgba(52,211,153,0.3);">🔗 Java Code Geeks — Spring AI 1.1 vs LangChain4j</a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>Julho começa com movimentos que precisam de decisão, não de observação. O retorno do Fable 5 e o lançamento do Sonnet 5 exigem revisão de tabelas de routing de modelos — especialmente se você tem pipelines que dependem de sampling customizado. A narrativa de Context Architecture é algo que estou incorporando ativamente nos projetos da Wrapper Sistemas: construir a camada de contexto com a mesma disciplina de um data pipeline é uma decisão que vai diferenciar as arquiteturas que escalam das que vão precisar ser reescritas em 12 meses. No Java, o LangChain4j 1.x com MCP nativo resolve um problema real de interoperabilidade que antes demandava código de integração manual. É o tipo de avanço silencioso que muda a velocidade de entrega sem aparecer em manchetes.</p>
+
+      <p>Se você está construindo algo com Java e IA, ou avaliando migração para o Sonnet 5, me conta nos comentários — tenho interesse em entender os padrões que estão emergindo em produção. Até amanhã com mais um diário.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
