@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 11/07/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    ul {
+      padding-left: 20px;
+      margin-bottom: 16px;
+    }
+
+    ul li {
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+      transition: color 0.2s;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    .pricing-table th {
+      background: var(--surface-2);
+      color: var(--cyan);
+      font-family: var(--font-title);
+      font-weight: 600;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pricing-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(45,55,72,0.5);
+      color: var(--text);
+    }
+
+    .pricing-table tr:last-child td { border-bottom: none; }
+    .pricing-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+      font-size: 17px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.9;
+    }
+
+    .radar-java ul li {
+      color: #a7f3d0;
+      opacity: 0.9;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      color: #6ee7b7;
+      line-height: 1.7;
+    }
+
+    .ignore-section { opacity: 0.72; }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .ignore-section .highlight-card:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 15px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+    }
+
+    .footer-closing span { color: var(--cyan); }
+
+    .callout {
+      background: rgba(124,58,237,0.08);
+      border: 1px solid rgba(124,58,237,0.25);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: #c4b5fd;
+    }
+
+    .callout strong { color: #a78bfa; }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+      .pricing-table { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 11/07/2026</div>
+      <h1>Diário Tecnológico — 11 de julho de 2026</h1>
+      <p class="excerpt">GPT-5.6 chega ao mundo com três camadas de pricing; Anthropic reativa Fable 5 e aposta tudo no Sonnet 5 como ferramenta de massa para desenvolvedores.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-red">OpenAI</span>
+        <span class="tag tag-cyan">Anthropic</span>
+        <span class="tag tag-green">RAG</span>
+        <span class="tag tag-violet">Agentes</span>
+        <span class="tag tag-amber">FinOps</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>A semana de 11 de julho de 2026 vai entrar para os registros como um dos momentos mais densos do ano no ecossistema de IA. Em menos de 72 horas, a OpenAI lançou uma família inteira de modelos com nova arquitetura de pricing, a Anthropic reativou seu flagship após um período de bloqueio regulatório e lançou um modelo intermediário com precificação agressiva, e o Google tropeçou com o Gemini 3.5 Pro enquanto entregava seu irmão mais barato pontualmente. Tudo isso enquanto o ecossistema Java para IA continua amadurecendo em silêncio — e de forma consistente.</p>
+      <p>O que estou observando é uma transição importante: o mercado está saindo da fase de "qual modelo é o mais inteligente" para "qual modelo entrega o melhor custo-benefício em produção". Isso muda o jogo completamente para quem desenvolve sistemas enterprise. Precificação tripartite, janelas de desconto por tempo limitado, trade-offs entre throughput e qualidade — são decisões de arquitetura com impacto financeiro direto. É exatamente o tipo de problema que resolvo para meus clientes na Wrapper Sistemas todos os dias.</p>
+      <p>Hoje quero destrinchar o que realmente importa nesse conjunto de movimentos, o que vale sua atenção agora no ecossistema Java e o que pode esperar sem prejuízo.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>GPT-5.6: OpenAI lança Sol, Terra e Luna com novo paradigma de pricing</h3>
+        <p>No dia 9 de julho, a OpenAI colocou a família GPT-5.6 em disponibilidade geral. São três modelos com propósitos distintos: <strong>Sol</strong> é o flagship para cargas pesadas (pesquisa científica, coding avançado, cibersegurança); <strong>Terra</strong> é o mid-range com desempenho comparável ao GPT-5.5 por metade do custo; e <strong>Luna</strong> é o modelo rápido e barato para tarefas de alto volume.</p>
+        <p>O que me chamou atenção não é só a qualidade dos modelos — é a estrutura de preços. A OpenAI está claramente tentando cobrir todo o espectro de casos de uso enterprise em uma única família, o que simplifica a decisão de qual modelo usar. Para times que hoje rodam GPT-5.5 em produção, migrar para Terra pode representar uma redução de custo de 50% sem perda significativa de qualidade.</p>
+        <p>Outro detalhe importante: a OpenAI anunciou que Sol será executado em hardware Cerebras (wafer-scale) com até <strong>750 tokens por segundo</strong> — cerca de 15 vezes o throughput atual de GPUs. Isso é relevante para aplicações de chat em tempo real e pipelines de processamento em lote onde latência importa.</p>
+
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Modelo</th>
+              <th>Input / 1M tokens</th>
+              <th>Output / 1M tokens</th>
+              <th>Perfil</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Sol</strong></td>
+              <td>$5,00</td>
+              <td>$30,00</td>
+              <td>Flagship — cargas complexas</td>
+            </tr>
+            <tr>
+              <td><strong>Terra</strong></td>
+              <td>$2,50</td>
+              <td>$15,00</td>
+              <td>Mid-range — custo-benefício</td>
+            </tr>
+            <tr>
+              <td><strong>Luna</strong></td>
+              <td>$1,00</td>
+              <td>$6,00</td>
+              <td>Volume — rápido e econômico</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p><strong>Minha dica prática:</strong> se você já tem uma aplicação em produção com GPT-5.5, avalie Terra agora. O benchmark de qualidade é compatível e o custo cai pela metade. Reserve Sol apenas para fluxos onde o raciocínio profundo é insubstituível.</p>
+        <a class="card-source" href="https://openai.com/index/previewing-gpt-5-6-sol/" target="_blank" rel="noopener">🔗 OpenAI — Previewing GPT-5.6 Sol</a>
+      </div>
+
+      <!-- DESTAQUE 2 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Anthropic: Fable 5 reativado + Sonnet 5 com janela de preço agressiva</h3>
+        <p>Dois movimentos da Anthropic merecem atenção. Primeiro: no dia 1º de julho, a Anthropic recolocou o <strong>Claude Fable 5</strong> em operação após o governo dos EUA revogar a ordem de controle de exportação que havia tirado o modelo do ar em 12 de junho. Quase três semanas de indisponibilidade no flagship mais poderoso do mercado — um episódio que deixou claro o quanto regulação pode impactar diretamente produtos de IA em produção.</p>
+        <p>Segundo: a Anthropic lançou o <strong>Claude Sonnet 5</strong> com precificação de introdução de <strong>$2 por milhão de tokens de entrada e $10 por milhão de tokens de saída</strong>, válida até 31 de agosto. Após essa data, os valores sobem para $3 / $15 por 1M tokens. O Sonnet 5 entrega desempenho muito próximo ao Opus 4.8 — o que, na prática, torna este o período mais econômico para migrar cargas que hoje usam Opus.</p>
+        <div class="callout">
+          <strong>Janela de oportunidade:</strong> você tem até 31 de agosto para aproveitar Sonnet 5 a $2/$10 por 1M tokens — um preço excepcionalmente baixo para a qualidade entregue. Se você tem projetos em planejamento que usarão Claude, avalie iniciar agora para capturar essa economia.
+        </div>
+        <p>No contexto de pricing geral do mercado, o Fable 5 custa $10/$50 por 1M tokens. Ou seja: Sonnet 5 a preço introdutório custa 1/5 do Fable 5 com qualidade comparável ao Opus 4.8. É uma decisão de FinOps óbvia para a maioria dos casos de uso.</p>
+        <a class="card-source" href="https://www.anthropic.com/news/claude-sonnet-5" target="_blank" rel="noopener">🔗 Anthropic — Introducing Claude Sonnet 5</a>
+      </div>
+
+      <!-- DESTAQUE 3 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Agentic RAG com Knowledge Graphs: 62% menos alucinação, mas o custo de tokens é real</h3>
+        <p>Um benchmark publicado pela comunidade MLOps em maio de 2026, que está repercutindo agora, trouxe um número significativo: sistemas de Agentic RAG com knowledge graphs reduziram alucinações em <strong>aproximadamente 62%</strong> em 47 deployments de produção. O dado confirma uma hipótese que muitos arquitetos já trabalhavam — conhecimento estruturado em grafos reduz ambiguidade de recuperação e melhora o grounding das respostas.</p>
+        <p>O contraponto que não pode ser ignorado: esse ganho de qualidade tem preço. O custo de tokens em Agentic RAG é de <strong>3 a 10 vezes maior</strong> que em RAG de passagem única, por conta dos múltiplos ciclos de recuperação, reavaliação e reformulação de queries. Para sistemas enterprise onde qualidade de resposta tem valor financeiro direto — diagnóstico médico, jurídico, compliance — esse multiplicador é justificável. Para casos de uso de sumarização ou FAQ, provavelmente não.</p>
+        <p><strong>Minha posição:</strong> Agentic RAG com KG é uma ferramenta de nicho de alto valor — não uma substituição padrão para RAG simples. A decisão precisa ser orientada pelo ROI do caso de uso específico, não por modismo arquitetural.</p>
+        <a class="card-source" href="https://sumatosoft.com/blog/blog-agentic-rag-enterprise-implementation-guide" target="_blank" rel="noopener">🔗 SumatoSoft — Agentic RAG Enterprise Implementation Guide</a>
+      </div>
+
+      <!-- DESTAQUE 4 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>LangChain4j formaliza módulo agentic com MCP e A2A como submódulos dedicados</h3>
+        <p>No ecossistema Java, a novidade mais relevante da semana é a consolidação formal do módulo <strong>langchain4j-agentic</strong> na linha 1.x, com submódulos dedicados para integração com Model Context Protocol (<strong>langchain4j-agentic-mcp</strong>) e comunicação Agent-to-Agent (<strong>langchain4j-agentic-a2a</strong>). Isso representa uma maturação importante: a orquestração multi-agente deixa de ser um padrão improvisado e passa a ter abstrações de primeira classe na biblioteca.</p>
+        <p>O submódulo A2A usa <code>DefaultA2AClientBuilder</code> para conectar agentes remotos via HTTP/REST — o que significa que é possível construir arquiteturas distribuídas onde agentes Java se comunicam com agentes em Python, Node.js ou qualquer runtime que exponha o protocolo A2A. Isso é relevante para times que precisam de interoperabilidade entre ecossistemas sem abrir mão da JVM como runtime principal.</p>
+        <a class="card-source" href="https://github.com/langchain4j/langchain4j" target="_blank" rel="noopener">🔗 GitHub — langchain4j/langchain4j</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar com prioridade:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">💸</span>
+          <h3>Sonnet 5 — janela de precificação introdutória</h3>
+          <p>A diferença entre $2 e $3 por 1M tokens pode parecer pequena, mas em produção é uma economia de 33%. Vale estudar o modelo agora e avaliar se ele substitui fluxos que usam Opus 4.8.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>langchain4j-agentic-a2a</h3>
+          <p>O protocolo Agent-to-Agent com <code>DefaultA2AClientBuilder</code> é a porta de entrada para arquiteturas multi-agente em Java que conversam com agentes de outros runtimes. Se você trabalha com sistemas distribuídos na JVM, esse módulo é prioritário.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>FinOps com LLMs — trade-offs de modelo tier</h3>
+          <p>Com GPT-5.6 Sol/Terra/Luna e Claude Sonnet 5/Fable 5, o mercado está impondo uma decisão de FinOps que antes não existia. Estudar como montar uma estratégia de roteamento de chamadas por custo é habilidade crítica para 2026.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚡</span>
+          <h3>Gemini 3.5 Flash</h3>
+          <p>Enquanto o Pro atrasou, o Flash foi entregue no prazo e com boa performance contra a geração anterior. Para casos de uso de baixa latência e custo, vale benchmarkar contra Luna e Sonnet 5.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔗</span>
+          <h3>Agentic RAG com Knowledge Graphs</h3>
+          <p>O dado de 62% de redução de alucinações é robusto o suficiente para justificar um estudo técnico. Entender onde KG-RAG se paga e onde não se paga é essencial antes de adotar em produção.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🚀</span>
+          <h3>Cerebras Wafer-Scale — impacto em throughput</h3>
+          <p>750 tokens/seg no Sol é um número que muda o cálculo de viabilidade para aplicações de chat em tempo real. Vale entender como esse hardware muda as premissas de latência que usamos hoje.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção imediata. Hoje, estes temas podem esperar — ou ser descartados por enquanto:</p>
+
+      <div class="highlight-card">
+        <h3>Gemini 3.5 Pro</h3>
+        <p>Prometido para junho no Google I/O de maio, escorregou para julho depois que enterprise testers flagraram problemas em raciocínio e coding. Modelo que atrasa após ter sido prometido merece período de observação antes de qualquer avaliação. Espere pelo menos 30 dias de feedback público antes de investir tempo nisso.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Grok 4.5 da xAI</h3>
+        <p>Lançado em 8 de julho a $2/$6 por 1M tokens como modelo focado em coding, o Grok 4.5 é treinado com Cursor e é claramente um produto de nicho para desenvolvedores dentro do ecossistema X/xAI. Para times enterprise fora desse ecossistema, não há caso de uso imediato que justifique atenção agora.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Meta Muse Spark 1.1</h3>
+        <p>Primeiro modelo pago da Meta, lançado em 9 de julho a $1,25/$4,25 por 1M tokens. Muito cedo para avaliar qualidade e confiabilidade em produção. Aguardar avaliações independentes antes de incluir em qualquer stack enterprise.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O ecossistema Java para IA está numa fase de consolidação que me agrada. Dois frameworks lideram com propostas distintas e complementares: <strong>LangChain4j 1.x</strong> e <strong>Spring AI 2.0</strong>. Ambos chegaram à maturidade de produção em 2025-2026 e hoje oferecem tool calling, RAG, MCP, chat memory e integração com 20+ provedores. A escolha entre eles depende mais do stack existente do que de capacidades técnicas.</p>
+
+        <h3>LangChain4j 1.x — O que mudou</h3>
+        <p>A divisão formal do módulo agentic em submódulos dedicados é a notícia da semana no mundo Java. A estrutura atual é:</p>
+        <ul>
+          <li><strong>langchain4j-agentic</strong>: abstrações core para orquestração multi-agente</li>
+          <li><strong>langchain4j-agentic-mcp</strong>: integração com Model Context Protocol via <code>McpService</code></li>
+          <li><strong>langchain4j-agentic-a2a</strong>: comunicação Agent-to-Agent via HTTP/REST com <code>DefaultA2AClientBuilder</code></li>
+        </ul>
+        <p>Essa divisão é uma decisão de design inteligente: permite que times adotem incrementalmente — você pode usar só o core agentic sem puxar a dependência de MCP ou A2A se não precisar. O Maven Repository já lista os artefatos separados.</p>
+
+        <h3>Spring AI 2.0.0-M2 — Contexto</h3>
+        <p>O milestone M2 do Spring AI 2.0, anunciado em janeiro de 2026 e construído sobre Spring Boot 4, trouxe anotações de null-safety JSpecify em toda a API pública. Isso pode parecer detalhe, mas para times com tooling estático habilitado (Kotlin, NullAway, etc.) é uma mudança relevante em manutenibilidade. O GA do 2.0 ainda não tem data confirmada — monitore o milestone tracker do Spring.</p>
+
+        <h3>Exemplo prático: agente A2A com LangChain4j</h3>
+        <p>Um padrão que tenho visto ganhar tração para conectar agentes Java a agentes externos via protocolo A2A:</p>
+
+<pre><code>// Dependência no pom.xml
+// &lt;dependency&gt;
+//   &lt;groupId&gt;dev.langchain4j&lt;/groupId&gt;
+//   &lt;artifactId&gt;langchain4j-agentic-a2a&lt;/artifactId&gt;
+//   &lt;version&gt;1.10.x&lt;/version&gt;
+// &lt;/dependency&gt;
+
+import dev.langchain4j.agentic.a2a.DefaultA2AClientBuilder;
+import dev.langchain4j.agentic.a2a.A2AAgent;
+
+// Conectar a um agente remoto (pode ser Python, Node.js, etc.)
+A2AAgent remoteAgent = DefaultA2AClientBuilder.builder()
+    .baseUrl("https://meu-agente-python.internal/a2a")
+    .connectTimeout(Duration.ofSeconds(10))
+    .readTimeout(Duration.ofSeconds(30))
+    .build()
+    .toAgent();
+
+// Usar o agente remoto como ferramenta em um AiService Java
+@AiServices
+public interface PipelineOrchestrator {
+    @Tool("Delegar análise de risco para agente especializado")
+    String analisarRisco(@P("contexto") String contexto);
+}</code></pre>
+
+        <h3>Recomendação para times Java</h3>
+        <p>Se o seu projeto já usa LangChain4j: atualize para 1.10.x e avalie a adição do módulo <code>langchain4j-agentic</code>. A arquitetura multi-agente deixou de ser experimental — agora tem abstrações estáveis e documentação oficial. Se você ainda está no stack vanilla (chamadas diretas ao SDK Anthropic ou OpenAI via HTTP), este é o momento de avaliar a migração: a produtividade ganha com as abstrações de alto nível compensa o custo de migração em poucas semanas de desenvolvimento.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>O que fica do dia 11 de julho de 2026 é a percepção de que o mercado de LLMs entrou definitivamente na fase de comoditização de camada intermediária. Quando a OpenAI lança três modelos em uma família e a Anthropic precifica o Sonnet 5 abaixo do custo percebido de mercado, o sinal é claro: qualidade de base virou commodity, e a diferenciação vai para a camada de produto — orquestração, memória, contexto, integração enterprise. É exatamente o que estou construindo com meus clientes. Se você está pensando em como levar IA para o seu sistema Java de forma séria e sustentável, me fala — esse é o trabalho da Wrapper Sistemas.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
