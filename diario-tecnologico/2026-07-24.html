@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 24 de julho de 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+      font-size: 17px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section {
+      opacity: 0.72;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-text {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 15px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+      font-weight: 600;
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+      .article-header { padding: 60px 0 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 24 de julho de 2026</div>
+      <h1>Diário Tecnológico — 24 de julho de 2026</h1>
+      <p class="excerpt">
+        A China estreia a primeira regulação mundial dedicada a agentes de IA; o Claude Sonnet 5 consolida sua posição como o modelo mais agêntico da Anthropic; e o ecossistema Java acelera com LangChain4j 1.17 e Spring AI 2.0 em produção.
+      </p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-green">Spring AI</span>
+        <span class="tag tag-red">Regulação</span>
+        <span class="tag tag-cyan">Agentes</span>
+        <span class="tag tag-violet">Context Engineering</span>
+        <span class="tag tag-amber">Anthropic</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>
+        Hoje foi um daqueles dias em que o volume de movimentações significativas no ecossistema de IA faz a caixa de entrada parecer um feed de breaking news sem parar. Não é exagero: regulação histórica na China, expansão de capacidades agênticas na Anthropic, OpenAI consolidando o GPT-5.6 em produção e o Java enterprise finalmente com ferramentas maduras para agentes multiprotocolo. Muito ruído, mas há sinal real aqui.
+      </p>
+      <p>
+        O que me chama atenção não é nenhum evento isolado, mas a convergência: os modelos estão ficando para trás como diferencial. O jogo agora é sobre quem consegue orquestrar melhor — agentes, contexto, memória, ferramentas, conformidade regulatória. O desenvolvedor Java que entender essa virada antes dos outros vai sair na frente. E os dados de hoje reforçam exatamente isso.
+      </p>
+      <p>
+        Deixa eu detalhar o que monitorei nas últimas 24 horas e o que cada movimento significa na prática para quem está construindo sistemas reais em enterprise.
+      </p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1: China AI Agent Regulation -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>China cria a primeira regulação mundial dedicada a agentes de IA — e já está em vigor</h3>
+        <p>
+          No dia 15 de julho de 2026, entrou em vigor na China o documento oficial emitido pelo CAC (Cyberspace Administration of China), NDRC e MIIT, intitulado <em>Implementation Opinions on the Standardized Application and Innovative Development of Intelligent Agents</em>. É, tecnicamente, a primeira regulação do mundo com categoria dedicada para agentes de IA — aqueles sistemas que percebem, memorizam, decidem e executam de forma autônoma.
+        </p>
+        <p>
+          A estrutura é de três camadas de autorização de decisão, obrigatoriedade de cadastro para setores críticos (saúde, transporte, mídia, segurança pública) e mandato de supervisão humana. O impacto imediato foi brutal: ByteDance foi obrigada a desligar os agentes persistentes do Doubao, e a Alibaba fez o mesmo com o Qwen — afetando centenas de milhões de usuários de uma vez. Separadamente, outra lei regulamentando serviços de IA com comportamento antropomórfico também entrou em vigor no mesmo dia, criando um duplo compliance deadline.
+        </p>
+        <p>
+          Para quem constrói agentes enterprise no Brasil: isso importa agora porque a EU AI Act exige conformidade para sistemas de alto risco a partir de agosto de 2026, e Illinois (EUA) acaba de aprovar auditoria de segurança independente anual para desenvolvedores de modelos frontier com faturamento acima de US$ 500 milhões. A regulação de agentes não é mais uma questão de futuro — é um requisito operacional ativo. Quem estiver desenhando arquiteturas sem considerar trilhas de auditoria, autorização hierárquica e override humano vai ter retrabalho pesado à frente.
+        </p>
+        <a class="card-source" href="https://aigovernance.com/news/chinas-agent-rules-take-effect-july-15-and-illinois-mandates-third-party-safety-audits" target="_blank" rel="noopener">🔗 AI Governance Institute — China & Illinois Dual Deadline</a>
+      </div>
+
+      <!-- DESTAQUE 2: Claude Sonnet 5 + Managed Agents -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Claude Sonnet 5 e a expansão do Claude Managed Agents chegam com força para developer</h3>
+        <p>
+          Lançado em 30 de junho de 2026 e disponível na AWS desde a semana de 6 de julho, o Claude Sonnet 5 é oficialmente descrito pela Anthropic como "o Sonnet mais agêntico até hoje" — e esse posicionamento é preciso. Com janela de contexto de 1 milhão de tokens e saída máxima de 128k tokens, ele entrega performance próxima ao Opus com a velocidade e o custo do Sonnet. Para quem usa o Sonnet como espinha dorsal de pipelines de processamento, essa é uma atualização de impacto imediato.
+        </p>
+        <p>
+          Mas o que mais me interessa são as expansões do Claude Managed Agents liberadas junto com o modelo. Agora é possível configurar <strong>effort level</strong> por agente diretamente no objeto de modelo durante a criação, algo que antes exigia workarounds. Os webhooks foram expandidos para cobrir eventos de ciclo de vida de <em>environment</em> e <em>memory store</em> — quatro tipos de evento de ambiente e três de memória — eliminando polling. E o streaming de <em>event deltas</em> chega para quem precisava de resposta em tempo real sem carregar o payload completo em cada iteração.
+        </p>
+        <p>
+          Na prática: se você usa o SDK da Anthropic para orquestrar agentes, esta release entrega controle granular que antes era artesanal. Session seeding com eventos iniciais e paginação retroativa completam o quadro. Parece incremento — mas na realidade é a diferença entre um agente confiável em produção e um que você tem medo de liberar para o cliente.
+        </p>
+        <a class="card-source" href="https://releasebot.io/updates/anthropic" target="_blank" rel="noopener">🔗 Releasebot — Anthropic Release Notes July 2026</a>
+      </div>
+
+      <!-- DESTAQUE 3: OpenAI GPT-5.6 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>OpenAI abre GPT-5.6 (Sol, Terra, Luna) para disponibilidade geral — e desafia o Fable 5 em benchmarks agênticos</h3>
+        <p>
+          Em 9 de julho, a OpenAI abriu para GA a família GPT-5.6, composta por três variantes: Sol, Terra e Luna. O Sol passou a ser o padrão do ChatGPT. A janela de contexto é de 1 milhão de tokens — paridade com o Sonnet 5. O dado mais relevante da release é o desempenho reportado em benchmarks agênticos de longa duração, onde a família supera o Claude Fable 5. Isso é relevante porque o Fable 5 era até recentemente a referência para tarefas agentic de alta complexidade.
+        </p>
+        <p>
+          No lado da API, as novidades técnicas que importam são: <strong>programmatic tool calling</strong>, <strong>multi-agent orchestration nativa</strong> e <strong>prompt cache breakpoints</strong> configuráveis — algo que os desenvolvedores vinham pedindo há muito tempo para otimizar custo em pipelines com contexto repetido. Se você usa GPT como orquestrador central de uma pipeline agentic, os breakpoints de cache vão reduzir sua conta de tokens de forma mensurável.
+        </p>
+        <a class="card-source" href="https://thursdai.news/releases/2026-07" target="_blank" rel="noopener">🔗 ThursdAI — July 2026 AI Releases</a>
+      </div>
+
+      <!-- DESTAQUE 4: Context Engineering -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Context Engineering substitui Prompt Engineering como disciplina central do desenvolvimento agentic</h3>
+        <p>
+          Um movimento que vinha se desenhando há meses ganhou contorno definitivo em julho: <strong>context engineering</strong> é agora a disciplina central de quem desenvolve com LLMs em produção. A diferença é precisa — prompt engineering foca em como você pergunta; context engineering foca no que o modelo vê antes, durante e depois da sua pergunta. Memória estruturada, recuperação RAG com múltiplas modalidades, schemas de tool use, estado de ambiente, histórico de thread — tudo isso é contexto. E contexto é aproximadamente 95% do que um agente produtivo processa em cada chamada.
+        </p>
+        <p>
+          O número que me convenceu: 82% dos líderes de TI afirmam que prompt engineering sozinho não é mais suficiente, e 95% classificam context engineering como crítico para agentes em escala. O Gartner estima que 40% das aplicações enterprise terão agentes embarcados até o final de 2026. Isso cria uma demanda imensa por desenvolvedores que entendem memória como primitiva arquitetural — três tiers distintos (working, episodic, semantic) — e não como um dump de tokens no contexto.
+        </p>
+        <p>
+          Para mim, isso muda o que ensino. O foco não é mais "escrever prompts melhores" — é arquitetar o que o agente sabe, quando sabe, e quanto custa saber.
+        </p>
+        <a class="card-source" href="https://dev.to/serenitiesai/context-engineering-why-its-replacing-prompt-engineering-in-2026-1b4g" target="_blank" rel="noopener">🔗 DEV Community — Context Engineering 2026</a>
+      </div>
+
+      <!-- DESTAQUE 5: Google Gemini 3.6 Flash -->
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>Google lança Gemini 3.6 Flash em 21 de julho — mais um na guerra dos multimodais</h3>
+        <p>
+          O Google lançou o Gemini 3.6 Flash no dia 21 de julho, mais um movimento na corrida contínua por modelos rápidos e baratos. Ele chega junto com variantes anteriores — Nano Banana 2 Lite e Gemini Omni Flash — que já circulavam desde o início de julho. A linha Flash historicamente se posiciona como custo-benefício para casos de uso de alto volume com baixa latência. Impacto imediato para enterprise é limitado — sem enterprise APIs novas relevantes, sem mudança de pricing que justifique migração.
+        </p>
+        <a class="card-source" href="https://felloai.com/best-ai-models/" target="_blank" rel="noopener">🔗 FelloAI — Best AI Models July 2026</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar — com foco em impacto prático para quem está em enterprise Java:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Context Engineering: A Nova Arquitetura Mental</h3>
+          <p>Estude os três tiers de memória (working, episodic, semantic) e como cada um mapeia para artefatos de sistema (thread state, vector store, knowledge graph). A série no DEV Community e o deepset Blog cobrem bem os fundamentos práticos.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>LangChain4j A2A Protocol — Agentes Java interoperáveis</h3>
+          <p>O módulo <code>langchain4j-agentic-a2a</code> (disponível no MVN Repository) permite que agentes Java se descubram e invoquem por protocolo padronizado. Se você constrói multi-agent systems em Java, este é o componente que faltava. Leia o artigo da JavaPro de julho/2026.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🤖</span>
+          <h3>Claude Managed Agents SDK — Effort + Webhooks</h3>
+          <p>A documentação oficial da Anthropic (releasebot.io/updates/anthropic) detalha as novas opções de <code>effort</code> no modelo de agente e os quatro tipos de evento de ambiente. Fundamental para quem usa Managed Agents em produção e quer eliminar polling.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚖️</span>
+          <h3>EU AI Act: Sistemas de Alto Risco — Compliance para agosto</h3>
+          <p>A janela está fechando: os requisitos para sistemas de alto risco entram em vigor em agosto de 2026. O AI Governance Institute publicou um roundup detalhado na semana de 16/07 com checklist técnico de conformidade — inventário de sistemas, documentação técnica, logs de auditoria.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🏗️</span>
+          <h3>Spring AI 2.0 GA — Null-safety e Spring Boot 4</h3>
+          <p>Com a GA de junho 2026, Spring AI 2.0 traz JSpecify null-safety annotations aplicadas em toda a API e verificadas em tempo de compilação. Para times que já rodam Spring Boot 4, a migração agora é cirúrgica. O artigo do Java Code Geeks de março detalha a estratégia de integração.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔐</span>
+          <h3>Three-Tier Agent Authorization Framework (China)</h3>
+          <p>Mesmo que você não atue no mercado chinês, o framework de três camadas criado pelo CAC é um blueprint arquitetural sensato para qualquer sistema agentic enterprise: autorização progressiva por nível de impacto da ação. Vai aparecer em outros frameworks regulatórios logo.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece ciclos de atenção. Hoje, estes temas podem esperar — ou ser descartados sem custo:</p>
+
+      <div class="highlight-card">
+        <h3>Grok 4.5 (SpaceXAI) e Muse Spark 1.1 (Meta)</h3>
+        <p>Ambos lançados na mesma semana, mas sem APIs enterprise maduras, sem documentação técnica consolidada e sem casos de uso diferenciados que justifiquem avaliação agora. Grok continua sem integração B2B relevante. Muse Spark é focado em geração de mídia — fora do escopo para quem constrói sistemas de negócio.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Artigos genéricos sobre "10 tendências de IA para 2026"</h3>
+        <p>Pululas os listicles de alto nível que reciclam as mesmas previsões de janeiro. O ciclo de hype na imprensa generalista está pelo menos 3 meses atrás da realidade técnica do campo. Prefira fontes primárias: release notes, arxiv, repositórios GitHub.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Gemini Nano Banana 2 Lite</h3>
+        <p>Nome curioso, impacto mínimo no cenário enterprise. Modelo de edge/mobile sem utilidade imediata para workloads server-side Java. Pode aguardar benchmarks mais maduros antes de qualquer avaliação séria.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>
+          O ecossistema Java com IA em julho de 2026 está, finalmente, maduro para produção. Sem aspas. As duas principais frameworks — LangChain4j 1.17.2 e Spring AI 2.0 GA — estão estáveis, mantidas ativamente e com suporte a MCP (Model Context Protocol) para interoperabilidade entre agentes e ferramentas. Isso elimina uma das últimas desculpas para não adotar IA em sistemas Java enterprise.
+        </p>
+
+        <h3>LangChain4j 1.17.2 — O Módulo Agentic Chegou</h3>
+        <p>
+          A grande adição da linha 1.x foi a formalização do módulo <code>langchain4j-agentic</code>, com dois sub-módulos de primeira classe: <code>langchain4j-agentic-mcp</code> (exposição de ferramentas via Model Context Protocol) e <code>langchain4j-agentic-a2a</code> (protocolo Agent-to-Agent para descoberta e invocação entre agentes). O que antes exigia fiação customizada e adaptadores manuais agora tem suporte nativo. A versão 1.3.0 foi o ponto de virada, e a 1.17 está estável em produção. A integração com Quarkus e Spring Boot continua como diferencial — mesmos padrões de DI, mesmos ciclos de vida de bean.
+        </p>
+
+        <h3>Spring AI 2.0 GA — Null-Safety e Fundações do Spring Boot 4</h3>
+        <p>
+          Com GA em junho de 2026, Spring AI 2.0 representa a quebra de compatibilidade que valeu a pena. A introdução de JSpecify null-safety annotations em toda a API — verificadas em tempo de compilação com NullAway — elimina silenciosamente uma classe inteira de NPEs em pipelines de IA. Para times que operam com Spring Boot 4, a migração de 1.x para 2.0 é recomendada imediatamente: a superfície de API é similar, mas a robustez operacional é substancialmente maior.
+        </p>
+
+        <h3>Exemplo: Agente Java com LangChain4j A2A</h3>
+        <p>Como ficaria a configuração básica de um agente expondo capacidades via A2A com LangChain4j 1.17:</p>
+
+        <pre><code>// pom.xml — dependências mínimas para agente A2A
+// dev.langchain4j:langchain4j-agentic-a2a:1.17.2
+// dev.langchain4j:langchain4j-anthropic:1.17.2
+
+import dev.langchain4j.agentic.a2a.A2AServer;
+import dev.langchain4j.agentic.a2a.AgentCard;
+import dev.langchain4j.model.anthropic.AnthropicChatModel;
+import dev.langchain4j.agent.tool.Tool;
+
+public class DocumentAnalysisAgent {
+
+    @Tool("Analisa e resume documentos jurídicos em português")
+    public String analyzeDocument(String documentText) {
+        // lógica de análise com RAG + LLM
+        return summarize(documentText);
+    }
+
+    public static void main(String[] args) {
+        var model = AnthropicChatModel.builder()
+            .modelName("claude-sonnet-5-20260630")
+            .maxTokens(4096)
+            .build();
+
+        // Expõe este agente via protocolo A2A
+        // Outros agentes podem descobri-lo e invocá-lo pelo endpoint
+        A2AServer.builder()
+            .agentCard(AgentCard.of(
+                "document-analysis-agent",
+                "Agente de análise de documentos jurídicos",
+                "1.0.0"
+            ))
+            .tools(new DocumentAnalysisAgent())
+            .model(model)
+            .port(8080)
+            .build()
+            .start();
+    }
+}</code></pre>
+
+        <p>
+          Com este padrão, qualquer outro agente na rede — seja Java, Python ou qualquer runtime compatível com A2A — pode descobrir e invocar este agente pelo <code>AgentCard</code>. É exatamente o tipo de interoperabilidade que o mercado enterprise precisa para escalar arquiteturas multi-agent sem acoplamento de implementação.
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p class="footer-text">
+        O que fica do dia de hoje é simples: a janela de "estamos avaliando" está fechando em todas as frentes — tecnológica, regulatória e competitiva. Quem vai esperar os frameworks Java estabilizarem? Estabilizaram. Quem vai esperar a regulação ficar clara? Chegou. Quem vai esperar os modelos ficarem bons o suficiente para agentes? Já estão. O próximo passo é decisão de arquitetura — e isso, infelizmente, não tem atalho. Se você quiser continuar essa conversa ou discutir como está implementando agentes no seu contexto enterprise, me encontra nos comentários ou no LinkedIn. Amanhã tem mais.
+      </p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
