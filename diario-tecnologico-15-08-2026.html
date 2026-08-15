@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 15 de Agosto de 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* HEADER */
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    section { padding: 60px 0; }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon { font-size: 28px; }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p { color: var(--text); margin-bottom: 16px; }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    /* CARDS DE DESTAQUE */
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta  { background: rgba(239,68,68,0.15);   color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15);  color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15);  color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+    .card-source:hover { color: var(--cyan); }
+
+    /* GRID */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .grid-card h3 { font-size: 16px; margin-bottom: 8px; }
+    .grid-card p { font-size: 14px; color: var(--text-muted); margin: 0; }
+
+    /* RADAR JAVA */
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 { color: #34d399; }
+    .radar-java h3 { color: #6ee7b7; }
+    .radar-java p  { color: #a7f3d0; opacity: 0.85; }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    /* SEÇÃO IGNORAR */
+    .ignore-section { opacity: 0.7; }
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    /* TAGS */
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan   { background: rgba(0,212,255,0.1);  color: var(--cyan);   border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa;       border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber  { background: rgba(245,158,11,0.1); color: var(--amber);  border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red    { background: rgba(239,68,68,0.1);  color: #f87171;       border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green  { background: rgba(16,185,129,0.1); color: #34d399;       border: 1px solid rgba(16,185,129,0.2); }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* FOOTER */
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p { font-size: 14px; color: var(--text-muted); margin: 0; }
+
+    .footer-closing { text-align: center; color: var(--text-muted); font-size: 14px; }
+    .footer-closing span { color: var(--cyan); }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 15/08/2026</div>
+      <h1>Diário Tecnológico — 15 de Agosto de 2026</h1>
+      <p class="excerpt">Gemini 3.7 Flash e DeepSeek V4 Pro estreiam no mesmo dia; MCP 2026-07-28 consolida o protocolo como padrão enterprise com auth centralizada e arquitetura stateless.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-cyan">MCP</span>
+        <span class="tag tag-green">Gemini</span>
+        <span class="tag tag-red">DeepSeek</span>
+        <span class="tag tag-amber">FinOps</span>
+        <span class="tag tag-violet">Agentes</span>
+        <span class="tag tag-cyan">RAG</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Esta sexta-feira, 15 de agosto, não vai passar em branco no ecossistema de IA. Dois dias atrás — dia 13 — o Google lançou o Gemini 3.7 Flash e a DeepSeek colocou o V4 Pro em GA praticamente no mesmo horário, como se fosse uma disputa coordenada. Enquanto isso, a especificação MCP 2026-07-28 terminou de consolidar o que estava em review desde julho: um protocolo de verdade pronto para enterprise, com auth centralizada, arquitetura stateless e suporte a redes privadas. São três eventos com peso real, e analiso cada um com frieza aqui.</p>
+
+      <p>O clima geral do ecossistema é de maturação acelerada — menos experimentação de laboratório, mais pressão por resultados mensuráveis em produção. Isso aparece em dois vetores simultâneos: de um lado, modelos mais especializados em coding e agentes (não mais modelos genéricos de benchmark); de outro, FinOps para LLMs virando prioridade #1 nas empresas, com 98% das organizações já gerenciando spend de IA ativamente. O custo de inferência ultrapassou infraestrutura cloud como segunda maior linha de orçamento em IA corporativa, atrás apenas de pessoal. Esse dado muda a conversa arquitetural completamente.</p>
+
+      <p>Para quem trabalha com Java e IA — como é o meu caso na Wrapper Sistemas — a semana trouxe movimento relevante no lado do LangChain4j com melhorias no suporte A2A (Agent-to-Agent) transport e correções críticas na integração MCP. Detalho tudo na seção Radar Java + IA mais abaixo.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1: GEMINI 3.7 FLASH -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Gemini 3.7 Flash: Google aposta em coding e agentes com preço agressivo</h3>
+        <p>O Google lançou o Gemini 3.7 Flash em 13 de agosto como o mais recente "workhorse" da família Gemini — a escolha para produção em coding e workflows agenticos. O número que me chama atenção imediato é o benchmark DeepSWE v1.1: foi de 49,0% para 65,3% frente ao 3.6 Flash, e o FrontierCode 1.1 Main saiu de 34,4% para 43,6%. São ganhos substantivos em software engineering tasks, não em benchmarks genéricos de conversação.</p>
+        <p>O que mais importa do ponto de vista arquitetural: o modelo foi descrito como melhor em <strong>multi-step planning e tool calls</strong>, com maior fidelidade na execução de instruções e capacidade de "adaptar-se a obstáculos". Isso é linguagem direta de uso agentico, não marketing de chatbot. O preço introductório é $0,75/M tokens de entrada e $3,75/M de saída — exatamente metade do Gemini 3.6 Flash. Para sistemas que fazem milhões de chamadas por dia, isso é diferença de budget, não de centavos.</p>
+        <p>Minha leitura prática: se você está avaliando um backbone de LLM para agentes de código em Java — integrado via LangChain4j ou Spring AI — o Gemini 3.7 Flash entrou como candidato sério. O timing de três semanas entre o 3.6 e o 3.7 Flash sugere que o Google está em ciclo agressivo de iteração. Monitoro de perto o 3.5 Pro, que segue em atraso conforme o Bloomberg reportou.</p>
+        <a class="card-source" href="https://www.technobezz.com/news/google-launches-gemini-3-7-flash-for-coding-and-agents-at-half-the-price" target="_blank" rel="noopener">🔗 Technobezz — Google Launches Gemini 3.7 Flash</a>
+        <br>
+        <a class="card-source" href="https://9to5google.com/2026/08/13/gemini-3-7-flash-launch/" target="_blank" rel="noopener">🔗 9to5Google — Gemini 3.7 Flash Launch</a>
+      </div>
+
+      <!-- DESTAQUE 2: MCP 2026-07-28 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>MCP 2026-07-28: o protocolo finalmente virou enterprise-ready</h3>
+        <p>A especificação MCP 2026-07-28 foi a mudança estrutural mais importante que o ecossistema de agentes recebeu neste ciclo. A revisão é a maior desde o lançamento do protocolo e resolve dois problemas que tornavam o MCP inviável em produção enterprise: gerenciamento de sessão stateful e autenticação corporativa. Com a nova spec, o núcleo do protocolo é completamente stateless — o handshake de inicialização foi removido. Um servidor MCP remoto que antes precisava de sticky sessions, session store compartilhado e deep packet inspection no gateway agora roda atrás de um load balancer round-robin simples. Isso é a diferença entre um protocolo de laboratório e um protocolo de produção.</p>
+        <p>O segundo ponto crítico é a extensão <strong>Enterprise-Managed Authorisation (EMA)</strong>, que saiu de experimental para estável. Ela conecta o MCP ao identity provider corporativo via OAuth e OIDC, com Anthropic, Microsoft e Okta já adotando. Com 950+ servidores MCP no diretório e usados por milhões de pessoas por dia, a Anthropic também expandiu suporte a embedded UI, observabilidade e private network tunnels. Para empresas com VPCs privadas — que é a realidade da maioria dos clientes corporativos — esse último ponto é o desbloqueador.</p>
+        <p>Do ponto de vista do LangChain4j: a biblioteca já integra suporte a MCP e tem recebido correções recentes relacionadas à nova spec (como o fix de ClassCastException em schemas com <code>anyOf</code>). Quem está construindo agentes Java conectados a ferramentas externas via MCP precisa validar a versão do SDK utilizada.</p>
+        <a class="card-source" href="https://blog.modelcontextprotocol.io/posts/2026-07-28/" target="_blank" rel="noopener">🔗 MCP Blog — The 2026-07-28 Specification</a>
+        <br>
+        <a class="card-source" href="https://www.infoq.com/news/2026/07/mcp-ema-enterprise-auth/" target="_blank" rel="noopener">🔗 InfoQ — MCP Adds Centralised Auth for Enterprise</a>
+      </div>
+
+      <!-- DESTAQUE 3: DEEPSEEK V4 PRO -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>DeepSeek V4 Pro 0813: números impressionantes, verificação independente pendente</h3>
+        <p>A DeepSeek colocou o V4 Pro 0813 em GA no dia 13 de agosto sem blog post, sem changelog e sem press release — um lançamento silencioso que chama atenção pelo que o modelo promete. Os números do vendor são espetaculares: DeepSWE saiu de 12,8% para 62,7%, CyberGym de 52,7% para 83,3%, e Terminal Bench 2.1 de 72,1% para 87,9%. O modelo é um MoE de 1,6 trilhão de parâmetros que ativa 49B por token, e agora suporta níveis de esforço de raciocínio (low/high/max) com contexto de 1M tokens.</p>
+        <p>Minha ressalva é direta: nenhum avaliador independente confirmou esses ganhos até agora. O TechTimes reportou isso explicitamente — "benchmark claims await independent proof". Saltos de 49 pontos percentuais em um único release são extraordinários e demandam ceticismo técnico até segunda-feira (quando o deadline de preços sobe, em 16/08). O preço atual é $0,435/M tokens de entrada e $0,87/M de saída — muito competitivo se as capacidades de coding se verificarem. Monitoro essa validação com atenção.</p>
+        <a class="card-source" href="https://www.techtimes.com/articles/324241/20260813/deepseek-v4-pro-0813-goes-ga-benchmark-claims-await-independent-proof.htm" target="_blank" rel="noopener">🔗 TechTimes — DeepSeek V4 Pro 0813 Goes GA</a>
+        <br>
+        <a class="card-source" href="https://aireleasetracker.com/model/deepseek/deepseek-v4-pro-0813" target="_blank" rel="noopener">🔗 AI Release Tracker — DeepSeek V4 Pro 0813</a>
+      </div>
+
+      <!-- DESTAQUE 4: FINOPS -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>FinOps para LLMs: custo de inferência ultrapassou infraestrutura cloud</h3>
+        <p>O relatório State of FinOps 2026 da FinOps Foundation registrou que 98% das organizações já gerenciam ativamente o gasto com IA — contra apenas 31% dois anos atrás. Mais relevante ainda: o custo de inferência se tornou a segunda maior linha de orçamento em IA corporativa, atrás apenas de pessoal. O gasto enterprise em LLMs APIs passou de US$ 8,4 bilhões em 2025 e está no caminho de dobrar novamente.</p>
+        <p>O paradoxo que os dados revelam é claro: o preço por token caiu até 280 vezes desde 2022, mas as faturas das empresas continuam subindo. O motivo é arquitetural — workflows agenticos consomem de 5 a 30 vezes mais tokens por tarefa do que um chatbot simples. Quem projetou custos com base em uso conversacional e migrou para agentes com loops de raciocínio, múltiplas chamadas de ferramenta e reranking de RAG levou um choque de orçamento. As estratégias que realmente cortam custos em 30-60%: prompt compression, model tiering, output caching e model routing inteligente. Isso precisa estar na arquitetura, não como afterthought.</p>
+        <a class="card-source" href="https://rickpollick.com/blog/finops-for-ai-llm-cost-governance" target="_blank" rel="noopener">🔗 Rick Pollick — FinOps for AI: LLM Cost Is an Engineering Problem</a>
+        <br>
+        <a class="card-source" href="https://lenxes.ai/blog/finops-for-ai" target="_blank" rel="noopener">🔗 Lenxes — Cost Control Is Now the #1 Enterprise Priority</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei esta semana, estes são os temas e recursos que recomendo explorar agora — com justificativa técnica direta:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Agentic RAG: Pipeline de 6 Camadas (2026)</h3>
+          <p>O RAG moderno vai muito além de retrieve + generate. O padrão 2026 inclui planner, multi-hop retrieval, query rewriting, hybrid search, reranking e graph RAG. Com o MCP novo, o retriever pode agora se conectar a qualquer fonte via protocolo padronizado. Estude a arquitetura completa antes de iniciar qualquer novo projeto RAG.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>FinOps para LLMs: Model Routing e Caching</h3>
+          <p>Com workflows agenticos queimando 5-30x mais tokens que chatbots, é imperativo projetar custo no nível arquitetural. Estude prompt caching (Anthropic e Google já suportam), model tiering (usar modelos menores para subtarefas simples) e token budget control em loops de agentes. O break-even para self-hosting começa em ~500k tokens/dia.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔌</span>
+          <h3>MCP Enterprise-Managed Auth (EMA)</h3>
+          <p>A extensão EMA do MCP 2026-07-28 já está estável e é adotada por Anthropic, Microsoft e Okta. Se você está construindo ou arquitetando agentes corporativos que precisam de acesso controlado a ferramentas, esta extensão é o mecanismo correto. Leia a spec oficial antes de implementar auth de MCP do zero.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>LangChain4j A2A Transport</h3>
+          <p>O suporte a Agent-to-Agent (A2A) transport no LangChain4j está recebendo melhorias ativas. Se você está implementando orquestrações com múltiplos agentes Java — como o padrão que uso nos projetos Wrapper Sistemas — este módulo é a peça de interoperabilidade entre agentes. Valide a versão e teste a configuração de transport.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚗️</span>
+          <h3>Gemini 3.7 Flash via SDK Java</h3>
+          <p>O novo Flash está disponível via API do Google AI. Para integrar em Java com LangChain4j, o provider GoogleAiGemini já suporta os novos modelos. Vale testar o 3.7 Flash em tarefas de geração de código e comparar com o benchmark DeepSWE que o Google reportou, validando os números em casos de uso reais do seu domínio.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">📊</span>
+          <h3>Test-Time Compute Allocation</h3>
+          <p>Uma das técnicas mais relevantes de 2026: alocar mais compute durante inferência em vez de exclusivamente no treino. É o mecanismo por trás dos "reasoning effort levels" do DeepSeek V4 Pro e dos modelos thinking do Claude. Entender como calibrar esse parâmetro é essencial para FinOps em pipelines de raciocínio complexo.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece ciclos de atenção. Estes temas podem esperar — ou ser descartados com tranquilidade:</p>
+
+      <div class="highlight-card">
+        <h3>Benchmarks do DeepSeek V4 Pro (por enquanto)</h3>
+        <p>Os números do vendor são extraordinários demais para serem aceitos sem validação independente. Saltos de 50 pontos percentuais em um único release precisam ser confirmados por avaliadores externos antes de qualquer decisão arquitetural. Aguarde os próximos dias.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Comparações rasas entre LangChain4j e Spring AI</h3>
+        <p>Ambos os frameworks são production-ready desde maio de 2025, ambos suportam MCP, e a escolha entre eles é contextual (Spring já no stack vs. Java puro). Artigos de "qual é melhor" publicados agora carecem de novidade técnica — o debate está resolvido na prática: use o que já está no seu ecossistema.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Rumores sobre o Gemini 3.5 Pro "em atraso"</h3>
+        <p>O Bloomberg reportou o atraso do 3.5 Pro como notícia, mas sem detalhes técnicos acionáveis. Especular sobre datas de release de modelos que ainda não chegaram ao mercado é ruído. O 3.7 Flash que está disponível agora é o que importa para avaliação técnica.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Novas ferramentas de AI "para leigos" lançadas em agosto</h3>
+        <p>O ciclo de produtos consumer de IA está em saturação. Fora do contexto enterprise e de arquitetura de agentes — que é onde atuo — o volume de lançamentos de interfaces de usuário sem substância técnica não merece atenção neste momento.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>Esta semana, o ecossistema Java com IA consolidou o que já estava em movimento desde o início do ano. O LangChain4j está na faixa 1.10.x e recebeu correções importantes na integração MCP — especificamente um fix de <code>ClassCastException</code> quando o <code>inputSchema</code> de uma ferramenta MCP contém <code>anyOf</code> junto com <code>type: "object"</code>. Quem está usando MCP com servidores que retornam schemas polimórficos (como o do GitHub ou do Google Drive) pode estar vulnerável a essa falha se não estiver na versão mais recente.</p>
+
+        <p>O suporte a <strong>A2A (Agent-to-Agent) transport</strong> está recebendo melhorias de configuração. Este é o mecanismo que permite que agentes Java se comuniquem entre si em uma orquestração multi-agente — exatamente o padrão que uso nos projetos de orquestração da Wrapper Sistemas. A configuração de transport agora é mais flexível, permitindo ajuste de timeouts e estratégias de retry no nível do agente individual. O módulo <code>langchain4j-agentic</code> com sub-módulos para MCP, A2A e padrões comuns agenticos é o lugar certo para quem quer construir agentes robustos em Java.</p>
+
+        <p>O Spring AI 2.0.0-M2, anunciado em janeiro e construído sobre Spring Boot 4, segue em maturação. Para projetos novos que já usam o ecossistema Spring, ele é candidato natural. Para projetos standalone sem Spring no stack, o LangChain4j continua sendo a escolha mais enxuta. Ambos suportam o novo MCP 2026-07-28 — a diferença está no nível de abstração e na estrutura de configuração.</p>
+
+        <p>Em termos de FinOps para Java: a integração de prompt caching nas principais bibliotecas ainda é manual — você precisa estruturar as chamadas com <code>cache_control</code> explícito na API da Anthropic, por exemplo. Não há ainda uma abstração de alto nível no LangChain4j que gerencie cache automaticamente. Isso é um gap que pretendo endereçar em um dos projetos internos da Wrapper Sistemas nas próximas semanas.</p>
+
+        <pre><code>// LangChain4j 1.10.x — Configurando MCP com transport A2A
+// Exemplo de configuração de McpToolProvider com novo transport
+
+McpTransport transport = new HttpMcpTransport.Builder()
+    .sseUrl("https://seu-servidor-mcp.exemplo.com/sse")
+    .timeout(Duration.ofSeconds(30))
+    .logRequests(true)
+    .logResponses(true)
+    .build();
+
+McpClient mcpClient = new DefaultMcpClient.Builder()
+    .transport(transport)
+    .build();
+
+McpToolProvider toolProvider = McpToolProvider.builder()
+    .mcpClients(List.of(mcpClient))
+    .build();
+
+// Agente com ferramentas via MCP (nova spec stateless 2026-07-28)
+AiServices.builder(MeuAgenteIA.class)
+    .chatLanguageModel(chatModel)
+    .toolProvider(toolProvider)
+    .build();</code></pre>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>O dia de hoje consolida uma tendência que já estava clara desde o primeiro semestre de 2026: o mercado não quer mais modelos experimentais — quer modelos que resolvem problemas reais de coding e agentes, com preço previsível e suporte enterprise. O Gemini 3.7 Flash é o exemplo mais direto disso. A maturação do MCP para arquitetura stateless e auth corporativa segue a mesma lógica: o protocolo precisava crescer para além do laboratório, e cresceu. O que ainda precisa acontecer é a consolidação de ferramentas de FinOps dentro das próprias bibliotecas Java — essa é uma lacuna real que observo no dia a dia dos projetos.</p>
+
+      <p>Amanhã trago o acompanhamento da validação independente dos benchmarks do DeepSeek V4 Pro — se os números se confirmarem, a conversa sobre alternativas de modelo para produção muda de patamar. Acompanhe o próximo diário para não perder a análise.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
