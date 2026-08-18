@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 18/08/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon { font-size: 28px; }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 { color: #34d399; }
+    .radar-java h3 { color: #6ee7b7; }
+    .radar-java p { color: #a7f3d0; opacity: 0.85; }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section { opacity: 0.7; }
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span { color: var(--cyan); }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 18/08/2026</div>
+      <h1>Diário Tecnológico — 18 de agosto de 2026</h1>
+      <p class="excerpt">GPT-5.6 com corte de preço de 80%, EU AI Act em vigor e Spring AI 2.0 consolidando o ecossistema Java. O mercado está acelerando — e os custos estão caindo.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-amber">Spring AI</span>
+        <span class="tag tag-red">OpenAI</span>
+        <span class="tag tag-cyan">Anthropic</span>
+        <span class="tag tag-green">EU AI Act</span>
+        <span class="tag tag-violet">FinOps</span>
+        <span class="tag tag-cyan">Agentes</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section id="intro">
+      <p>Quando acordo de manhã e verifico os feeds técnicos, o que determina se vai ser um dia produtivo ou um dia de ruído é simples: tem alguma coisa que muda meu trabalho hoje, ou é só mais um ciclo de hype? Hoje, 18 de agosto de 2026, a resposta é clara — tem coisa concreta acontecendo. Não apenas tendências para o futuro: decisões que afetam custo, compliance e arquitetura agora.</p>
+
+      <p>O mais importante dessa semana para qualquer equipe que roda LLMs em produção é o corte de preço da OpenAI para o GPT-5.6. A linha Luna caiu 80% e a Terra caiu 20% em 30 de julho. Isso não é um ajuste cosmético — é uma mudança de viabilidade econômica para uma classe inteira de casos de uso que antes eram caros demais para rodar em escala. Ao mesmo tempo, a Anthropic consolidou o Claude Opus 5 com janela de contexto de 1 milhão de tokens a um preço que começa a fazer sentido para uso corporativo intensivo.</p>
+
+      <p>No lado regulatório, o EU AI Act Anexo III entrou em vigor em 2 de agosto. Qualquer sistema classificado como alto risco agora precisa estar em conformidade — e muitas equipes enterprise ainda não têm clareza sobre o que isso exige na prática. Combinando isso com a aquisição da Galileo pela Cisco em abril e o crescimento explosivo do mercado de governança de IA, fica claro que observabilidade e compliance não são mais itens opcionais na arquitetura de um sistema com IA. São requisitos de produção.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>GPT-5.6 Luna com queda de 80% no preço — a virada do FinOps para LLMs</h3>
+        <p>Em 30 de julho de 2026, a OpenAI cortou o preço do GPT-5.6 Luna em 80% e do Terra em 20%. Para quem está rodando LLMs em produção com volume significativo, isso não é notícia de benchmark — é uma mudança de planilha. Casos de uso que eram economicamente inviáveis (classificação em lote, sumarização de documentos longos, triagem de suporte) agora precisam ser reavaliados com os novos números.</p>
+        <p>A família GPT-5.6 (Sol, Terra, Luna) ficou disponível para o público geral em 9 de julho. O Sol é o modelo topo de linha, com resultados de ponta em coding, cybersecurity e ciência. O Terra equilibra capacidade e custo. O Luna é o modelo de custo mínimo — e com 80% de desconto, a relação custo-benefício mudou radicalmente. Minha leitura: as equipes que construíram pipelines sobre GPT-4o ou GPT-5 devem fazer benchmarks urgentes para avaliar a migração para Luna em tarefas que não exigem o topo da fronteira.</p>
+        <p>Além disso, a OpenAI lançou o Ultrafast em parceria com a Cerebras — uma camada de API que pode atingir até 750 tokens por segundo no Sol, chegando a 14 vezes mais rápido que o ritmo normal do modelo. Para aplicações onde latência é crítica (agentes interativos, automações em tempo real), isso muda o desenho da arquitetura.</p>
+        <a class="card-source" href="https://openai.com/index/gpt-5-6/" target="_blank" rel="noopener">🔗 OpenAI — GPT-5.6 Announcement</a>
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>EU AI Act Anexo III em vigor — compliance é obrigação, não diferencial</h3>
+        <p>Em 2 de agosto de 2026, as obrigações do Anexo III do EU AI Act entraram em vigor. Isso afeta qualquer sistema classificado como IA de alto risco que opere ou processe dados de cidadãos europeus. As exigências incluem transparência, documentação técnica, supervisão humana e gestão de riscos — e não são requisitos abstratos: precisam estar evidenciados e auditáveis.</p>
+        <p>O problema que estou vendo no mercado: 88% das organizações já usam IA em ao menos uma função de negócio, mas menos de um terço conseguiu escalar de verdade com maturidade de governança. A maioria está em modo de experimentação ou piloto, sem o arcabouço de compliance necessário para operar sistemas de alto risco com segurança jurídica. Para empresas que atendem o mercado europeu, isso não é mais uma questão de roadmap — é uma questão de risco operacional imediato.</p>
+        <p>Minha recomendação prática: mapeie hoje quais sistemas da sua organização se enquadram no Anexo III. Documente os modelos utilizados, as decisões que automatizam e os mecanismos de supervisão humana existentes. O mercado de governança de IA está projetado para crescer de USD 2,55 bilhões em 2026 para USD 11 bilhões em 2036 — e quem não construir essa estrutura agora vai correr contra o relógio.</p>
+        <a class="card-source" href="https://www.wsgr.com/en/insights/2026-year-in-preview-ai-regulatory-developments-for-companies-to-watch-out-for.html" target="_blank" rel="noopener">🔗 Wilson Sonsini — AI Regulatory Developments 2026</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Claude Opus 5 e Claude Max — Anthropic consolida posição com pricing racional</h3>
+        <p>Em 24 de julho de 2026, a Anthropic lançou o Claude Opus 5 com janela de contexto de 1 milhão de tokens. O Claude Max chegou com precificação mantida em USD 5/USD 25 por milhão de tokens de input/output, posicionado como uma alternativa com desempenho próximo ao topo da linha a metade do custo. No Coding Index da Artificial Analysis, o GPT-5.6 Sol marcou 78,3 e o Opus 5 ficou em 78,0 — uma diferença insignificante na prática.</p>
+        <p>Para times que usam Claude em pipelines de código, análise de documentos longos ou agentes de pesquisa, o contexto de 1M de tokens é uma mudança real de capacidade. Não precisa mais chunkar documentos longos ou gerenciar janelas manualmente em muitos casos. O foco agora está em como usar bem esse contexto — não apenas em encaixar mais texto, mas em estruturar o prompt para aproveitar o que o modelo realmente retém e raciocina bem nessa escala.</p>
+        <a class="card-source" href="https://local-ai-zone.github.io/blog/ai-updates-august-2026.html" target="_blank" rel="noopener">🔗 Local AI Zone — AI Updates August 2026</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Cisco adquire Galileo — observabilidade de agentes vira mercado consolidado</h3>
+        <p>Em 9 de abril de 2026, a Cisco anunciou a aquisição da Galileo, startup de avaliação, observabilidade e guardrails para IA fundada em 2021. O movimento confirma o que eu venho dizendo há meses: observabilidade de agentes não é nicho de engenharia — é infraestrutura crítica de negócio. Quando uma empresa do porte da Cisco entra nesse mercado via aquisição, o sinal é claro: a demanda é real e vai crescer.</p>
+        <p>O problema central que o Galileo resolve é justamente o gap entre protótipo e produção — o maior problema de qualquer equipe que tenta levar agentes de IA para além do demo. A avaliação de sistemas multi-agente, tarefas de longa duração e agentes que aprendem ao longo do tempo ainda são problemas em aberto. Ferramentas como MLflow AI Observability e AgentOps estão ganhando tração, mas o mercado ainda está se consolidando. Escolha bem: o stack que você adota hoje vai ser difícil de trocar amanhã.</p>
+        <a class="card-source" href="https://montecarlo.ai/blog-agent-observability-tools" target="_blank" rel="noopener">🔗 Monte Carlo — 2026 Guide to Agent Observability Tools</a>
+      </div>
+
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>Google Gemini 3.1 Pro e Deep Think — contexto de 2M de tokens para multimodal</h3>
+        <p>O Google consolidou o Gemini 3.1 Pro e o Deep Think como referência para trabalho de longa janela de contexto e multimodal — 2 milhões de tokens para texto massivo, vídeo, áudio e código. Para a maioria dos casos de uso enterprise que acompanho, isso ainda é capacidade além do que conseguimos usar de forma eficiente. O desafio não é mais o tamanho da janela — é saber o que perguntar e como estruturar o input para que o modelo realmente entregue resultado consistente nessa escala.</p>
+        <a class="card-source" href="https://felloai.com/best-ai-models/" target="_blank" rel="noopener">🔗 FelloAI — Best AI Models August 2026</a>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar com prioridade — não para ficar atualizado, mas porque têm impacto direto em arquitetura e custo nas próximas semanas.</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>FinOps para LLMs — rastreamento de custo por token</h3>
+          <p>Com o corte de preço do GPT-5.6, o momento é ideal para estruturar métricas de custo por request, por caso de uso e por modelo. Rastreie uso de tokens, eficiência de seleção de modelo e custo por chamada de API — os dados vão justificar (ou refutar) migrações.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🏛️</span>
+          <h3>EU AI Act Anexo III — requisitos práticos</h3>
+          <p>Leia a documentação oficial dos requisitos de alto risco. Foco em: obrigações de transparência, registro de logs para auditoria e requisitos de supervisão humana. Se você tem sistemas que tomam decisões sobre pessoas, esse estudo é urgente.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔍</span>
+          <h3>Agentic RAG — padrões de produção em 2026</h3>
+          <p>LangGraph e o OpenAI Agents SDK dominam os padrões de RAG agêntico em produção. Estude os 5 padrões recorrentes — especialmente as trocas entre latência, custo de tokens e fidelidade em perguntas complexas.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>Spring AI 2.0 — migração para Spring Boot 4</h3>
+          <p>Spring AI 2.0 foi lançado em junho de 2026 com foco no Spring Boot 4. Se você mantém aplicações Java com IA no Spring Boot 3.5, o 1.1.x ainda tem suporte, mas a janela de migração já está aberta. Avalie as mudanças de API antes que se tornem urgentes.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">👁️</span>
+          <h3>Observabilidade de agentes — stack atual</h3>
+          <p>Com a aquisição da Galileo pela Cisco, o mercado de observabilidade está em consolidação. Avalie MLflow AI Observability, AgentOps e Langfuse antes de fechar escolha de stack. A decisão de hoje vai ser difícil de reverter em 12 meses.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚡</span>
+          <h3>OpenAI Ultrafast — arquitetura para baixa latência</h3>
+          <p>750 tokens por segundo com Cerebras muda o design de agentes interativos. Se você tem casos de uso com latência crítica — chatbots em tempo real, automações síncronas — vale entender como essa camada de API funciona e quando compensa o custo adicional.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados sem prejuízo:</p>
+
+      <div class="highlight-card">
+        <h3>Comparações de benchmark entre modelos sem contexto de custo</h3>
+        <p>Rankings de modelos baseados puramente em desempenho em benchmarks sintéticos, sem considerar custo por token, latência real e adequação ao caso de uso específico, geram ruído sem valor. Com o GPT-5.6 Sol e Opus 5 empatados tecnicamente no Coding Index (78,3 vs 78,0), a diferença que importa é econômica e operacional — não de pontuação.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Modelos "open source" locais sem suporte enterprise real</h3>
+        <p>Há um ciclo constante de lançamentos de modelos locais com promessas de substituição dos modelos frontier. Para uso enterprise — com requisitos de SLA, suporte, compliance e escala — esses modelos ainda não chegaram lá. Vale acompanhar a distância, mas sem urgência de avaliação agora.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>ChatGPT Work como "revolução do trabalho" — ainda em maturação</h3>
+        <p>O ChatGPT Work foi lançado pela OpenAI como sistema agêntico para projetos complexos de várias horas. A proposta é interessante, mas a ferramenta ainda está em fase inicial de adoção enterprise. Vale observar, mas sem colocar expectativa de uso produtivo imediato — especialmente em ambientes com restrições de dados e compliance.</p>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+        <p>O ecossistema Java para IA está em um ponto de maturidade que eu não esperava ver tão rápido. Dois frameworks de produção consolidados, ciclos de release mensais e uma base de adoção enterprise crescendo em ritmo acelerado.</p>
+
+        <h3>Spring AI 2.0 — a virada para Spring Boot 4</h3>
+        <p>Spring AI 2.0, lançado em junho de 2026, marca a migração oficial para o ecossistema Spring Boot 4. A linha 1.1.x permanece com suporte para Spring Boot 3.5, então não há urgência de migração forçada — mas o novo desenvolvimento da plataforma está concentrado no 2.0. Para quem está iniciando novos projetos, já não tem motivo para começar no 1.1.x. As mudanças mais relevantes incluem anotações completas de null-safety com JSpecify e integração nativa com Model Context Protocol (MCP) — o que simplifica consideravelmente a construção de agentes que precisam invocar ferramentas externas.</p>
+
+        <h3>LangChain4j 1.10.x — ritmo de release que impressiona</h3>
+        <p>O LangChain4j está na versão 1.10.x com releases mensais desde a estabilização do 1.0 GA em maio de 2025. O ecossistema amadureceu: guardrails de input/output chegaram no 1.1.0, a extensão Quarkus para Azure OpenAI está em 1.1.1, e a adoção enterprise está crescendo em times que preferem uma abordagem mais explícita e menos autoconfigurada do que o Spring AI oferece. Minha avaliação atual: para times Spring-first, o Spring AI 2.0 é o caminho natural. Para times Quarkus ou que precisam de controle mais fino sobre o pipeline de chamada, o LangChain4j ainda é a melhor opção.</p>
+
+        <p>Exemplo prático — um pipeline de RAG com Spring AI 2.0 e integração via MCP:</p>
+
+        <pre><code>@Service
+public class DocumentAnalysisService {
+
+    private final ChatClient chatClient;
+    private final VectorStore vectorStore;
+
+    public DocumentAnalysisService(ChatClient.Builder builder,
+                                   VectorStore vectorStore) {
+        this.chatClient = builder
+            .defaultSystem("Você é um assistente especializado em análise de documentos enterprise.")
+            .build();
+        this.vectorStore = vectorStore;
+    }
+
+    public String analyzeWithContext(String query) {
+        // Busca documentos relevantes no vector store
+        List&lt;Document&gt; relevantDocs = vectorStore.similaritySearch(
+            SearchRequest.query(query).withTopK(5)
+        );
+
+        // Constrói o contexto RAG e envia ao modelo
+        return chatClient.prompt()
+            .user(u -> u.text(query))
+            .advisors(new QuestionAnswerAdvisor(vectorStore,
+                SearchRequest.defaults()))
+            .call()
+            .content();
+    }
+}</code></pre>
+
+        <p>A interface <code>QuestionAnswerAdvisor</code> do Spring AI 2.0 encapsula o padrão RAG de forma que o código de negócio fica limpo — sem misturar lógica de retrieval com lógica de apresentação. Para quem vem de implementações manuais de RAG, a diferença de manutenibilidade é imediata.</p>
+
+        <p>Um ponto que merece atenção no contexto do EU AI Act: se você usa Spring AI em sistemas classificados como alto risco, ative logging estruturado de todas as chamadas aos modelos — input, output, modelo utilizado, versão e timestamp. O framework suporta isso via interceptors customizados no <code>ChatClient</code>. Não é opcional para compliance com o Anexo III.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>O que fica do dia de hoje é simples: o custo de rodar LLMs em produção caiu de forma significativa, o compliance regulatório europeu virou obrigação presente (não futura), e o ecossistema Java para IA está mais maduro e produtivo do que nunca. São três vetores que se combinam: quem souber usar o modelo certo no custo certo, dentro de uma arquitetura observável e em conformidade com as regulações, está construindo vantagem competitiva real. Quem está só acompanhando trends está perdendo a janela.</p>
+
+      <p>Se este diário foi útil, compartilhe com alguém do seu time que ainda está no modo "vou ver isso depois". Amanhã tem mais — e o ritmo não vai diminuir.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
