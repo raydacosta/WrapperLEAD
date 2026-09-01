@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 01/09/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section {
+      opacity: 0.7;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 01/09/2026</div>
+      <h1>Diário Tecnológico — 1º de Setembro de 2026</h1>
+      <p class="excerpt">Claude Opus 5 consolida liderança em agentes; Spring AI 2.0 redefine o ecossistema Java. O mercado de IA corporativa acelera sem olhar para trás.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-green">Spring AI</span>
+        <span class="tag tag-cyan">Agentes</span>
+        <span class="tag tag-violet">MCP</span>
+        <span class="tag tag-amber">RAG</span>
+        <span class="tag tag-red">Claude Opus 5</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Setembro começa com o ecossistema de IA em ritmo de consolidação. Não é mais sobre "qual modelo vai surgir agora" — é sobre como arquiteturas maduras, frameworks estáveis e adoção corporativa estão se encontrando em velocidade que poucos previram no início do ano. Se em 2024 estávamos no modo descoberta, e em 2025 no modo experimentação, 2026 é claramente o ano da execução. As peças estão no tabuleiro. O jogo agora é jogar bem.</p>
+
+      <p>Do lado da Anthropic, o Claude Opus 5 — lançado em julho — recebeu sua segunda atualização de agosto com ganhos reais de velocidade e capacidade de raciocínio científico. Do lado Java, a situação é ainda mais animadora: o Spring AI 2.0 foi ao ar em junho direcionado ao Spring Boot 4, e o LangChain4j chegou à versão 1.17.2. Pela primeira vez sinto que o ecossistema Java para IA não está correndo atrás do Python — ele está propondo sua própria abordagem, com tipagem forte, injeção de dependência e os padrões que a indústria enterprise já conhece e confia.</p>
+
+      <p>Um dado que vale frisar: a KPMG mediu que mais de 26% das organizações já implantaram algum tipo de agente de IA — mais que o dobro de um ano atrás. Isso não é mais tendência de laboratório. É operação real, com custo real, com risco real. E é exatamente aí que o ecossistema Java se encaixa como uma luva: maturidade, rastreabilidade, integração enterprise e uma cultura de engenharia que não perdoa código frágil.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Claude Opus 5 — Update de Agosto Traz Velocidade e Raciocínio Científico</h3>
+        <p>A Anthropic atualizou o Claude Opus 5 em 12 de agosto com melhorias concretas: inferência mais rápida e capacidade expandida para raciocínio em contextos científicos e técnicos de longa duração. Isso importa para quem usa o modelo em pipelines agenticos que dependem de múltiplos turnos de raciocínio — o custo por token de saída cai quando o modelo é mais direto ao ponto, e a latência menor significa que sistemas multi-agente conseguem iterar mais ciclos dentro de janelas de tempo aceitáveis.</p>
+        <p>Minha leitura: o Opus 5 se consolida como o modelo de referência para orquestração de agentes enterprise na plataforma Anthropic, enquanto o Sonnet 4.6 continua sendo o ponto de equilíbrio custo-eficácia para tarefas de volume. Quem ainda não revisou sua estratégia de roteamento de modelos está deixando dinheiro na mesa.</p>
+        <a class="card-source" href="https://releasebot.io/updates/anthropic" target="_blank" rel="noopener">🔗 Releasebot — Anthropic Release Notes</a>
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Spring AI 2.0 — Integração Nativa com Spring Boot 4 e Null-Safety em Tempo de Compilação</h3>
+        <p>O Spring AI 2.0, lançado em junho de 2026, representa uma mudança de geração no ecossistema Java com IA. Além da migração para o Spring Boot 4, a novidade técnica mais relevante é a adoção plena de anotações JSpecify para null-safety em tempo de compilação, verificadas pelo NullAway. Traduzindo: você vai saber em build time que aquele prompt template não aceita null antes de descobrir isso em produção às 3h da manhã.</p>
+        <p>O Spring AI 2.0 também expande o suporte ao MCP (Model Context Protocol), que está se tornando o padrão de facto para interoperabilidade entre agentes e ferramentas externas — tanto o Spring AI quanto o LangChain4j implementam MCP, o que significa que suas ferramentas customizadas podem ser consumidas por qualquer framework compatível. Isso é uma mudança de paradigma: você está construindo componentes interoperáveis, não ilhas isoladas.</p>
+        <a class="card-source" href="https://blog.vaadin.com/spring-ai-2-0-in-practice-adding-llm-features-to-a-java-web-app" target="_blank" rel="noopener">🔗 Vaadin Blog — Spring AI 2.0 in Practice</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>LangChain4j 1.17.2 — Cadência Mensal Mantida, Ecosystem Maduro</h3>
+        <p>O LangChain4j chegou à versão 1.17.2 em julho de 2026, mantendo sua cadência de releases mensais desde que estabilizou na versão 1.0 GA em maio de 2025. A versão atual traz refinamentos nas integrações com os principais provedores de LLM e expansão do suporte a vector stores — incluindo melhorias no gerenciamento de chat memory para agentes de longa duração. O projeto confirmou que não é um port do Python: é uma implementação Java-first com idiomática Java forte.</p>
+        <p>O ponto que merece atenção é a comparação direta com o Spring AI 2.0: ambos têm Boot starters, RAG, tool calling e MCP. A decisão entre eles hoje é mais cultural do que técnica — Spring AI faz mais sentido se seu time já vive no ecossistema Spring; LangChain4j oferece mais flexibilidade para times que querem controle granular sem opinionation de framework.</p>
+        <a class="card-source" href="https://levelup.gitconnected.com/langchain4j-vs-spring-ai-an-honest-side-by-side-for-java-backend-teams-b6c0ea370f28" target="_blank" rel="noopener">🔗 Level Up Coding — LangChain4j vs Spring AI</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>ChatGPT Work e GPT-5.6 — O Agente Corporativo da OpenAI Ganha Forma</h3>
+        <p>A OpenAI lançou o ChatGPT Work em 9 de julho, um agente powered pelo GPT-5.6 que se integra com apps, arquivos e workflows de equipes para produzir documentos, planilhas, apresentações e relatórios completos de forma autônoma. A proposta é clara: agente como membro da equipe, não como ferramenta de consulta pontual. O mercado corporativo está respondendo — e quem constrói plataformas enterprise precisa entender essa pressão competitiva.</p>
+        <p>Do ponto de vista arquitetural, o que a OpenAI está fazendo com o ChatGPT Work é a mesma coisa que estamos implementando com LangChain4j e Spring AI: orquestração de contexto, acesso a ferramentas externas e geração de artefatos estruturados. A diferença é que eles empacotam isso como produto SaaS. Nós empacotamos como arquitetura customizável. Ambas as abordagens têm mercado — o que muda é o grau de controle e personalização que o cliente final demanda.</p>
+        <a class="card-source" href="https://valueaddvc.com/anthropic-2026" target="_blank" rel="noopener">🔗 ValueAdd VC — AI Announcements 2026</a>
+      </div>
+
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>Vertex AI Depreca Claude 3 Haiku — Sinal de Ciclo de Vida Acelerado de Modelos</h3>
+        <p>O Google Cloud encerrou o Claude 3 Haiku no Vertex AI em 23 de agosto de 2026, após deprecação anunciada em fevereiro. O evento em si é de baixo impacto para quem já migrou, mas sinaliza algo importante: o ciclo de vida de modelos é curto e os provedores de cloud não vão manter modelos legados indefinidamente. Se você ainda tem dependências hardcoded em versões específicas de modelos, esse é o momento de revisar sua estratégia de versionamento e aliasing.</p>
+        <a class="card-source" href="https://docs.cloud.google.com/vertex-ai/docs/release-notes" target="_blank" rel="noopener">🔗 Google Cloud — Vertex AI Release Notes</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Agentic RAG — Taxonomia e Arquiteturas</h3>
+          <p>O ArXiv publicou um SoK (Systematization of Knowledge) sobre Agentic RAG cobrindo taxonomia, arquiteturas e direções de pesquisa. Se você está projetando pipelines RAG para produção, essa leitura define o vocabulário e os padrões que o mercado vai adotar.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>Migração Spring AI 1.x → 2.0</h3>
+          <p>Com o Spring AI 2.0 targeting Spring Boot 4, o guia de migração é leitura obrigatória para qualquer equipe Java. Foco nas quebras de null-safety e nas mudanças de API no ChatClient e nos advisors de RAG.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔌</span>
+          <h3>Model Context Protocol (MCP)</h3>
+          <p>O MCP está se tornando o padrão de interoperabilidade para ferramentas de agentes. Tanto Spring AI 2.0 quanto LangChain4j 1.17.x já suportam MCP — construir suas ferramentas sobre esse protocolo agora significa portabilidade entre frameworks.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">📊</span>
+          <h3>Estratégia Multimodelo — FinOps com LLMs</h3>
+          <p>A tendência de 2026 é usar o modelo certo para cada tarefa: um para código, outro para raciocínio longo, outro para respostas rápidas de volume. Revisar seus custos de API com essa ótica pode reduzir 40-60% do gasto sem perda de qualidade.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🕸️</span>
+          <h3>LangGraph e Orquestração Stateful</h3>
+          <p>Para sistemas multi-agente com estado compartilhado e ciclos de feedback, o LangGraph define o padrão de orquestração stateful com grafos de controle. Vale entender o modelo mental mesmo que você implemente em Java — os padrões são transferíveis.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔍</span>
+          <h3>Observabilidade em Pipelines Agenticos</h3>
+          <p>Com 26% das organizações rodando agentes em produção, a demanda por traces, spans e métricas específicas para LLMs explodiu. Ferramentas como LangSmith Fleet e o suporte a OpenTelemetry no Spring AI 2.0 são o estado da arte atual.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados:</p>
+
+      <div class="highlight-card">
+        <h3>Google Search Spam Update de Agosto 2026</h3>
+        <p>O Google lançou sua terceira atualização anti-spam de 2026 em 18 de agosto. Relevante para times de SEO e marketing de conteúdo — completamente irrelevante para arquitetos de software focados em IA e Java. Ignore sem culpa.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Claude for Teachers — Oferta Educacional Gratuita da Anthropic</h3>
+        <p>A Anthropic anunciou acesso gratuito Enterprise para escolas e distritos até junho de 2027. Iniciativa válida do ponto de vista social, mas sem impacto no ecossistema de desenvolvimento enterprise. Nada aqui muda arquitetura, pricing de API ou roadmap técnico.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Hype em Torno de Frameworks JavaScript para Agentes</h3>
+        <p>Mastra e outros frameworks TypeScript-first continuam gerando conteúdo, mas para times Java enterprise o custo de avaliação não se justifica agora. Spring AI 2.0 e LangChain4j já entregam o mesmo conjunto de features com a maturidade de JVM. Fique no seu ecossistema.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O ecossistema Java para IA atingiu um nível de maturidade que não deixa mais desculpa para times enterprise continuarem na postura de "vamos esperar o mercado se estabilizar". <strong>Ele se estabilizou.</strong> Spring AI 2.0 e LangChain4j 1.17.x são as duas escolhas maduras, cada uma com filosofia distinta, e ambas prontas para produção.</p>
+
+        <p>A decisão prática hoje: se seu time já usa Spring Boot e quer a menor fricção possível, <strong>Spring AI 2.0</strong> é a escolha natural — o ChatClient abstrai providers, os Advisors encapsulam RAG e memória, e o suporte a null-safety em compile time é exatamente o tipo de garantia que times Java exigem. Se você precisa de controle fino sobre o pipeline — definir exatamente como cada passo de embedding, retrieval e geração se conecta — o <strong>LangChain4j</strong> oferece essa granularidade sem opinionation excessiva.</p>
+
+        <p>O MCP (Model Context Protocol) merece atenção especial: ambos os frameworks já exportam e consomem ferramentas via MCP, o que significa que uma ferramenta que você implementa em Java pode ser usada por um agente Python, por um cliente Claude Desktop ou por qualquer orquestrador compatível. Esse é o tipo de interoperabilidade que elimina silos entre times e plataformas.</p>
+
+        <h3>Exemplo: RAG com Spring AI 2.0 e MCP Tool Export</h3>
+
+<pre><code>// Spring AI 2.0 — RAG com advisor e tool MCP
+@Configuration
+public class RagConfig {
+
+    @Bean
+    public ChatClient chatClient(
+            ChatClient.Builder builder,
+            VectorStore vectorStore) {
+
+        return builder
+            .defaultAdvisors(
+                new QuestionAnswerAdvisor(vectorStore,
+                    SearchRequest.defaults()
+                        .withTopK(5)
+                        .withSimilarityThreshold(0.75)))
+            .build();
+    }
+}
+
+// Expondo uma ferramenta via MCP
+@Service
+public class DocumentSearchTool {
+
+    @Tool(description = "Busca documentos internos por relevância semântica")
+    public List&lt;String&gt; searchDocuments(
+            @ToolParam("query") String query,
+            @ToolParam("maxResults") int maxResults) {
+        // implementação com VectorStore
+        return vectorStore.similaritySearch(
+            SearchRequest.query(query).withTopK(maxResults))
+            .stream()
+            .map(Document::getContent)
+            .toList();
+    }
+}</code></pre>
+
+        <p>O padrão acima é o que estou usando em projetos da Wrapper Sistemas. A separação entre configuração de RAG (via advisor) e exposição de ferramentas (via MCP) mantém o código limpo e permite que os mesmos componentes sejam reusados em diferentes pipelines agenticos — sem duplicação, sem acoplamento desnecessário.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>Setembro começa com clareza: o ecossistema Java para IA não é mais um cidadão de segunda classe no mundo dos LLMs. Spring AI 2.0, LangChain4j 1.17.x, MCP e uma base de adoção enterprise crescente formam uma combinação que justifica investimento sério agora. O que me motiva é que os padrões que a indústria Java construiu em décadas — tipagem forte, injeção de dependência, rastreabilidade, testes — são exatamente o que sistemas agenticos em produção precisam para não virar caos. Estamos no lugar certo, com as ferramentas certas, no momento certo.</p>
+
+      <p>Se você está trabalhando com Java e IA e tem dúvidas sobre qual caminho tomar — Spring AI vs LangChain4j, RAG vs fine-tuning, MCP vs tool calling direto — deixa nos comentários. Esse diário existe justamente para essa conversa.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
