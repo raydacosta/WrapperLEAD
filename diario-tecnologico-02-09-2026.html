@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 02/09/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section { opacity: 0.7; }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span { color: var(--cyan); }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 02/09/2026</div>
+      <h1>Diário Tecnológico — 02 de setembro de 2026</h1>
+      <p class="excerpt">Spring AI 2.0 consolida o stack Java para IA nativa, enquanto Harness Engineering redefine como arquitetamos agentes em produção. Dois movimentos que mudam o jogo para quem trabalha com Java e IA corporativa.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-green">Spring AI</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-red">Agentes</span>
+        <span class="tag tag-violet">Harness Engineering</span>
+        <span class="tag tag-cyan">OpenAI</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Começo esta terça-feira com a sensação de que o ecossistema de IA passou de uma fase de experimentação acelerada para uma fase de consolidação técnica. Não é que as novidades pararam — é que elas começaram a ter endereço certo, versão estável e documentação de produção. Isso muda a conversa. Quando trabalho com times de engenharia aqui na Wrapper Sistemas, a diferença entre um projeto que virou PoC e um que entrou em produção raramente é de capacidade do modelo: é de maturidade da infraestrutura ao redor dele.</p>
+
+      <p>No front Java, o lançamento do <strong>Spring AI 2.0 GA</strong> em junho deste ano continua reverberando no ecossistema. Ainda estou vendo equipes migrando ou planejando migração, e hoje chegaram análises e comparações que valem a atenção. Ao mesmo tempo, o conceito de <strong>Harness Engineering</strong> — que substitui o prompt engineering isolado como disciplina central para construção de agentes — está ganhando tracção técnica de forma consistente, deixando de ser só buzzword para virar arquitetura documentada.</p>
+
+      <p>Tem também o barulho financeiro da semana: o pedido de IPO da OpenAI. Vou falar sobre isso, mas com a perspectiva de quem constrói software, não de quem especula em bolsa. Pra mim, o que importa é o que esse movimento significa para a continuidade e precificação das APIs — e aí tem algo relevante a analisar.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1: Spring AI 2.0 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Spring AI 2.0 GA + Spring Boot 4: o stack Java para IA nativa ficou sério</h3>
+        <p>Embora o GA tenha chegado em 12 de junho, só agora estão surgindo análises comparativas consolidadas sobre o que o Spring AI 2.0 significa na prática para times enterprise. Construído sobre Spring Boot 4 e Spring Framework 7, a versão 2.0 não é apenas uma atualização incremental — é uma reescrita de posicionamento. O framework saiu do papel de "biblioteca de integração com LLMs" para assumir o papel de plataforma completa para aplicações de IA.</p>
+
+        <p>O que me chamou mais atenção foram três mudanças estruturais: primeiro, o suporte ao <strong>Model Context Protocol (MCP)</strong> foi promovido para feature de primeira classe — não mais um addon comunitário. Segundo, o <strong>ToolCallingAdvisor</strong> tira do desenvolvedor a responsabilidade de gerenciar o loop de chamada de ferramentas (iterate → call → append → resubmit), abstraindo esse ciclo num componente reutilizável na cadeia de advisors. Terceiro, a adoção do JSpecify para null-safety em toda a API, aplicada em tempo de compilação via NullAway, que resolve uma classe inteira de bugs em tempo de desenvolvimento, não de runtime.</p>
+
+        <p>Para quem mantém aplicações Spring Boot 3.x, a linha 1.1.x continua com suporte ativo. A migração para Boot 4 não é obrigatória agora, mas o sinal estratégico é claro: o futuro do ecossistema Java para IA vai rodar no novo stack. Comece a planejar.</p>
+        <a class="card-source" href="https://spring.io/blog/2026/06/12/spring-ai-2-0-0-GA-available-now/" target="_blank" rel="noopener">🔗 Spring Blog — Spring AI 2.0.0 GA</a>
+      </div>
+
+      <!-- DESTAQUE 2: Harness Engineering -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Harness Engineering: o paradigma que substituiu o Prompt Engineering em 2026</h3>
+        <p>A evolução é clara quando traço a linha do tempo: em 2023, o foco era <strong>Prompt Engineering</strong> — como escrever o prompt certo para obter a resposta certa. Em 2025, evoluímos para <strong>Context Engineering</strong> — não só o prompt, mas o contexto completo que o modelo recebe: histórico, ferramentas, documentos recuperados via RAG. Em 2026, chegamos ao <strong>Harness Engineering</strong> — construir o invólucro programático que governa o ambiente de execução do agente: workflow, constraints, feedback loops, toolchain e lifecycle completo.</p>
+
+        <p>Essa evolução tem consequências arquiteturais diretas. Não se trata mais de otimizar um prompt em isolamento. Trata-se de desenhar um sistema determinístico que envolve o modelo probabilístico e traduz comportamento imprevisível em output confiável para produção. Empresas não podem escalar operações quando a saída do sistema depende de como o usuário formulou a pergunta — o harness resolve exatamente isso.</p>
+
+        <p>Do ponto de vista prático: se você ainda está focando seus esforços em "como melhorar meu prompt", você está otimizando a camada errada. O investimento deve estar na arquitetura do harness — nos contratos entre agentes, nos mecanismos de fallback, na observabilidade dos loops de decisão.</p>
+        <a class="card-source" href="https://www.epsilla.com/blogs/harness-engineering-evolution-prompt-context-autonomous-agents" target="_blank" rel="noopener">🔗 Epsilla Blog — Harness Engineering Evolution</a>
+      </div>
+
+      <!-- DESTAQUE 3: OpenAI IPO -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>OpenAI IPO: o que o pedido de capital aberto significa pra quem usa as APIs</h3>
+        <p>A OpenAI entrou com pedido de IPO buscando avaliação de até US$ 1 trilhão, trabalhando com Goldman Sachs e Morgan Stanley. A estreia na bolsa pode acontecer ainda em setembro de 2026. Para quem acompanha o mercado financeiro, é uma notícia enorme. Para quem usa a API da OpenAI em produção — como muitos dos projetos que acompanho — o sinal relevante é diferente.</p>
+
+        <p>Uma empresa aberta tem obrigações de transparência financeira que mudam o jogo. A OpenAI reportou prejuízo de US$ 5 bilhões em 2024 contra receita de US$ 3,7 bilhões, com custo operacional de US$ 1 bilhão por mês. Abrir capital significa expor esses números ao escrutínio público e de analistas — e a pressão por margem vai crescer. Isso pode se traduzir em revisões de precificação da API, mudanças nos tier de acesso a modelos de ponta, e aceleração na deprecação de modelos mais antigos.</p>
+
+        <p>Minha recomendação: quem tem workloads críticos em OpenAI deve começar agora a mapear estratégias de multi-provider. Não porque a OpenAI vá sumir, mas porque dependência de vendor único em API de IA é risco que não se justifica quando existem alternativas maduras (Anthropic, Google Gemini, e modelos open weight em infraestrutura própria).</p>
+        <a class="card-source" href="https://exame.com/invest/mercados/openai-dona-do-chatgpt-entra-com-pedido-de-ipo-nos-eua-e-pode-valer-us-1-trilhao/" target="_blank" rel="noopener">🔗 Exame — OpenAI IPO pedido</a>
+      </div>
+
+      <!-- DESTAQUE 4: Agentic RAG -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Agentic RAG como nova baseline: o RAG ingênuo ficou para trás</h3>
+        <p>Há uma análise circulando que define bem o momento atual: o RAG simples — recupera documentos, monta contexto, envia pro modelo — virou commodity. O que está se tornando a nova baseline é o <strong>Agentic RAG</strong>: o agente reformula a query em subqueries, executa múltiplas rodadas de recuperação, avalia a qualidade dos resultados e decide se precisa buscar mais antes de responder.</p>
+
+        <p>O que vem depois disso é ainda mais interessante: o argumento que está ganhando força é que o problema do RAG em produção não é a retrieval em si — é que o modelo gasta tokens em inference interpretando e contextualizando conhecimento que poderia ter sido pré-processado em tempo de compilação. A ideia de uma "compilation-stage knowledge layer" — processar e estruturar o conhecimento antes do momento de uso — é a direção que equipes com workloads pesados estão explorando.</p>
+        <a class="card-source" href="https://www.startuphub.ai/ai-news/ai-video/2026/agentic-rag-is-the-new-baseline-context-engineering-shifts-from-component-hacks-to-full-system-design/" target="_blank" rel="noopener">🔗 StartupHub — Agentic RAG nova baseline</a>
+      </div>
+
+      <!-- DESTAQUE 5: Agentes como paradigma dominante -->
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>2026: o ano em que a IA parou de responder e começou a agir</h3>
+        <p>O consenso que está se formando na indústria é que 2026 marcou a virada dos assistentes conversacionais para agentes operacionais. A IA deixou de ser um sistema de Q&amp;A sofisticado e passou a ser um executor: planeja tarefas, toma decisões com base em contexto, integra sistemas e conclui workflows de ponta a ponta. A tendência de multi-modelo — usar a IA certa para cada etapa de um pipeline — está substituindo a abordagem de "um modelo faz tudo".</p>
+
+        <p>Coloco como baixa relevância não porque seja irrelevante, mas porque esse ponto de inflexão já estava claro para quem acompanha o ecossistema há alguns meses. Se você ainda está explicando para a liderança por que agentes importam, este é um bom momento para usar os argumentos que estão circulando.</p>
+        <a class="card-source" href="https://digital.soufotofan.com/agentes-de-ia-por-que-2026-e-o-ano-em-que-a-inteligencia-artificial-deixou-de-responder-e-passou-a-agir/" target="_blank" rel="noopener">🔗 Por que 2026 é o ano dos agentes de IA</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🔧</span>
+          <h3>ToolCallingAdvisor — Spring AI 2.0</h3>
+          <p>A nova abstração que gerencia automaticamente o loop de chamada de ferramentas em agentes Spring. Estudar como integrá-lo na advisor chain é fundamental para quem quer agentes confiáveis em produção com Spring Boot 4.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔌</span>
+          <h3>Model Context Protocol (MCP) no Spring AI</h3>
+          <p>MCP virou cidadão de primeira classe no Spring AI 2.0, com anotações próprias e transporte Spring-specific. Entender o protocolo e como expor tools via MCP vai ser diferencial nas próximas semanas.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🏗️</span>
+          <h3>Harness Engineering — Arquitetura de Agentes</h3>
+          <p>O paradigma que substituiu o Prompt Engineering. Vale estudar como desenhar o invólucro programático ao redor de agentes LLM: contratos, feedback loops, mecanismos de retry e fallback, observabilidade.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔍</span>
+          <h3>Agentic RAG com subquery decomposition</h3>
+          <p>Reformulação de queries em subqueries paralelas, avaliação de relevância dos chunks recuperados e decisão iterativa de quando parar de buscar. É o que separa um RAG de demo de um RAG de produção.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚖️</span>
+          <h3>LangChain4j 1.x vs Spring AI 2.0 — quando usar cada um</h3>
+          <p>Com LangChain4j na versão 1.17.2 e Spring AI 2.0 GA, ambos são produção-ready. Estudar os trade-offs de composição opinionada (Spring AI) vs blocos granulares (LangChain4j) define a escolha arquitetural certa por contexto.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💼</span>
+          <h3>Estratégia multi-provider de LLM</h3>
+          <p>Com o IPO da OpenAI trazendo incerteza de precificação, mapear abstração de provider — usando interfaces agnósticas como as do Spring AI ou LangChain4j — vira proteção arquitetural, não overengineering.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados:</p>
+
+      <div class="highlight-card">
+        <h3>Especulação sobre valuation e data exata do IPO da OpenAI</h3>
+        <p>O barulho de mercado em torno de "vai ser US$ 800 bilhões ou US$ 1 trilhão?" e "IPO em setembro ou outubro?" não agrega nada para quem constrói software. O dado que importa — a empresa abre capital e vai ter pressão por margem — já está disponível. O resto é ruído de analista financeiro.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Artigos genéricos sobre "tendências de IA em 2026"</h3>
+        <p>A web está cheia de conteúdo do tipo "8 tendências de IA para 2026" que repetem os mesmos pontos de agentes, multimodal e automação sem nenhuma profundidade técnica. Se o artigo não tiver código, caso real ou análise de arquitetura, pode fechar sem culpa.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Hype em torno de novos modelos "melhores que o GPT-4" sem benchmark real</h3>
+        <p>A cada semana aparece algum modelo anunciado como "state-of-the-art" em alguma dimensão específica. Sem benchmark reproduzível no seu domínio de aplicação, esse tipo de anúncio não altera decisão arquitetural nenhuma. Aguarde resultados em aplicações reais antes de agir.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O ecossistema Java para IA está mais maduro do que a maioria dos desenvolvedores percebe. Temos dois frameworks de produção — <strong>Spring AI 2.0.0 GA</strong> (junho 2026) e <strong>LangChain4j 1.17.2</strong> (julho 2026) — com suporte completo a tool calling, RAG, chat memory, vector stores e MCP. Essa coexistência não é problema; é sinal de saúde do ecossistema.</p>
+
+        <p>A escolha entre os dois segue uma regra prática: se seu projeto já vive no universo Spring Boot, o Spring AI 2.0 é a extensão natural — ele se integra ao ciclo de vida do container, usa Spring Beans como tools e traz o ToolCallingAdvisor para gerenciar o loop agentic. Se você precisa de controle granular sobre cada componente do pipeline de IA (DocumentLoader, DocumentSplitter, EmbeddingStore de forma independente), ou se quer evitar lock-in com o ecossistema Spring, o LangChain4j é mais adequado. Ambos suportam Anthropic Claude, OpenAI, Google Gemini e modelos locais via Ollama.</p>
+
+        <p>O ponto crítico do Spring AI 2.0 que merece atenção imediata é o suporte a MCP como anotação de primeira classe. Isso significa que você pode transformar qualquer Spring Bean anotado com <code>@Tool</code> em um servidor MCP — e qualquer cliente MCP, incluindo Claude Desktop ou agentes externos, pode descobrir e chamar essas tools. Abaixo, um exemplo mínimo de como o ToolCallingAdvisor simplifica a construção de um agente com tools no Spring AI 2.0:</p>
+
+        <pre><code>// Spring AI 2.0 — Agente com ToolCallingAdvisor
+@Configuration
+public class AgentConfig {
+
+    @Bean
+    public ChatClient agentChatClient(ChatClient.Builder builder) {
+        return builder
+            .defaultAdvisors(
+                new ToolCallingAdvisor(),           // gerencia o loop tool-call automaticamente
+                new MessageChatMemoryAdvisor(
+                    new InMemoryChatMemory()
+                )
+            )
+            .defaultTools("catalogTools", "orderTools") // Spring Beans como tools
+            .build();
+    }
+}
+
+// Tool declarada como Spring Bean — descoberta automática via MCP
+@Component
+public class CatalogTools {
+
+    private final ProductRepository productRepository;
+
+    @Tool(description = "Busca produtos pelo nome no catálogo corporativo")
+    public List&lt;ProductDTO&gt; findByName(String name) {
+        return productRepository
+            .findByNameContaining(name)
+            .stream()
+            .map(ProductDTO::from)
+            .toList();
+    }
+
+    @Tool(description = "Retorna estoque disponível para um SKU específico")
+    public StockDTO getStock(String sku) {
+        return StockDTO.from(productRepository.findBySku(sku));
+    }
+}
+
+// Uso no serviço — o advisor resolve o loop internamente
+@Service
+public class ProductAgentService {
+
+    private final ChatClient agentChatClient;
+
+    public String query(String userMessage) {
+        return agentChatClient
+            .prompt()
+            .user(userMessage)
+            .call()
+            .content(); // ToolCallingAdvisor executa quantas rodadas forem necessárias
+    }
+}</code></pre>
+
+        <p>A simplicidade acima esconde o que o ToolCallingAdvisor faz por baixo: detecta quando o modelo solicita uma tool call, executa a tool, anexa o resultado ao contexto e reenvia para o modelo — repetindo quantas iterações forem necessárias até o modelo produzir uma resposta final. Antes do Spring AI 2.0, esse loop tinha que ser implementado manualmente, o que era fonte de bugs e inconsistências entre implementações. Agora é infraestrutura.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>O que fica dessa terça-feira é a sensação de que o campo está se consolidando nas camadas certas. Spring AI 2.0 resolve problemas de infraestrutura que antes ficavam no colo do desenvolvedor. Harness Engineering dá nome e estrutura para o que times mais maduros já estavam fazendo intuitivamente. O ecossistema Java para IA tem, agora, ferramentas à altura da complexidade dos problemas que estamos resolvendo. O próximo passo é parar de debater frameworks e começar a debater arquiteturas.</p>
+
+      <p>Se você tem dúvidas sobre como escolher entre Spring AI 2.0 e LangChain4j para o seu contexto, ou quer discutir como implementar Harness Engineering na prática, deixa nos comentários. Tenho visto essa dúvida aparecer com frequência nos projetos que acompanho, e vale um post aprofundado sobre isso em breve.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
