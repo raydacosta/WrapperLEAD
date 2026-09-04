@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 04/09/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section {
+      opacity: 0.7;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 24px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 04/09/2026</div>
+      <h1>Diário Tecnológico — 4 de setembro de 2026</h1>
+      <p class="excerpt">
+        Anthropic, OpenAI e Google lançam modelos com capacidades cibernéticas em menos de 72 horas. Fable 5.1 corta cache em 75% — o que isso muda para arquiteturas Java com IA em produção.
+      </p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-cyan">Spring AI</span>
+        <span class="tag tag-red">Anthropic</span>
+        <span class="tag tag-green">Agentic RAG</span>
+        <span class="tag tag-violet">FinOps LLM</span>
+        <span class="tag tag-amber">Cyber AI</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>
+        Acordei hoje com o feed transbordando de anúncios. Não é exagero dizer que as últimas 72 horas foram o período mais denso de lançamentos de modelos frontier que já vi desde o ciclo de lançamentos de 2025. Anthropic, OpenAI e Google DeepMind jogaram novos modelos no mercado em sequência — e todos com um denominador comum que me chamou atenção imediatamente: capacidades cibernéticas com programas de acesso restrito. O mercado está claramente reconhecendo que inteligência artificial ofensiva é uma fronteira que precisa ser gerenciada, não ignorada.
+      </p>
+      <p>
+        Para quem constrói sistemas corporativos em Java, o destaque de hoje não é só a corrida dos grandes laboratórios. É o corte de 75% no preço de leitura de cache do Fable 5.1 da Anthropic — um movimento que altera diretamente o cálculo de viabilidade econômica de agentes de longa duração e pipelines RAG contextuais que estou colocando em produção na Wrapper Sistemas. Junto com o Spring AI 2.0 GA estabilizado desde junho e o LangChain4j na versão 1.17.2, o ecossistema Java com IA está mais robusto e economicamente defensável do que nunca.
+      </p>
+      <p>
+        Vou detalhar o que realmente importa separando o sinal do ruído, como de costume.
+      </p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1: Fable 5.1 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Anthropic lança Claude Fable 5.1 e Mythos 5.1 — cache 75% mais barato</h3>
+        <p>
+          A Anthropic lançou em 1º de setembro o <strong>Claude Fable 5.1</strong> e seu gêmeo de acesso restrito <strong>Mythos 5.1</strong>, com um número que eu não consigo ignorar: redução de 75% no preço de leitura de cache, caindo de $1,00 para <strong>$0,25 por milhão de tokens</strong>. A base de preço de entrada e saída se manteve em $10 e $50 por milhão, respectivamente. No benchmark Terminal-Bench-Science, o modelo atingiu 52,6% — o que não é apenas incremental.
+        </p>
+        <p>
+          O que isso muda na prática? Para agentes com contexto longo — pense em contratos jurídicos, análise de código de repositórios inteiros, assistentes com histórico acumulado — o custo efetivo cai entre 25% e 45% dependendo da intensidade de cache na carga de trabalho. Nos pipelines que tenho em produção com system prompts pesados e documentos de referência fixos, essa mudança de preço pode representar a diferença entre uma funcionalidade sendo viável ou não para um cliente de médio porte. A Anthropic também ajustou o TTL do cache: 5 minutos (cache-write a $12,50/MTok) e 1 hora ($20/MTok). Vale calibrar qual TTL faz sentido para cada caso de uso — não existe resposta universal.
+        </p>
+        <p>
+          O Mythos 5.1 é a variante de acesso controlado voltada para cenários de segurança cibernética — seguindo o padrão que OpenAI e Google também adotaram nessa rodada. Ainda não tenho acesso ao gated program, mas vou acompanhar de perto.
+        </p>
+        <a class="card-source" href="https://www.marktechpost.com/2026/09/01/anthropic-releases-claude-fable-5-1-and-claude-mythos-5-1-52-6-on-terminal-bench-science-and-75-cheaper-cache-reads/" target="_blank" rel="noopener">🔗 MarkTechPost — Anthropic Releases Claude Fable 5.1</a>
+        <br>
+        <a class="card-source" href="https://venturebeat.com/technology/anthropics-claude-fable-5-1-and-mythos-5-1-arrive-with-a-75-cost-reduction-for-fable-cache-reads" target="_blank" rel="noopener">🔗 VentureBeat — 75% cost reduction for Fable cache reads</a>
+      </div>
+
+      <!-- DESTAQUE 2: GPT-6 Astra -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>OpenAI lança GPT-6 Astra — primeiro modelo a ativar safeguard crítico de cibersegurança</h3>
+        <p>
+          Em 3 de setembro, a OpenAI lançou o <strong>GPT-6 Astra</strong> — e junto com o lançamento veio uma notícia que merece atenção separada: este é o primeiro modelo da OpenAI a atingir o threshold de capacidade cibernética que aciona seus mecanismos internos de salvaguarda. A empresa confirmou que isso significa que acesso à variante Cyber do modelo é controlado por um programa de defensores — pesquisadores de segurança credenciados e equipes de resposta a incidentes.
+        </p>
+        <p>
+          Como arquiteto de software, o que me interessa aqui não é o aspecto sensacionalista, mas o que isso sinaliza sobre a trajetória de capacidade dos modelos. Se o GPT-6 Astra está ativando thresholds que modelos anteriores não ativavam, isso significa que a barreira de capacidade para automação de tarefas complexas (incluindo análise de vulnerabilidades, geração de exploits e engenharia reversa) caiu significativamente. Para times de segurança e pentesters, isso é uma ferramenta poderosa. Para quem constrói sistemas enterprise, é um lembrete de que modelos com acesso irrestrito à internet e ferramentas de execução de código precisam de políticas de governança sérias.
+        </p>
+        <a class="card-source" href="https://thehackernews.com/2026/09/google-anthropic-and-openai-unveil.html" target="_blank" rel="noopener">🔗 The Hacker News — Google, Anthropic, and OpenAI Unveil Cyber AI Models</a>
+      </div>
+
+      <!-- DESTAQUE 3: Gemini 3.8 Flash -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Google DeepMind: Gemini 3.8 Flash com variante Cyber para defensores</h3>
+        <p>
+          No dia 2 de setembro, o Google DeepMind entrou na sequência com o <strong>Gemini 3.8 Flash</strong>, incluindo uma variante Cyber de acesso restrito — o mesmo padrão que Anthropic e OpenAI adotaram. O que me chamou atenção aqui é o claim de desempenho: o Gemini 3.8 Flash afirma superar tanto o Mythos 5 quanto o GPT-5.6 Sol na descoberta autônoma de vulnerabilidades, com nível frontier.
+        </p>
+        <p>
+          Para equipes enterprise, o Gemini 3.8 Flash tem relevância imediata: é um modelo de latência baixa (Flash), o que significa que ele se encaixa melhor em pipelines de produção com requisitos de tempo de resposta apertados do que modelos maiores. Se a Anthropic domina meu stack pela qualidade de raciocínio do Fable, o Google Flash é o que eu uso quando preciso de throughput alto e custo controlado. Com a nova versão, essa decisão fica ainda mais interessante de calibrar.
+        </p>
+        <a class="card-source" href="https://thehackernews.com/2026/09/google-anthropic-and-openai-unveil.html" target="_blank" rel="noopener">🔗 The Hacker News — Gemini 3.8 Flash + Cyber variant</a>
+      </div>
+
+      <!-- DESTAQUE 4: Agentic RAG enterprise -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Agentic RAG vira padrão de fato — e 40% dos projetos serão cancelados até 2027</h3>
+        <p>
+          Dois dados do Gartner circularam essa semana que valem comentário: primeiro, que <strong>33% dos aplicativos enterprise terão componentes de IA agêntica até 2028</strong>. Segundo, que mais de <strong>40% dos projetos de IA agêntica serão cancelados até o final de 2027</strong> por custo escalando sem controle e ausência de frameworks de risco adequados. Isso não é pessimismo — é a realidade de qualquer tecnologia que vai de protótipo a produção sem disciplina de engenharia.
+        </p>
+        <p>
+          A lição que tiro disso é clara: Agentic RAG não é uma questão de "se vamos adotar", mas de "como vamos operar em produção de forma sustentável". Governança de custo por token, observabilidade de agentes e circuit breakers para loops autônomos não são opcionais — são requisitos arquiteturais de primeira ordem.
+        </p>
+        <a class="card-source" href="https://sumatosoft.com/blog/blog-agentic-rag-enterprise-implementation-guide" target="_blank" rel="noopener">🔗 SumatoSoft — Agentic RAG Enterprise Implementation Guide</a>
+      </div>
+
+      <!-- DESTAQUE 5: AI FinOps -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Inferência já é o segundo maior custo de IA enterprise — FinOps de tokens virou obrigação</h3>
+        <p>
+          Consolidou-se em 2026 um dado que já suspeitava: <strong>o custo de inferência ultrapassou infraestrutura cloud como segunda maior linha de custo em orçamentos de IA enterprise</strong>, atrás apenas de pessoal. A unidade de medida muda — de custo por hora para custo por inferência ou por token. O ciclo de otimização também: semanal em fases de crescimento acelerado, não mensal como no modelo FinOps tradicional.
+        </p>
+        <p>
+          Para times como o meu, isso significa instrumentar cada chamada de LLM com atribuição de custo por feature, não apenas por ambiente. A redução de 75% no cache do Fable 5.1 é relevante exatamente nesse contexto — é uma alavanca de FinOps que a Anthropic entregou direto na linha de preço, sem exigir mudança de arquitetura além de ativar o prompt caching corretamente.
+        </p>
+        <a class="card-source" href="https://www.vantage.sh/blog/finops-for-ai-token-costs" target="_blank" rel="noopener">🔗 Vantage — AI Cost Observability: Measuring and Justifying Token Spend</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar — com foco direto em aplicabilidade para arquiteturas Java enterprise:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>Prompt Caching com Anthropic SDK (Java)</h3>
+          <p>Com o Fable 5.1 cortando cache reads em 75%, agora é o momento certo para entender como ativar e calibrar o cache de system prompts longos via SDK Java da Anthropic. O impacto no FinOps é imediato.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🏗️</span>
+          <h3>Spring AI 2.0 GA — o que mudou</h3>
+          <p>O Spring AI 2.0 GA (lançado em junho de 2026) trouxe mudanças de API relevantes em relação à 1.x. Se você ainda está em 1.1, vale avaliar a migração — especialmente para o suporte a MCP e modelos multi-provider.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔍</span>
+          <h3>Agentic RAG: arquiteturas de loop de raciocínio</h3>
+          <p>Diferente do RAG linear clássico, o Agentic RAG adiciona um reasoning loop que decide quantas retrieval steps executar. Entender esse padrão agora é crítico antes de colocar agentes enterprise em produção.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">📊</span>
+          <h3>AI FinOps: custo por feature, não por ambiente</h3>
+          <p>Instrumentar chamadas de LLM com atribuição de custo por feature é a diferença entre um projeto cancelado e um projeto escalável. Ferramentas como Vantage e LangFuse têm modelos de atribuição prontos.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🛡️</span>
+          <h3>Governança de agentes autônomos</h3>
+          <p>Com modelos Cyber de capacidade frontier disponíveis, políticas de sandboxing, permissões mínimas e circuit breakers para agentes com acesso a ferramentas precisam entrar no seu checklist de arquitetura agora.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚡</span>
+          <h3>Gemini 3.8 Flash para pipelines de alto throughput</h3>
+          <p>Para casos de uso que precisam de latência baixa e volume alto (classificação, extração, triagem), o Flash da nova geração é o candidato natural. Vale comparar benchmarks contra Fable 5.1 no seu caso de uso específico.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção imediata. Hoje, estes temas podem esperar — ou ser descartados sem culpa:</p>
+
+      <div class="highlight-card">
+        <h3>Corrida de benchmarks comparativos entre Fable 5.1, GPT-6 Astra e Gemini 3.8</h3>
+        <p>As primeiras 48 horas após qualquer lançamento são dominadas por benchmarks selados pelos próprios laboratórios e reproduções apressadas da comunidade. Espere pelo menos duas semanas para avaliações independentes em tarefas reais antes de mudar qualquer decisão arquitetural baseada em números de benchmark.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Modelos locais "que rivalizam com o frontier" — setembro de 2026</h3>
+        <p>Sempre há uma enxurrada de posts comparando o mais novo modelo open-weights com o frontier. Para sistemas enterprise que precisam de raciocínio complexo, conformidade de dados e SLA, modelos locais ainda carregam um custo operacional e de manutenção que o hype não menciona. Acompanhe, mas não tome decisão arquitetural baseada em posts de Reddit ou X.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Hype em torno das variantes "Cyber" para uso geral</h3>
+        <p>Mythos 5.1, GPT-6 Astra Cyber e Gemini 3.8 Cyber são modelos com acesso restrito a programas controlados. Não existe data pública de disponibilidade geral. Posts especulando sobre acesso são ruído — ignore até que haja anúncio formal de programa aberto.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>
+          O ecossistema Java com IA está em um ponto de maturidade que me deixa genuinamente satisfeito. O <strong>LangChain4j 1.17.2</strong> (julho de 2026) e o <strong>Spring AI 2.0 GA</strong> (junho de 2026) formam hoje a base mais sólida que já tivemos para construir sistemas RAG e agentes em Java. Ambos suportam MCP (Model Context Protocol), o que significa que ferramentas externas — desde buscas na web até execução de queries SQL — são cidadãos de primeira classe nos seus pipelines de agentes.
+        </p>
+
+        <p>
+          Com a redução de cache do Fable 5.1, o ponto de atenção imediato no stack Java é garantir que o SDK da Anthropic está configurado corretamente para aproveitar o prompt caching. No Spring AI 2.0, isso se traduz em configurar o <code>CacheControl</code> adequado nas opções do modelo. Para agentes com system prompts longos — algo muito comum em assistentes jurídicos, de compliance ou de análise de código que construímos aqui — ativar TTL de 1 hora pode reduzir o custo total do pipeline entre 30% e 45%.
+        </p>
+
+        <p>
+          O LangChain4j também está evoluindo bem no suporte a RAG agêntico: o padrão de <em>query routing</em> com múltiplos retrievers foi estabilizado nas versões recentes, e a integração com bancos vetoriais como pgvector (via Spring Data) ficou mais direta no contexto do Spring AI 2.0. Para quem está avaliando qual framework usar hoje em projetos novos, minha posição se mantém: Spring AI se você já tem Spring Boot no stack; LangChain4j se precisar de controle granular sem opinião de framework.
+        </p>
+
+        <h3>Exemplo: Spring AI 2.0 + Claude Fable 5.1 com cache de 1 hora</h3>
+
+        <pre><code>// Configuração do ChatClient com Claude Fable 5.1 e cache ativo
+@Configuration
+public class AiConfig {
+
+    @Bean
+    public ChatClient chatClient(ChatClient.Builder builder) {
+        return builder
+            .defaultSystem("""
+                Você é um assistente jurídico especializado em contratos enterprise.
+                [SYSTEM PROMPT LONGO — este conteúdo fica no cache por 1 hora]
+                """)
+            .defaultOptions(AnthropicChatOptions.builder()
+                .model("claude-fable-5-1-20260901")
+                .maxTokens(4096)
+                .cacheControl(CacheControl.oneHour()) // TTL 1h: $20/MTok na escrita, $0.25/MTok na leitura
+                .build())
+            .build();
+    }
+}
+
+// Uso em produção: múltiplas chamadas reutilizam o cache do system prompt
+public String analisarContrato(String clausula) {
+    return chatClient.prompt()
+        .user(u -> u.text("Analise a seguinte cláusula e identifique riscos: {clausula}")
+                    .param("clausula", clausula))
+        .call()
+        .content();
+}</code></pre>
+
+        <p>
+          A lógica é simples: você paga $20/MTok na primeira escrita do cache (TTL 1h), mas nas chamadas subsequentes dentro dessa hora paga apenas $0,25/MTok — 80 vezes mais barato. Para um sistema com 500 chamadas por hora com system prompt de 10k tokens, isso representa uma economia expressiva no FinOps mensal.
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>
+        Hoje foi um daqueles dias em que vale parar e reconhecer que o mercado de IA está se movendo em velocidade não-linear. Três laboratórios de ponta lançaram modelos frontier em 72 horas, todos com o mesmo tema subjacente de capacidade cibernética controlada — e a Anthropic aproveitou o movimento para entregar uma alavanca de FinOps concreta com o corte de cache. Para mim, o dia se resume a isso: mais capacidade disponível, mais custo para gerenciar, mais urgência em ter observabilidade e governança como parte da arquitetura, não como afterthought.
+      </p>
+      <p>
+        Se você está construindo sistemas Java com IA em produção, hoje tem dois pontos de ação claros: revisar sua configuração de prompt caching com o Fable 5.1 e garantir que tem atribuição de custo por feature no seu stack de observabilidade. O resto pode esperar a poeira baixar.
+      </p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
