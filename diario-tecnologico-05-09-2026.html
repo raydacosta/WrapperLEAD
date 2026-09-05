@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 05/09/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section {
+      opacity: 0.7;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    .breaking-alert {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: #fca5a5;
+    }
+
+    .breaking-alert strong {
+      color: #f87171;
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 05 de setembro de 2026</div>
+      <h1>Diário Tecnológico — 05 de setembro de 2026</h1>
+      <p class="excerpt">GPT-6 Astra opera computadores sozinho enquanto a Anthropic quebra a API com o Fable 5.1 — a semana mais densa de lançamentos frontier desde agosto. No radar Java, MCP vira infraestrutura de verdade.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-red">GPT-6 Astra</span>
+        <span class="tag tag-cyan">Anthropic</span>
+        <span class="tag tag-green">Spring AI</span>
+        <span class="tag tag-violet">MCP</span>
+        <span class="tag tag-amber">Agentes</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Essa semana foi uma das mais densas que já acompanhei desde que comecei a escrever o Diário Tecnológico. Em menos de 72 horas, a OpenAI lançou o GPT-6 Astra — o modelo que o próprio Greg Brockman ousou chamar de potencial marco da AGI —, a Anthropic entregou o Fable 5.1 com três breaking changes que vão obrigar muita equipe a rever integrações esta semana, e o Google silenciosamente soltou o Gemini 3.8 Flash com desempenho cybersecurity que levantou as sobrancelhas do mercado. Tudo isso em 48 horas.</p>
+      <p>O ecossistema de IA está claramente entrando em outra fase. Não é mais a corrida por benchmarks de raciocínio ou contextos maiores — isso agora é commodity. O que está sendo disputado agora é <strong>autonomia real</strong>: a capacidade de um modelo executar fluxos complexos, operar interfaces, tomar decisões em sequência e entregar resultado sem intervenção humana. O GPT-6 Astra é o sinal mais claro disso até hoje.</p>
+      <p>Do lado Java, o que chama atenção é o amadurecimento do ecossistema MCP. LangChain4j 1.17.2 e Spring AI 2.0 já estão em produção em empresas sérias, e o artigo que o Java Code Geeks publicou em agosto sobre JVMs como agent hosts resume bem o que estou vendo nos projetos da Wrapper Sistemas: o Java enterprise não está apenas consumindo IA — ele está se tornando a infraestrutura que serve IA para outros sistemas.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1: GPT-6 Astra -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>GPT-6 Astra: a OpenAI lança o modelo que opera computadores sozinho</h3>
+        <p>Em 3 de setembro de 2026, a OpenAI apresentou o <strong>GPT-6 Astra</strong>, e esse lançamento muda o referencial de comparação de todos os outros modelos. Não é apenas um salto em benchmark — é uma mudança de paradigma no que um modelo de linguagem pode fazer. O Astra consegue navegar na web, preencher formulários, instalar software, atualizar registros em sistemas, criar jogos completos e conduzir fluxos compostos por dezenas de etapas sem supervisão humana.</p>
+        <p>A demonstração mais impactante foi objetiva: uma tarefa que tomaria meia hora de uma pessoa foi executada em <strong>5 minutos e 27 segundos</strong>. O Greg Brockman chamou de <em>"generational leap"</em> e insinuou que o Astra pode eventualmente ser visto como a chegada da AGI. Eu prefiro manter o ceticismo técnico — AGI é uma afirmação carregada de critérios vagos — mas o que não dá pra ignorar é que um modelo capaz de conduzir uma due diligence de apartamento, preparar uma declaração de imposto de renda ou renderizar um projeto arquitetônico do zero, tudo de forma autônoma, tem implicações operacionais profundas para qualquer empresa que ainda opera com processos manuais repetitivos.</p>
+        <p>Do ponto de vista estratégico para quem trabalha com automação enterprise: o Astra começa disponível para clientes corporativos via o tier Daybreak e nos próximos dias chega ao ChatGPT Plus, Pro, Business e Enterprise. A pergunta que faço aos meus clientes é simples — <strong>quais dos vossos processos repetitivos você ainda não automatizou porque "não tem API"?</strong> O Astra resolve isso pelo UI. Essa é a mudança mais relevante.</p>
+        <a class="card-source" href="https://www.axios.com/2026/09/03/openai-astra-gpt-6-agi-brockman" target="_blank" rel="noopener">🔗 Axios — OpenAI releases GPT-6 Astra</a>
+      </div>
+
+      <!-- DESTAQUE 2: Claude Fable 5.1 Breaking Changes -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Anthropic lança Fable 5.1 e Mythos 5.1 com três breaking changes críticos na API</h3>
+        <p>Em 1º de setembro de 2026, a Anthropic lançou o <strong>Claude Fable 5.1</strong> e o <strong>Mythos 5.1</strong> — e junto com eles vieram três mudanças que vão exigir atenção imediata de qualquer equipe que usa a API da Anthropic em produção. Não são mudanças de comportamento sutis. São erros em runtime e invalidações silenciosas que podem quebrar pipelines sem aviso claro.</p>
+
+        <div class="breaking-alert">
+          <strong>⚠️ Breaking Change #1 — Forced tool use retorna 400:</strong> Se o seu código usa <code>tool_choice: {"type": "tool", ...}</code> para forçar o modelo a chamar uma ferramenta específica, agora você receberá um erro HTTP 400. Era um comportamento implicitamente suportado; agora é explicitamente rejeitado.
+        </div>
+        <div class="breaking-alert">
+          <strong>⚠️ Breaking Change #2 — Thinking blocks são vinculados ao modelo:</strong> Blocos de raciocínio (thinking blocks) agora registram qual modelo os gerou. O Fable 5.1 consegue ler thinking blocks de modelos anteriores, mas o inverso não funciona. Se você reutiliza blocos de raciocínio entre versões do modelo em chamadas encadeadas, revise a lógica agora.
+        </div>
+        <div class="breaking-alert">
+          <strong>⚠️ Breaking Change #3 — Editar histórico invalida o raciocínio:</strong> Qualquer alteração antes de um thinking block do Fable 5.1 — system prompt, array de tools, mensagem anterior — resulta em erro ou descarte silencioso do bloco. Já está ativo para contas de API criadas após 31/08/2026.
+        </div>
+
+        <p>Minha recomendação prática: antes de atualizar qualquer integração para o Fable 5.1, rode os seus testes de integração com um ambiente de staging. Se você não tem testes de integração cobrindo o comportamento da sua pipeline com a API da Anthropic, esse é o momento de criar — esse padrão de breaking changes vai se repetir.</p>
+        <a class="card-source" href="https://roo.beehiiv.com/p/claude-fable-5-1-mythos-5-1-whats-new" target="_blank" rel="noopener">🔗 Beehiiv — Claude Fable 5.1: What Changed, What Broke</a>
+      </div>
+
+      <!-- DESTAQUE 3: Gemini 3.8 Flash -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Gemini 3.8 Flash: Google entra na disputa de cybersecurity autônoma com resultado surpreendente</h3>
+        <p>Em 2 de setembro, o Google lançou o <strong>Gemini 3.8 Flash</strong> com um diferencial específico que merece atenção: a variante Cyber desse modelo demonstrou desempenho frontier-level em descoberta autônoma de vulnerabilidades — e, segundo o The Hacker News, superou modelos maiores da Anthropic (Mythos 5) e da OpenAI (GPT-5.6 Sol e GPT-5.5-Cyber) em benchmarks de cibersegurança.</p>
+        <p>O que isso significa na prática? O Google está apostando em especialização vertical por domínio. Em vez de competir no geral, está mostrando que um modelo Flash — menor, mais rápido e mais barato — pode ser superior em tarefas específicas quando treinado com foco. Isso reforça a tendência que vejo se consolidar em 2026: a abordagem multimodelo. Você não vai usar o mesmo modelo para tudo. Você vai usar o modelo certo para cada tarefa. Para análise de código e varredura de segurança, o Gemini 3.8 Flash Cyber entra no radar com muita força.</p>
+        <a class="card-source" href="https://thehackernews.com/2026/09/google-anthropic-and-openai-unveil.html" target="_blank" rel="noopener">🔗 The Hacker News — Google, Anthropic e OpenAI revelam modelos de Cyber IA</a>
+      </div>
+
+      <!-- DESTAQUE 4: Revolução dos Agentes -->
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>A narrativa de 2026 se consolida: IA parou de responder e passou a agir</h3>
+        <p>Essa semana vários veículos publicaram análises sobre o que está acontecendo com o ecossistema de IA em 2026, e o consenso é claro: <strong>a era da IA reativa acabou</strong>. O que vemos agora são sistemas que planejam, decidem e executam — com menos supervisão humana a cada versão. O lançamento do GPT-6 Astra é o ponto alto dessa narrativa, mas ela vem se construindo há meses, com OpenAI, Anthropic, Google e uma dezena de players menores todos apostando no design agentic como o eixo central de diferenciação.</p>
+        <p>Registrei esse item aqui não como novidade, mas como confirmação de tendência. Para quem ainda está "esperando para ver", o mercado não vai esperar.</p>
+        <a class="card-source" href="https://digital.soufotofan.com/agentes-de-ia-por-que-2026-e-o-ano-em-que-a-inteligencia-artificial-deixou-de-responder-e-passou-a-agir/" target="_blank" rel="noopener">🔗 Análise — Por que 2026 é o ano em que a IA passou a agir</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei nessa janela de 72h, estes são os temas que recomendo explorar agora — não por tendência, mas por impacto imediato no trabalho:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🔌</span>
+          <h3>MCP (Model Context Protocol) na prática</h3>
+          <p>Com Spring AI 2.0 e LangChain4j 1.17.x, transformar um serviço Java em MCP Tool Server virou questão de horas. Se você ainda não estudou o protocolo, agora é o momento — ele está virando o "padrão REST" dos agentes.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚠️</span>
+          <h3>Guia de migração: Claude API para Fable 5.1</h3>
+          <p>As três breaking changes do Fable 5.1 exigem revisão de código agora. Antes de atualizar qualquer integração em produção, leia o release notes completo e teste em staging. Os breaking changes em thinking blocks e forced tool use são os mais críticos.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🤖</span>
+          <h3>Agentic design patterns — multi-step planning</h3>
+          <p>O GPT-6 Astra torna urgente entender como arquitetar fluxos agenticos com raciocínio multi-step. Vale revisar os padrões de orchestração, handoff entre agentes e observabilidade de pipelines longas.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🛡️</span>
+          <h3>Gemini 3.8 Flash Cyber — benchmarks de segurança</h3>
+          <p>Se você trabalha com segurança de software ou precisa de análise de vulnerabilidades em pipelines de CI/CD, esse modelo merece avaliação. Superou modelos maiores em tarefas específicas de cybersecurity a um custo menor.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>Spring AI 2.0 — o que mudou para quem vem do 1.x</h3>
+          <p>A migração de Spring Boot 3.x para 4.x é pré-requisito. O Spring AI 2.0 GA de junho de 2026 trouxe null-safety annotations com NullAway e a camada de anotações para agentes integrada ao core. Vale ler o migration guide antes de atualizar.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Estratégia multimodelo para enterprise</h3>
+          <p>Com Gemini Flash para segurança, Fable 5.1 para raciocínio, GPT-6 Astra para autonomia — a escolha não é mais "qual modelo usar", mas "como orquestrar os modelos certos para cada tarefa". Esse é o framework que vale estudar agora.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que está circulando no feed desta semana merece atenção. Filtrando o ruído:</p>
+
+      <div class="highlight-card">
+        <h3>Debate sobre AGI real no GPT-6 Astra</h3>
+        <p>Greg Brockman chamou o Astra de potencial marco de AGI. Esse é um movimento de marketing com critérios técnicos vagos. O que importa avaliar é a capacidade operacional concreta do modelo, não a nomenclatura filosófica. Ignore o debate semântico sobre AGI e foque no que ele faz de verdade.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Tutoriais de RAG com modelos e SDKs de 2024</h3>
+        <p>Circulam muitos guias de RAG em Java, Python e TypeScript baseados em versões antigas dos frameworks. Com LangChain4j 1.17.x e Spring AI 2.0 no campo, boa parte desse material está desatualizado. Não vale o tempo.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Plataformas no-code de "agentes de IA" sem API enterprise</h3>
+        <p>A semana de lançamentos reativou o hype em torno de ferramentas no-code que prometem agentes sem código. Para contexto enterprise com integração real a sistemas legados e requisitos de compliance, essas plataformas ainda não entregam. Fique com os SDKs.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O que está consolidado em setembro de 2026: <strong>LangChain4j 1.17.2</strong> (julho 2026) e <strong>Spring AI 2.0 GA</strong> (junho 2026) são os dois frameworks de referência para IA em Java enterprise, ambos maduros, ambos em produção em empresas sérias. A escolha entre eles depende do contexto — se você já está no ecossistema Spring Boot 4 + Spring Framework 7, o Spring AI 2.0 é a escolha natural. Se você precisa de flexibilidade multimodelo e trabalha com Quarkus ou precisa de menos opinião do framework, o LangChain4j continua na frente.</p>
+
+        <p>O ponto que mais me chama atenção esta semana é o <strong>MCP como infraestrutura Java</strong>. Um artigo publicado pelo Java Code Geeks em agosto sintetiza bem o que estou vendo: com Spring AI, Quarkus, Helidon e LangChain4j todos implementando o Model Context Protocol, qualquer JVM enterprise pode se tornar um host de agentes. O seu serviço de consulta de contratos, o seu motor de precificação, o seu validador de compliance — todos podem ser expostos como MCP tools e consumidos por agentes externos sem nenhuma mudança na lógica de negócio. Isso é grande.</p>
+
+        <p>Sobre o impacto dos breaking changes do Fable 5.1 no ecossistema Java: se você usa o SDK da Anthropic para Java e tem integrações que usam forced tool use ou reutilizam thinking blocks entre chamadas, <strong>revise antes de atualizar o modelo</strong>. O comportamento de invalidação de raciocínio ao editar o histórico é particularmente crítico em pipelines com memória conversacional.</p>
+
+        <p>Abaixo, um exemplo de como expor um serviço Java como MCP Tool Server com Spring AI 2.0 — padrão que já uso nos projetos da Wrapper Sistemas:</p>
+
+        <pre><code>// Spring AI 2.0 — expondo um serviço Java como MCP Tool Server
+@Configuration
+public class McpToolsConfig {
+
+    @Bean
+    @McpTool(
+        name        = "buscar-contratos",
+        description = "Busca contratos ativos pelo CNPJ do cliente"
+    )
+    public McpToolFunction&lt;BuscarContratosInput, List&lt;ContratoDTO&gt;&gt; buscarContratos(
+            ContratoService contratoService) {
+        return input -&gt; contratoService.findByCnpj(input.cnpj(), input.limite());
+    }
+}
+
+// Input record com validação (NullAway-safe)
+public record BuscarContratosInput(
+    @NotBlank String cnpj,
+    @Min(1) @Max(50) int limite
+) {}
+
+// O serviço Java vira automaticamente um MCP resource server.
+// Agentes externos consumem via protocolo MCP sem alterar a lógica de negócio.</code></pre>
+
+        <p>Esse padrão é o que está se tornando padrão de fato nas integrações que construímos. A camada de MCP age como um adaptador: o domínio Java permanece intacto, e o agente recebe as ferramentas via protocolo padronizado. Observabilidade, autorização e rate limiting ficam no Java, onde temos controle total.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>O que fica dessa semana não é só o volume de lançamentos — é a percepção de que o campo está se movendo mais rápido do que a maioria das equipes consegue absorver. GPT-6 Astra operando computadores, Fable 5.1 quebrando integrações, MCP virando infraestrutura padrão em Java enterprise: tudo isso em 72 horas. O ritmo não vai desacelerar. O que diferencia quem vai aproveitar esse momento de quem vai correr atrás é a capacidade de filtragem — saber o que importa agora, o que pode esperar e o que é ruído. Espero que esse diário ajude nisso. Se você tem dúvidas sobre como aplicar algum desses temas nos seus projetos, me chame.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
