@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 07 de Setembro de 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon { font-size: 28px; }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 { color: #34d399; }
+    .radar-java h3 { color: #6ee7b7; }
+    .radar-java p { color: #a7f3d0; opacity: 0.85; }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section { opacity: 0.7; }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span { color: var(--cyan); }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 07/09/2026</div>
+      <h1>Diário Tecnológico — 7 de Setembro de 2026</h1>
+      <p class="excerpt">
+        Anthropic, Google e OpenAI lançaram novos modelos em menos de uma semana — e o mercado cunhou um novo termo: <em>model fatigue</em>. Enquanto isso, o cache-read da Anthropic ficou 75% mais barato e o ecossistema Java AI chegou a um nível de maturidade que não dá mais para ignorar.
+      </p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-green">Spring AI 2.0</span>
+        <span class="tag tag-red">GPT-6 Astra</span>
+        <span class="tag tag-cyan">Claude Fable 5.1</span>
+        <span class="tag tag-violet">Gemini 3.8</span>
+        <span class="tag tag-amber">Agentic RAG</span>
+        <span class="tag tag-green">A2A Protocol</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>
+        Esta semana começou com o ritmo mais intenso de lançamentos que já vi desde o Big Bang de modelos de 2025. Anthropic, Google e OpenAI despejaram novos modelos em janelas de 48 horas — Fable 5.1 e Mythos 5.1 da Anthropic em 1º de setembro, Gemini 3.8 Flash do Google em 2 de setembro, e GPT-6 Astra da OpenAI em 3 de setembro. A CNBC não demorou para cunhar o termo: <strong>model fatigue</strong>. E, pela primeira vez, acho que o termo faz sentido. A velocidade de lançamento passou a superar a capacidade de absorção das equipes técnicas que precisam avaliar, integrar e validar esses modelos em produção.
+      </p>
+      <p>
+        Mas há algo mais interessante por baixo do barulho: o movimento real não está nos nomes dos modelos, e sim no que acompanha os lançamentos. Preço de cache-read cortado em 75% pela Anthropic — isso muda a conta de custo de qualquer sistema de RAG com alta repetição de contexto. Variantes cyber com acesso controlado sendo lançadas simultaneamente pelas três empresas. E uma mudança silenciosa de narrativa: os ganhos de capacidade agora vêm predominantemente do scaling de pós-treinamento, não de novas arquiteturas de base. Isso tem implicações diretas para como projetamos pipelines de agentes em ambiente corporativo.
+      </p>
+      <p>
+        Do lado Java, o cenário está mais maduro e menos barulhento — mas igualmente importante. Spring AI 2.0 GA chegou em junho e LangChain4j acumula versões mensais desde maio de 2025, hoje em 1.17.2. Vou detalhar cada um desses pontos com a profundidade que o tema merece.
+      </p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>A semana do "model fatigue": Claude Fable 5.1, Gemini 3.8 Flash e GPT-6 Astra em 72 horas</h3>
+        <p>
+          Entre 1º e 3 de setembro, os três grandes players de LLM lançaram modelos novos. A Anthropic abriu o jogo com <strong>Claude Fable 5.1</strong> e <strong>Mythos 5.1</strong> — dois modelos com perfis distintos: Fable é o sucessor do Sonnet 4.6 para tarefas de raciocínio e codificação, enquanto Mythos se posiciona em um segmento criativo e narrativo de alta complexidade. A Google seguiu com o <strong>Gemini 3.8 Flash</strong> e uma variante "Cyber" com acesso controlado voltada para equipes de defesa cibernética. A OpenAI fechou o ciclo com o <strong>GPT-6 Astra</strong>, descrito como o sistema mais alinhado e capaz da empresa até hoje.
+        </p>
+        <p>
+          Do ponto de vista executivo, o padrão que emerge aqui é claro: estamos entrando em uma era de <em>tiering vertical de capacidades</em>. Cada empresa está segmentando seus modelos por caso de uso — raciocínio, criatividade, segurança, codificação — ao invés de apostar em um modelo monolítico "para tudo". Para times de arquitetura que consomem LLMs via API, isso significa que a decisão de qual modelo usar precisa ser mais granular e orientada por workload. Roteamento dinâmico de modelos, que era curiosidade em 2025, passa a ser necessidade operacional em 2026.
+        </p>
+        <p>
+          A dica prática: se você ainda está usando um único modelo para todo o pipeline, está provavelmente pagando caro onde não precisa e entregando menos onde importa. Modelagem de custo por etapa do pipeline — com modelos menores em classificação e roteamento, e modelos maiores apenas na geração final — é o caminho.
+        </p>
+        <a class="card-source" href="https://startupfortune.com/anthropic-openai-meta-and-google-all-shipped-new-ai-models-in-one-week/" target="_blank" rel="noopener">🔗 Startup Fortune — All major players shipped new models in one week</a>
+      </div>
+
+      <!-- DESTAQUE 2 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Anthropic corta o preço de cache-read em 75% — e isso muda a conta do RAG enterprise</h3>
+        <p>
+          Esse é o movimento que mais me interessa nesta semana, e está sendo eclipsado pelo barulho dos lançamentos. A Anthropic reduziu o custo de <em>cache-read</em> em 75% para todos os modelos Claude. Para quem não acompanhou: cache-read é a leitura de tokens que já foram processados e armazenados em cache de prompt — exatamente o padrão que toda implementação séria de RAG usa para injetar contexto fixo (documentos base, instruções de sistema, exemplos few-shot) sem pagar o custo de processamento completo a cada requisição.
+        </p>
+        <p>
+          Na prática, sistemas RAG com alta repetição de contexto — como aqueles que injetam um conjunto fixo de documentos de referência em cada chamada — vão ver uma redução direta no TCO. Se o seu pipeline de RAG usa 50% de tokens em contexto cacheado, o custo efetivo de input pode cair entre 30% e 40% dependendo da proporção de tokens novos vs. cacheados. Para sistemas em produção com volume alto, essa diferença é material e justifica revisitar a estratégia de cache de prompt mesmo que você já a tenha implementado.
+        </p>
+        <a class="card-source" href="https://llm-stats.com/llm-updates" target="_blank" rel="noopener">🔗 LLM Stats — AI Updates Today (September 2026)</a>
+      </div>
+
+      <!-- DESTAQUE 3 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Agent2Agent (A2A) Protocol v1.0 consolida suporte de mais de 150 organizações</h3>
+        <p>
+          Anunciado em abril de 2026, o protocolo A2A v1.0 já conta com mais de 150 organizações signatárias. O A2A define um contrato de comunicação padronizado entre agentes de IA, independente de framework ou provedor de modelo — o que é especialmente relevante para arquiteturas multi-agente em ambiente corporativo, onde é comum ter agentes construídos com tecnologias distintas precisando colaborar.
+        </p>
+        <p>
+          Do ponto de vista arquitetural, o que me interessa no A2A é a separação entre o protocolo de comunicação e a lógica do agente. Isso permite que um agente Java construído com LangChain4j se comunique com um agente Python construído com LangGraph sem acoplamento direto — o que facilita muito a composição de sistemas heterogêneos, que é a realidade da maioria das empresas enterprise. Ainda estamos no início da adoção, mas com 150+ organizações sinalizando suporte, vale começar a avaliar a aderência dos seus frameworks hoje.
+        </p>
+        <a class="card-source" href="https://aetherlink.ai/en/blog/agentic-ai-development-2026-rag-mcp-multi-agent-orchestration" target="_blank" rel="noopener">🔗 AetherLink — Agentic AI Development 2026: RAG, MCP & Multi-Agent Orchestration</a>
+      </div>
+
+      <!-- DESTAQUE 4 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>GLM 5.1: 744 bilhões de parâmetros MoE, contexto de 200K — o open-weights que liderou os benchmarks</h3>
+        <p>
+          O GLM 5.1, com 744 bilhões de parâmetros em arquitetura MoE (Mixture of Experts) e janela de contexto de 200K tokens, assumiu o topo do Artificial Analysis Intelligence Index como modelo open-weights mais capaz. Para quem trabalha com implantação on-premise ou em nuvem privada — cenário comum em projetos enterprise com restrições regulatórias —, o GLM 5.1 representa uma opção concreta de capacidade comparável aos modelos proprietários sem o lock-in de API.
+        </p>
+        <p>
+          O caveat: MoE de 744B não é trivial de operar. Você precisa de infraestrutura de GPU de alto custo para rodar o modelo completo, o que limita o alcance prático a organizações com budget significativo de infraestrutura ou a provedores especializados. Para a maioria dos projetos, GLM 4.6 (também 200K de contexto, menor custo operacional) é o ponto de entrada mais realista no ecossistema GLM.
+        </p>
+        <a class="card-source" href="https://benchlm.ai/" target="_blank" rel="noopener">🔗 BenchLM — LLM Leaderboard & AI Model Benchmarks (September 2026)</a>
+      </div>
+
+      <!-- DESTAQUE 5 -->
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>Agentic RAG: a evolução do retrieve-and-generate para pipelines reflexivos</h3>
+        <p>
+          O RAG clássico — recupera uma vez, gera uma resposta — está cedendo espaço para o <strong>Agentic RAG</strong>: pipelines que adicionam planejamento e reflexão ao ciclo de recuperação. O agente decide se deve recuperar novamente, reformular a query, chamar uma ferramenta ou refinar a resposta antes de entregar o resultado final. A academia e a indústria estão convergindo na visão de que RAG é um ponto de partida, não o destino — e que a arquitetura de referência para sistemas de busca semântica robustos envolve múltiplos rounds de retrieval com avaliação interna.
+        </p>
+        <p>
+          É um tema estruturalmente importante, mas coloco em relevância baixa para hoje porque não há um lançamento específico ou mudança de paradigma nesta semana — é uma tendência de fundo que vale estudar com calma, sem urgência de sprint.
+        </p>
+        <a class="card-source" href="https://www.eduinx.in/blog-repository/agentic-RAG-in-2026-AI-agents-with-tool-use-explained.php" target="_blank" rel="noopener">🔗 EduinX — Agentic RAG in 2026: AI Agents With Tool Use Explained</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar — com foco em aplicação prática, não em teoria vaga:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Roteamento dinâmico de modelos (Model Routing)</h3>
+          <p>Com o tiering vertical que os grandes labs estão adotando, saber rotear requisições para o modelo certo — por custo, capacidade e latência — virou habilidade central de arquitetura de sistemas AI. Vale explorar os padrões de router-agent e como implementar scoring de complexidade de tarefa.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>Prompt Cache Strategy com a nova tabela de preços Anthropic</h3>
+          <p>Com cache-read 75% mais barato, a equação de FinOps muda. Vale revisar suas implementações de RAG e identificar onde o cache de prompt pode ser aplicado para reduzir custo efetivo — especialmente em contextos fixos e instruções de sistema repetidas.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔗</span>
+          <h3>Agent2Agent (A2A) Protocol v1.0</h3>
+          <p>Com 150+ organizações suportando o protocolo, é hora de entender as primitivas: como agentes se descobrem, como passam contexto e como delegam subtarefas. A spec oficial e os exemplos de referência são o ponto de partida.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>Spring AI 2.0 — novas APIs de agentes e MCP</h3>
+          <p>Spring AI 2.0 GA chegou em junho e trouxe mudanças significativas na API de agentes, suporte nativo a MCP (Model Context Protocol) e integração com vector stores de terceiros. Se você ainda está no 1.x, o migration guide é leitura obrigatória antes de qualquer upgrade em produção.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔄</span>
+          <h3>Agentic RAG — padrões de retrieval reflexivo</h3>
+          <p>Estudar os padrões de multi-hop retrieval, self-query e query rewriting dentro de pipelines agênticos. O paper "Experience as a Compass: Multi-agent RAG with Evolving Orchestration" (ArXiv 2026) é um ponto de referência sólido com benchmarks reais.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚖️</span>
+          <h3>Observabilidade e avaliação de agentes em produção</h3>
+          <p>Com agentes executando tarefas autônomas de múltiplos passos, observabilidade deixou de ser opcional. Estudar tracing distribuído para LLMs, métricas de fidelidade em RAG e como construir evals automatizadas para comportamento agêntico.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece ciclo cognitivo. Hoje, estes temas podem esperar — ou ser descartados sem culpa:</p>
+
+      <div class="highlight-card">
+        <h3>Rankings e leaderboards de benchmark</h3>
+        <p>Com o volume de modelos lançados simultaneamente, os sites de ranking estão atualizando em ritmo frenético — e os deltas de performance entre modelos top-10 são cada vez menores. Para decisões de produto, benchmarks genéricos (MMLU, HumanEval) têm cada vez menos valor preditivo. O que importa é o benchmark no seu próprio workload, não no de terceiros.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Hype em torno do "model fatigue" como crise</h3>
+        <p>O termo está gerando cobertura exagerada em veículos de tecnologia generalistas. O volume de lançamentos é real, mas não é uma crise — é a normalização de um ciclo de release mais curto. Para times técnicos, o processo de avaliação e adoção precisa amadurecer, não o ritmo dos labs precisa desacelerar.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>GLM 5.1 para projetos sem infraestrutura de GPU de alto custo</h3>
+        <p>744B parâmetros MoE é tecnicamente impressionante, mas fora do alcance operacional da maioria dos projetos enterprise que não têm clusters de GPU dedicados. Se você não tem infra para isso hoje, não perca tempo avaliando o modelo — olhe GLM 4.6 ou os modelos cloud-hosted que já entregam 200K de contexto sem a dor de cabeça operacional.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>
+          O ecossistema Java de IA entrou em 2026 em um estado que eu descreveria como <strong>maturidade operacional</strong>: não há mais desculpa para não integrar LLMs em aplicações Java enterprise. Os dois frameworks principais — Spring AI e LangChain4j — são production-ready, têm Boot starters, suporte a vector stores, tool calling, RAG, chat memory e, agora, suporte nativo ao Model Context Protocol (MCP).
+        </p>
+
+        <h3>Spring AI 2.0 GA (junho 2026)</h3>
+        <p>
+          Spring AI 2.0, construído sobre Spring Boot 4, trouxe uma revisão significativa da API de agentes e introduziu suporte nativo ao MCP, o que permite que aplicações Spring atuem tanto como clientes quanto como servidores MCP — abrindo a porta para integração direta com ferramentas como Claude Desktop e outros clientes que consomem o protocolo. A API de <em>Advisors</em> (que encapsula comportamentos transversais como logging, retry e avaliação) ficou mais expressiva. Se você trabalha com Spring no dia a dia, o 2.0 é a versão que finalmente torna o stack completo sem gambiarra.
+        </p>
+
+        <h3>LangChain4j 1.17.2 (julho 2026)</h3>
+        <p>
+          LangChain4j mantém o ritmo de releases mensais — 1.17.2 é a versão mais recente, com melhorias em streaming de tokens, suporte ampliado a vector stores (incluindo integrações com PGVector e Qdrant), e uma API de agentes reativos inspirada no padrão ReAct. Para times que não estão no ecossistema Spring, LangChain4j continua sendo a escolha mais flexível e com menor acoplamento a convenções de framework.
+        </p>
+
+        <p>Abaixo, um exemplo de RAG agêntico com LangChain4j 1.17.x usando retrieval reflexivo — o agente decide se precisa buscar mais contexto antes de responder:</p>
+
+        <pre><code>// LangChain4j 1.17.x — Agentic RAG com ReAct pattern
+@AiService
+public interface ResearchAgent {
+
+    @SystemMessage("""
+        Você é um assistente de pesquisa enterprise.
+        Use a ferramenta de busca para recuperar contexto relevante.
+        Se o resultado inicial for insuficiente, reformule a query e busque novamente.
+        Responda apenas quando tiver contexto suficiente para uma resposta confiável.
+        """)
+    String research(@UserMessage String question);
+}
+
+// Configuração do agente com EmbeddingStoreRetriever
+ResearchAgent agent = AiServices.builder(ResearchAgent.class)
+    .chatLanguageModel(anthropicChatModel)   // Claude Fable 5.1 via SDK
+    .tools(new DocumentSearchTool(embeddingStore, embeddingModel))
+    .chatMemory(MessageWindowChatMemory.withMaxMessages(20))
+    .build();
+
+// DocumentSearchTool com retrieval reflexivo
+public class DocumentSearchTool {
+
+    @Tool("Busca documentos relevantes para a query fornecida")
+    public String search(
+            @P("Query de busca — seja específico") String query,
+            @P("Número de documentos a recuperar (1-10)") int topK) {
+
+        List&lt;EmbeddingMatch&lt;TextSegment&gt;&gt; matches =
+            embeddingStore.findRelevant(
+                embeddingModel.embed(query).content(),
+                topK,
+                0.75  // score mínimo de similaridade
+            );
+
+        return matches.stream()
+            .map(m -> m.embedded().text())
+            .collect(Collectors.joining("\n\n---\n\n"));
+    }
+}</code></pre>
+
+        <p>
+          O ponto que vale notar aqui: o padrão ReAct no LangChain4j permite que o próprio modelo decida quando e quantas vezes chamar a ferramenta de busca — o que implementa Agentic RAG de forma elegante sem precisar de orquestração manual de múltiplos rounds. Com o Spring AI 2.0, o mesmo padrão pode ser implementado via <code>@Tool</code> annotations no estilo Spring, com injeção de dependência gerenciada pelo contexto do Boot.
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>
+        O que fica do dia de hoje não é o nome dos modelos lançados — é a confirmação de uma mudança estrutural no mercado: a competição se deslocou do "quem tem o modelo mais inteligente" para "quem tem a melhor estratégia de precificação, distribuição e especialização por vertical". Para equipes técnicas, isso significa que a leitura de releases de modelos precisa evoluir de "qual modelo é melhor" para "qual modelo resolve meu caso de uso com o melhor custo-benefício operacional". Essa é a pergunta certa para 2026.
+      </p>
+      <p>
+        Nos próximos dias, quero explorar com mais profundidade a especificação do A2A Protocol e como implementar um gateway de agentes Java que respeita o contrato do protocolo. Se você tem interesse nesse tema ou está construindo algo semelhante na sua empresa, deixa um comentário — gosto de conversar com quem está no campo, não só na teoria.
+      </p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
