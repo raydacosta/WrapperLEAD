@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 08/09/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section { padding: 60px 0; }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon { font-size: 28px; }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p { color: var(--text); margin-bottom: 16px; }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    ul {
+      padding-left: 1.5em;
+      margin-bottom: 16px;
+    }
+
+    ul li {
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 { font-size: 16px; margin-bottom: 8px; }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 { color: #34d399; }
+    .radar-java h3 { color: #6ee7b7; }
+    .radar-java p { color: #a7f3d0; opacity: 0.85; }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section { opacity: 0.7; }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span { color: var(--cyan); }
+
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    .pricing-table th {
+      background: rgba(0,212,255,0.08);
+      color: var(--cyan);
+      padding: 10px 14px;
+      text-align: left;
+      font-family: var(--font-title);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pricing-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(45,55,72,0.5);
+      color: var(--text);
+    }
+
+    .pricing-table tr:last-child td { border-bottom: none; }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+      .pricing-table { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 08/09/2026</div>
+      <h1>Diário Tecnológico — 8 de setembro de 2026</h1>
+      <p class="excerpt">Semana histórica: Anthropic, OpenAI e Google lançam modelos frontier em 72 horas. LangChain4j 1.20 estreia suporte reativo e o EU AI Act começa a cobrar suas primeiras contas.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-violet">Spring AI</span>
+        <span class="tag tag-cyan">Claude Fable 5.1</span>
+        <span class="tag tag-amber">GPT-6 Astra</span>
+        <span class="tag tag-green">RAG</span>
+        <span class="tag tag-red">EU AI Act</span>
+        <span class="tag tag-cyan">MCP</span>
+        <span class="tag tag-violet">FinOps</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Entre os dias 1 e 3 de setembro de 2026, o ecossistema de IA viveu talvez o período mais denso de lançamentos frontier da história recente. Anthropic abriu com Claude Fable 5.1 e Mythos 5.1, no dia seguinte o Google respondeu com Gemini 3.8 Flash e Flash Cyber, e no terceiro dia a OpenAI subiu GPT-6 Astra — o primeiro modelo da empresa a acionar o limiar interno de salvaguarda cibernética crítica. Como cereja no bolo, os três provedores ficaram fora do ar simultaneamente em 3 de setembro, provavelmente por sobrecarga de tráfego no lançamento do GPT-6. Se isso não é um sinal de que a infraestrutura de resiliência multi-provedor deixou de ser aspiração e virou requisito de produção, não sei o que é.</p>
+
+      <p>Para quem trabalha com Java no lado da plataforma, a semana teve peso próprio: o LangChain4j 1.20.0 chegou com suporte experimental a APIs reativas — <code>CompletableFuture&lt;T&gt;</code> e <code>Flow.Publisher&lt;T&gt;</code> — diretamente nos AI Services. Isso muda a conversa sobre integração não-bloqueante com LLMs em backends Quarkus e Spring WebFlux. Junto com o Spring AI 2.0 já consolidado desde junho, o ecossistema Java de IA está maduro o suficiente para escolhas de arquitetura sérias.</p>
+
+      <p>E no campo regulatório, o EU AI Act está ativo desde 2 de agosto. O Artigo 50 — que exige marcação detectável por máquina em outputs de sistemas GPAI — não é mais uma questão de compliance futuro. É uma obrigação de hoje, com multas de até €15M ou 3% do faturamento global. A Anthropic já anunciou adesão global ao watermarking de outputs do Claude. Sistemas Java que geram ou redistribuem conteúdo de LLMs na UE precisam incorporar verificação de proveniência agora, não no próximo trimestre.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Claude Fable 5.1 e Mythos 5.1 — 75% mais barato no cache, dobro de performance agentica</h3>
+        <p>A Anthropic lançou Claude Fable 5.1 em 1 de setembro com uma mudança de precificação que importa diretamente para times enterprise: o custo de leitura de cache caiu <strong>75%</strong>, de $1 para $0,25 por milhão de tokens. Em termos práticos, aplicações com alto volume de chamadas repetitivas — como RAG com contexto fixo de domínio ou system prompts densos — vão ver redução imediata no custo operacional sem mudar uma linha de código. A janela de contexto chegou a <strong>1 milhão de tokens</strong> com output máximo de 128k.</p>
+        <p>No lado de performance, o Fable 5.1 mais que dobra o Fable 5 em benchmarks de pesquisa científica agêntica e supera o Opus 5 em todas as categorias publicadas pela Anthropic. O modelo é disponibilizado via API própria, Amazon Bedrock, Google Cloud e Microsoft Foundry — o que facilita a integração com os SDKs Java já em uso. O Claude Mythos 5.1, por sua vez, é a variante de acesso restrito para organizações vetadas em segurança cibernética e ciências da vida. Para a maioria dos times, o Fable 5.1 é o modelo certo.</p>
+        <p>Outro ponto que me chama atenção: o Fable 5.1 estreia o recurso beta de <strong>rastreamento de proveniência de conteúdo</strong> — outputs marcados criptograficamente para que sistemas downstream possam verificar a origem da IA. Isso está diretamente alinhado ao EU AI Act Artigo 50. Se você estiver construindo pipelines de geração de conteúdo em Java, essa feature merece atenção agora.</p>
+        <a class="card-source" href="https://venturebeat.com/technology/anthropics-claude-fable-5-1-and-mythos-5-1-arrive-with-a-75-cost-reduction-for-fable-cache-reads" target="_blank" rel="noopener">🔗 VentureBeat</a>
+        &nbsp;&nbsp;
+        <a class="card-source" href="https://www.marktechpost.com/2026/09/01/anthropic-releases-claude-fable-5-1-and-claude-mythos-5-1-52-6-on-terminal-bench-science-and-75-cheaper-cache-reads/" target="_blank" rel="noopener">🔗 MarkTechPost</a>
+      </div>
+
+      <!-- DESTAQUE 2 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>LangChain4j 1.20.0 — Suporte reativo com CompletableFuture e Flow.Publisher nos AI Services</h3>
+        <p>Esta é a notícia da semana para times Java. A versão 1.20.0 do LangChain4j traz suporte <strong>experimental não-bloqueante e reativo para métodos de AI Service</strong>: agora você pode declarar métodos que retornam <code>CompletableFuture&lt;T&gt;</code> ou <code>Flow.Publisher&lt;T&gt;</code> diretamente na interface do AI Service, sem precisar de adaptadores externos ou threading manual.</p>
+        <p>Na prática, isso significa que um assistente de chat baseado em LLM pode ser integrado diretamente a um controller Spring WebFlux ou a uma rota Quarkus RESTEasy Reactive sem bloquear o event loop. Para aplicações de alta concorrência — como sistemas de suporte com múltiplos usuários simultâneos — isso não é só elegância de código, é viabilidade de deploy em production sem threadpool dedicada. O release também inclui correções de bugs e upgrades de dependências, além de manter o módulo <code>langchain4j-agentic</code> com sub-módulos para MCP, A2A (Agent-to-Agent) e padrões agênticos comuns.</p>
+        <a class="card-source" href="https://www.infoq.com/news/2026/09/java-news-roundup-aug31-2026/" target="_blank" rel="noopener">🔗 InfoQ — Java News Roundup</a>
+        &nbsp;&nbsp;
+        <a class="card-source" href="https://github.com/langchain4j/langchain4j/releases" target="_blank" rel="noopener">🔗 LangChain4j GitHub Releases</a>
+      </div>
+
+      <!-- DESTAQUE 3 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>EU AI Act Artigo 50 — Watermarking de outputs de IA é obrigação agora, não futuro</h3>
+        <p>O Artigo 50 do EU AI Act entrou em vigor em <strong>2 de agosto de 2026</strong>, exigindo marcação detectável por máquina em todos os outputs de sistemas GPAI (General Purpose AI). A Anthropic foi uma das primeiras a anunciar conformidade global — não apenas para tráfego europeu — usando watermarking estatístico por amostragem de tokens, onde vocabulários são particionados em conjuntos pseudoaleatórios "verde/vermelho" assinados criptograficamente com a chave do contexto predecessor durante a decodificação autoregressiva.</p>
+        <p>O que isso significa para nós na prática? Qualquer pipeline Java que gera ou redistribui conteúdo de LLMs para usuários na UE precisa ser capaz de propagar e verificar esses sinais de proveniência. Não é suficiente receber o output e guardá-lo num banco — você precisa planejar como a cadeia de processamento (chunking, reescrita, sumarização) preserva ou invalida as marcas. Multas chegam a €15M ou 3% do faturamento global. O compliance não é mais um item de backlog.</p>
+        <a class="card-source" href="https://www.infoq.com/news/2026/08/eu-ai-content-watermark/" target="_blank" rel="noopener">🔗 InfoQ — EU AI Act Watermarking</a>
+        &nbsp;&nbsp;
+        <a class="card-source" href="https://www.euronews.com/next/2026/08/11/eu-compliance-delivered-globally-anthropic-to-watermark-claudes-output-worldwide/" target="_blank" rel="noopener">🔗 Euronews</a>
+      </div>
+
+      <!-- DESTAQUE 4 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Gemini 3.8 Flash e Flash Cyber — Mesmo preço, benchmarks superiores, acesso enterprise pelo Vertex AI</h3>
+        <p>O Google lançou o Gemini 3.8 Flash em 2 de setembro com uma proposta clara: <strong>mesmo preço do 3.7 Flash</strong> ($0,75/M input, $3,75/M output), desempenho superior em todos os benchmarks publicados. No DeepSWE v1.1 — benchmark de resolução de problemas de engenharia end-to-end — o 3.8 Flash supera modelos maiores de concorrentes a custo muito menor. Para arquiteturas onde o Flash é usado em retrieval de alta frequência ou como roteador de intent antes de chamar um modelo maior, essa atualização é direta no bolso.</p>
+        <p>O Gemini 3.8 Flash Cyber é uma variante para operações de segurança ofensiva e defensiva, com acesso restrito através do programa Fairwind. Para times enterprise usando Spring AI com Vertex AI como backend, a atualização chega transparentemente — sem mudança de endpoint ou configuração.</p>
+        <a class="card-source" href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/" target="_blank" rel="noopener">🔗 Google Blog — Gemini 3.8 Flash</a>
+        &nbsp;&nbsp;
+        <a class="card-source" href="https://www.marktechpost.com/2026/09/02/google-deepmind-releases-gemini-3-8-flash-and-gemini-3-8-flash-cyber-one-core-model-two-access-envelopes/" target="_blank" rel="noopener">🔗 MarkTechPost</a>
+      </div>
+
+      <!-- DESTAQUE 5 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>GPT-6 Astra — OpenAI aciona pela primeira vez o limiar de salvaguarda cibernética crítica</h3>
+        <p>O GPT-6 Astra chegou em 3 de setembro com janela de contexto de <strong>1.050.000 tokens</strong> e precificação de $10/M input e $50/M output — exatamente igual ao Fable 5.1, confirmando uma convergência de preço no topo do mercado. O modelo tem foco declarado em tarefas agênticas de longa duração: uso de computador, automação de browser e pesquisa profunda.</p>
+        <p>O detalhe mais significativo é que o GPT-6 Astra foi o primeiro modelo da OpenAI a acionar internamente o <strong>limiar de salvaguarda cibernética crítica</strong>, uma nova camada de segurança que o acesso a capacidades específicas do modelo sujeita a uma avaliação adicional. Isso indica que as avaliações de segurança de IA evoluíram de processos one-shot para protocolos contínuos de monitoramento de capacidade — algo que teremos que incorporar em como avaliamos modelos para uso enterprise.</p>
+        <a class="card-source" href="https://llm-stats.com/models/gpt-6-astra" target="_blank" rel="noopener">🔗 LLM Stats — GPT-6 Astra</a>
+      </div>
+
+      <!-- DESTAQUE 6 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>AI FinOps — 98% das práticas agora gerenciam gasto com IA; workflows agênticos custam 30x mais</h3>
+        <p>O relatório State of FinOps 2026 traz um número que resume o estado do mercado: <strong>98% das práticas de FinOps agora gerenciam gasto com IA</strong>, subindo de 63% em 2025 e 31% em 2024. A velocidade dessa curva de adoção é impressionante — e assustadora se você ainda não tiver um modelo de atribuição de custo por feature/usuário/time no lugar.</p>
+        <p>O dado mais impactante vem da EY: interações agênticas custam em média <strong>30x mais</strong> que chamadas simples a LLMs. Isso coloca em perspectiva qualquer decisão de "vamos usar agentes para tudo". Adaptive RAG — que roteia 60-70% das consultas para retrieval direto sem loop agêntico — emerge como o padrão econômico correto para produção. A observabilidade de tokens a nível de feature não é mais métricas de DevOps; é FinOps de negócio.</p>
+        <a class="card-source" href="https://www.kosmoy.com/resources/blog/best-llm-observability-ai-finops-platforms-2026/" target="_blank" rel="noopener">🔗 Kosmoy — LLM Observability &amp; AI FinOps</a>
+        &nbsp;&nbsp;
+        <a class="card-source" href="https://www.moderndata101.com/blogs/top-trends-of-enterprise-ai-observability" target="_blank" rel="noopener">🔗 Modern Data Blog</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei esta semana, estes são os temas e recursos que recomendo aprofundar agora — não daqui a três meses.</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">⚡</span>
+          <h3>LangChain4j 1.20 — AI Services reativos</h3>
+          <p>O suporte a <code>CompletableFuture</code> e <code>Flow.Publisher</code> muda a arquitetura de integração com LLMs em Java não-bloqueante. Vale testar agora em ambientes WebFlux e Quarkus Reactive.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔁</span>
+          <h3>Adaptive RAG — Roteamento econômico de consultas</h3>
+          <p>Padrão que direciona 60-70% das queries para retrieval direto e reserva o loop agêntico para casos complexos. Redução de custo imediata sem perda de qualidade nas respostas.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">📡</span>
+          <h3>OpenTelemetry para LLMs — Semântica de AI no OTel</h3>
+          <p>O OTel com convenções semânticas específicas de LLM está se tornando o padrão enterprise de observabilidade agêntica. Instrumentação de traces por chamada de ferramenta, token, e custo por feature.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🏛️</span>
+          <h3>EU AI Act Artigo 50 — Conformidade técnica</h3>
+          <p>Entender como o watermarking estatístico funciona e como planejar a cadeia de processamento de outputs para preservar sinais de proveniência. Obrigação atual para sistemas que distribuem conteúdo de IA na UE.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🛠️</span>
+          <h3>ToolCallingAdvisor — Spring AI 2.0</h3>
+          <p>A movimentação da execução de ferramentas para um advisor componível no Spring AI 2.0 é o padrão correto para construir agentes enterprise em Java com Boot 4. Vale refatorar implementações baseadas no AI 1.x.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>Prompt Cache no Fable 5.1 — 75% de redução</h3>
+          <p>Com cache reads a $0,25/M tokens, aplicações com contexto fixo volumoso (system prompts, documentação de domínio, contratos) ganham redução de custo imediata sem mudança de lógica. Calcule o ROI agora.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção imediata. Esta semana, estes temas podem esperar — ou ser descartados do radar de curto prazo.</p>
+
+      <div class="highlight-card">
+        <h3>Claude Mythos 5.1 — Acesso restrito, fora de alcance</h3>
+        <p>A variante Mythos é limitada a organizações vetadas em cybersecurity e life sciences via programa de acesso restrito. Para a esmagadora maioria dos times enterprise, o Fable 5.1 é o modelo relevante. Não vale gastar energia especulando sobre capacidades que você não vai acessar.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Gemini 3.8 Flash Cyber — Programa Fairwind com acesso gated</h3>
+        <p>A variante Cyber do Gemini 3.8 Flash tem foco em operações ofensivas e defensivas de segurança e acesso controlado. Para squads de produto ou backend sem operações de SOC, irrelevante por ora.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Narrativa de "model fatigue" na mídia</h3>
+        <p>O ciclo de notícias gerou muito ruído sobre "cansaço de modelos" e velocidade dos lançamentos. Para quem toma decisões técnicas, o que importa são mudanças de preço, contexto e capacidade — não a narrativa de ritmo. Filtre o conteúdo pelo impacto prático, não pela frequência dos anúncios.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Comparativos de benchmark sem dados de custo</h3>
+        <p>Tabelas de benchmark publicadas por provedores sem contexto de custo por chamada e latência p99 em produção têm valor limitado para decisões de arquitetura enterprise. Priorize benchmarks de terceiros (DeepSWE, Terminal-Bench) e dados reais de produção.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O ecossistema Java de IA está passando por um momento de convergência real. As duas principais framewoks — <strong>LangChain4j</strong> (agora em 1.20.0) e <strong>Spring AI 2.0</strong> (GA desde junho) — amadureceram para escolhas de arquitetura sérias, cada uma com perfil próprio.</p>
+
+        <p>O LangChain4j 1.20.0, lançado na semana passada, traz o que eu considerava o gap mais crítico em relação ao Spring AI: <strong>suporte nativo a execução não-bloqueante nos AI Services</strong>. Com <code>CompletableFuture&lt;T&gt;</code> e <code>Flow.Publisher&lt;T&gt;</code> disponíveis diretamente na interface, o LangChain4j passa a se integrar limpo com Quarkus RESTEasy Reactive e Spring WebFlux sem adaptadores. O módulo <code>langchain4j-agentic</code> com sub-módulos MCP e A2A (Agent-to-Agent) consolida a plataforma como opção séria para orquestração agêntica em produção. A JavaZone 2026 (1-3 de setembro) teve workshop dedicado: <em>Building Secure AI Agents with Quarkus LangChain4j</em> — o interesse da comunidade é real.</p>
+
+        <p>O Spring AI 2.0, por sua vez, trouxe em junho o <code>ToolCallingAdvisor</code> — a execução do loop de ferramentas saiu de dentro dos <code>ChatModel</code> e passou a ser um advisor componível na cadeia. Combinado com as anotações <code>@McpTool</code>, <code>@McpResource</code> e <code>@McpPrompt</code> para MCP nativo, o Spring AI 2.0 é hoje o ponto de entrada mais natural para times que já rodam Spring Boot 4. A adição de null-safety com JSpecify em toda a API é um detalhe que parece pequeno e vai salvar horas de debugging em produção.</p>
+
+        <p>Em termos de decisão: <strong>use Spring AI 2.0</strong> se você está num ecossistema Spring Boot 4, quer integração idiomática e precisa de MCP out-of-the-box. <strong>Use LangChain4j 1.20</strong> se você está em Quarkus, precisa de suporte a mais provedores LLM ou quer máxima flexibilidade na composição de chains. Ambas suportam MCP, RAG, chat memory e tool calling — a escolha é de fit arquitetural, não de funcionalidade.</p>
+
+        <h3>Exemplo: AI Service reativo com LangChain4j 1.20</h3>
+
+<pre><code>// Interface do AI Service com retorno reativo
+interface ResumidorDocumentosService {
+
+    // Streaming token a token via Flow.Publisher
+    @SystemMessage("Você é um especialista em análise de contratos jurídicos.")
+    @UserMessage("Resuma o seguinte contrato em 3 pontos objetivos: {{contrato}}")
+    Flow.Publisher&lt;String&gt; resumirContrato(@V("contrato") String contrato);
+
+    // Execução assíncrona completa via CompletableFuture
+    @SystemMessage("Você é um especialista em análise de contratos jurídicos.")
+    @UserMessage("Classifique o risco deste contrato: {{contrato}}")
+    CompletableFuture&lt;ClassificacaoRisco&gt; classificarRisco(@V("contrato") String contrato);
+}
+
+// Uso em um endpoint Quarkus Reactive
+@Path("/contratos")
+public class ContratoResource {
+
+    @Inject
+    ResumidorDocumentosService service;
+
+    @GET
+    @Path("/{id}/resumo")
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    public Multi&lt;String&gt; resumir(@PathParam("id") String id) {
+        String contrato = contratoRepository.buscar(id);
+        // Flow.Publisher integra com Mutiny/Multi sem adaptador
+        return Multi.createFrom().publisher(
+            service.resumirContrato(contrato)
+        );
+    }
+}</code></pre>
+
+        <p>Tabela de referência de preços para decisão de modelo em produção (setembro 2026):</p>
+
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Modelo</th>
+              <th>Input ($/M)</th>
+              <th>Output ($/M)</th>
+              <th>Cache Read ($/M)</th>
+              <th>Contexto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Claude Fable 5.1</td>
+              <td>$10,00</td>
+              <td>$50,00</td>
+              <td><strong style="color:#34d399">$0,25</strong></td>
+              <td>1M tokens</td>
+            </tr>
+            <tr>
+              <td>GPT-6 Astra</td>
+              <td>$10,00</td>
+              <td>$50,00</td>
+              <td>$1,00</td>
+              <td>1,05M tokens</td>
+            </tr>
+            <tr>
+              <td>Gemini 3.8 Flash</td>
+              <td>$0,75</td>
+              <td>$3,75</td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>Esta foi uma semana que vai ficar na memória: três provedores frontier lançando modelos num intervalo de 72 horas, a comprovação de que infraestrutura de resiliência multi-provedor é urgente (os três fora do ar ao mesmo tempo não é coincidência — é aviso), e o LangChain4j dando um salto de maturidade que muda a conversa sobre Java reativo com IA. O que eu levo dessa semana é simples: o custo de não ter uma estratégia de FinOps para LLMs dobrou. Workflows agênticos custando 30x mais que chamadas simples não é uma curiosidade de benchmark — é a conta que vai chegar no final do mês.</p>
+
+      <p>Se você ainda não tem atribuição de custo de tokens por feature e por usuário na sua plataforma, este é o momento de começar. E se você ainda não leu o Artigo 50 do EU AI Act, agora é definitivamente a hora — compliance retroativo é sempre mais caro do que design antecipado.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

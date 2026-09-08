@@ -1,0 +1,21 @@
+TÍTULO: Diário Tecnológico — 08/09/2026
+SLUG: diario-tecnologico-08-09-2026
+EXCERPT: Semana histórica: Anthropic, OpenAI e Google lançam modelos frontier em 72h. LangChain4j 1.20 traz suporte reativo e EU AI Act entra em vigor.
+TAGS: IA, Java, LangChain4j, Spring AI, Claude, Gemini, GPT-6, EU AI Act, FinOps, Observabilidade, MCP, Agentes, RAG, Watermarking
+CATEGORIA: Diário Tecnológico
+AUTOR: Ray da Costa
+FOTO_AUTOR: https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg
+
+BANNER_PROMPT (para Bing Image Creator):
+Dark tech cinematic 16:9 abstract illustration: glowing electric cyan neural network nodes fragmenting into floating Java source code characters and LLM token streams, deep navy blue background with violet shadow gradients, holographic model performance benchmark charts and agentic workflow state-machine diagrams dissolving into particle clouds, EU compliance shield watermark glyph hovering in corner, no human faces, ultra-detailed photorealistic CGI render, cinematic volumetric lighting — themes: frontier AI model releases (Claude Fable 5.1, GPT-6 Astra, Gemini 3.8 Flash), Java enterprise agent orchestration with MCP, EU AI Act content watermarking compliance.
+
+GERADOR DE IMAGEM: https://www.bing.com/images/create/ai-image-generator?cc=br
+
+---
+DESTAQUES DO DIA:
+1. [ALTA] Claude Fable 5.1 + Mythos 5.1 — cache 75% mais barato, 1M tokens de contexto, performance agentica dobrada
+2. [ALTA] LangChain4j 1.20.0 — suporte reativo (CompletableFuture / Flow.Publisher) nos AI Services
+3. [ALTA] EU AI Act Artigo 50 — watermarking de outputs de IA em vigor desde 2 de agosto
+4. [MÉDIA] Gemini 3.8 Flash — mesmo preço do 3.7, benchmarks superiores, acesso enterprise via Vertex AI
+5. [MÉDIA] GPT-6 Astra — 1.05M contexto, safeguard cibernética crítica acionada pela primeira vez
+6. [MÉDIA] AI FinOps — 98% das práticas gerenciam gasto de IA; workflows agênticos custam 30x mais
