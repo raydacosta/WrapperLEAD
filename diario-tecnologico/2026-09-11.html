@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 11 de Setembro de 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    section { padding: 60px 0; }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon { font-size: 28px; }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 { color: #34d399; }
+    .radar-java h3 { color: #6ee7b7; }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.9;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section { opacity: 0.75; }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-text {
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-closing span { color: var(--cyan); font-weight: 600; }
+
+    .callout-box {
+      background: rgba(0,212,255,0.05);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+
+    .callout-box p {
+      color: var(--cyan);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 11/09/2026</div>
+      <h1>Diário Tecnológico — 11 de Setembro de 2026</h1>
+      <p class="excerpt">72h com Fable 5.1, GPT-6 Astra e Gemini 3.8 Flash. EU AI Act inicia auditorias de alto risco. O gap de avaliação que silenciosamente destrói agentes em produção.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-green">Spring AI</span>
+        <span class="tag tag-red">EU AI Act</span>
+        <span class="tag tag-cyan">Agentes</span>
+        <span class="tag tag-violet">Observabilidade</span>
+        <span class="tag tag-amber">RAG</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>A semana começou de forma incomum. As 72 horas entre 1º e 3 de setembro foram, provavelmente, o período mais denso em lançamentos de modelos de fronteira do ano inteiro. Fable 5.1 da Anthropic no dia 1, Gemini 3.8 Flash da Google DeepMind no dia 2, GPT-6 Astra da OpenAI no dia 3. Três grandes players, três novos modelos, menos de três dias. O ecossistema está testando nossa capacidade de avaliar, decidir e não reagir por impulso a cada lançamento.</p>
+
+      <p>Mas o que me preocupa mais hoje não são os novos benchmarks. São os auditores. Em 30 de agosto — há menos de duas semanas — o European AI Office iniciou formalmente a primeira onda de auditorias presenciais de sistemas de IA classificados como alto risco pelo EU AI Act. Currículos automatizados, análise de crédito, triagem médica. Se você está construindo para o mercado europeu e ainda não abriu a documentação técnica do AI Act, o prazo não está chegando — ele passou.</p>
+
+      <p>No ecossistema Java, o cenário continua amadurecendo de forma sólida. Spring AI 2.0, lançado em junho com suporte ao Spring Boot 4, e LangChain4j na série 1.10.x formam hoje uma base enterprise confiável para RAG e sistemas agenticos. O que falta, e os números que vou detalhar são alarmantes, é a camada de avaliação. Observabilidade virou commodity; eval em produção ainda é exceção.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>As 72 horas que redefinirão benchmarks: Fable 5.1, GPT-6 Astra e Gemini 3.8 Flash</h3>
+        <p>O que aconteceu entre 1º e 3 de setembro não tem precedente em velocidade. A Anthropic abriu a sequência com Fable 5.1 no dia 1 — e os números são concretos: <strong>113% de melhoria no Terminal-Bench-Science</strong> (52.6 vs 24.7 do Fable 5), com cache-read pricing cortado em 75%, chegando a <strong>$0,25 por milhão de tokens</strong>. Para workloads de coding intensivo com documentação recorrente, o custo de operação cai de forma expressiva.</p>
+        <p>A Google DeepMind entrou no dia 2 com Gemini 3.8 Flash, incluindo uma variante Cyber focada em descoberta autônoma de vulnerabilidades. No dia 3, a OpenAI fechou a trinca com GPT-6 Astra — e aqui há um detalhe que merece atenção: foi o <strong>primeiro modelo da OpenAI a acionar o limiar crítico de proteção de cibersegurança</strong> da empresa antes do lançamento. Isso não é retórica de marketing; significa que a própria OpenAI identificou capacidade ofensiva suficiente no modelo para justificar controles adicionais antes de disponibilizá-lo.</p>
+        <p>Para arquitetos de solução: o Fable 5.1 a $0,25 em cache-read muda o cálculo de FinOps para qualquer aplicação RAG que reutilize os mesmos documentos base. Se seu pipeline ainda está pagando por re-leituras de contexto estático, é hora de revisar os números. O delta é relevante o suficiente para alterar decisões de viabilidade em projetos com volume alto.</p>
+        <a class="card-source" href="https://llm-stats.com/ai-news" target="_blank" rel="noopener">🔗 LLM Stats — AI News</a>
+        <a class="card-source" href="https://aireleasetracker.com/latest" target="_blank" rel="noopener">🔗 AI Release Tracker</a>
+        <a class="card-source" href="https://releasebot.io/updates/anthropic" target="_blank" rel="noopener">🔗 Releasebot — Anthropic</a>
+      </div>
+
+      <!-- DESTAQUE 2 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>EU AI Act: deixou de ser regulatório para virar operacional</h3>
+        <p>Em 30 de agosto de 2026, o European AI Office iniciou formalmente a <strong>primeira onda de auditorias presenciais</strong> de sistemas de IA classificados como alto risco sob o EU AI Act. Os setores alvo da primeira rodada são diretos: triagem automatizada de currículos, análise automatizada de crédito e triagem médica. Não são setores periféricos — são os casos de uso enterprise mais comuns nos últimos três anos.</p>
+        <p>O que está sendo exigido nas auditorias é operacional, não teórico: documentação técnica atualizada, diagramas de arquitetura detalhados, logs de governança de dados, fluxogramas de supervisão humana e registros de gestão de risco. Em paralelo, setembro de 2026 marca uma onda regulatória simultânea em EU, Estados Unidos, Brasil, Índia e China — cada um com seus próprios requisitos e prazos, criando um cenário de compliance fragmentado que afeta qualquer empresa com operação global.</p>
+        <p>Minha leitura direta: se você está construindo sistemas de decisão automatizada para o mercado europeu e não tem um risk register atualizado com seus respectivos controles, você não está atrasado — você está descoberto. O prazo das obrigações de alto risco foi agosto de 2026. As auditorias já começaram.</p>
+        <a class="card-source" href="https://blog.mean.ceo/eu-ai-act-news-september-2026/" target="_blank" rel="noopener">🔗 EU AI Act News — September 2026</a>
+        <a class="card-source" href="https://www.tonishatagoe.com/september-2026-ai-regulation-surge-how-enterprises-can-preserve-sovereignty-amid-fragmented-rules/" target="_blank" rel="noopener">🔗 September 2026 AI Regulation Surge</a>
+      </div>
+
+      <!-- DESTAQUE 3 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>O gap de 37 pontos que silenciosamente destrói sistemas agenticos</h3>
+        <p>Um dado publicado essa semana por equipes com agentes em produção resume o estado atual do mercado de forma brutal: <strong>89% dos times implementaram observabilidade</strong> em seus sistemas agenticos, mas <strong>apenas 52% têm frameworks de avaliação</strong> (evals). Um gap de 37 pontos percentuais entre saber o que o agente está fazendo e saber se ele está fazendo certo.</p>
+        <p>A analogia que uso internamente: observabilidade sem evals é como monitorar o tempo de resposta de um endpoint sem nunca verificar se a resposta está correta. Você sabe que o sistema está rodando; não sabe se está respondendo com qualidade. Em sistemas RAG, isso se traduz em alucinações que chegam ao usuário sem nenhum sinal de alerta.</p>
+        <p>A direção clara para 2026 é evals contínuas em produção com <strong>LLM-as-judge scoring</strong> e <strong>OpenTelemetry como padrão de instrumentação</strong>. Para RAG pipelines, o Ragas oferece métricas de referência sem necessidade de ground-truth manual: faithfulness, answer relevance, context precision e context recall. Se você ainda não tem nada disso em produção, comece aí.</p>
+        <a class="card-source" href="https://www.moderndata101.com/blogs/top-trends-of-enterprise-ai-observability" target="_blank" rel="noopener">🔗 Enterprise AI Observability Trends 2026</a>
+        <a class="card-source" href="https://futureagi.com/blog/agentic-rag-systems-2025/" target="_blank" rel="noopener">🔗 Agentic RAG in 2026 — FutureAGI</a>
+      </div>
+
+      <!-- DESTAQUE 4 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>AccuKnox AgentZ: governança de agentes como produto — o timing importa</h3>
+        <p>Em 27 de agosto, a AccuKnox anunciou o <strong>AgentZ</strong> — uma plataforma que consolida o ciclo de vida completo de agentes IA em um único stack: construção, execução, ferramentas, fluxos de trabalho, permissões e governança. A proposta não é nova tecnicamente, mas a entrega como produto unificado é relevante.</p>
+        <p>O timing não é coincidência. Com as primeiras auditorias do EU AI Act focando justamente em sistemas automatizados de decisão, a pergunta "como você controla o que seu agente pode fazer?" deixou de ser arquitetural para se tornar regulatória. Audit trail, permissões granulares e explicabilidade não são opcionais em sistemas de alto risco — são evidência de compliance.</p>
+        <p>Para equipes Java: LangChain4j e Spring AI oferecem hooks para construir essas camadas de governança, mas elas precisam ser projetadas explicitamente. Não surgem por padrão. Se você está avançando com agentes em produção, reserve um sprint para mapear os controles de permissão e auditoria do seu stack antes que um auditor externe a pergunta por você.</p>
+        <a class="card-source" href="https://agentic.ai/news" target="_blank" rel="noopener">🔗 Agentic.ai — September 2026 News</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar — com prioridade para quem está colocando sistemas em produção agora:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🔭</span>
+          <h3>OpenTelemetry para LLMs</h3>
+          <p>O padrão emergente de observabilidade para sistemas agenticos. Implementar agora é construir sobre fundação que o mercado está convergindo — não é mais diferencial, é baseline enterprise.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚖️</span>
+          <h3>EU AI Act: Risk Documentation</h3>
+          <p>Com auditorias já iniciadas, saber montar risk registers, diagramas de supervisão humana e logs de governança de dados virou competência obrigatória para qualquer time que atende o mercado europeu.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔗</span>
+          <h3>Agentic RAG com LangGraph</h3>
+          <p>O padrão de referência em 2026 para RAG stateful. Os patterns de query rewriting, recuperação multi-step e LangGraph sobre vector stores são o que separa RAG de protótipo de RAG de produção.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>Spring AI 2.0 — Migration Guide</h3>
+          <p>Com Spring Boot 4 como target, vale mapear o caminho de migração do 1.1.x agora. O novo Advisors API e o suporte nativo a MCP são os dois pontos mais importantes da mudança de versão maior.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>LLM FinOps: Reasoning Tokens</h3>
+          <p>Modelos de raciocínio como GPT-6 Astra têm custo por output significativamente maior. Tracking granular por tipo de token (input, output, cache-read, reasoning) é o que transforma "o custo subiu" em decisão arquitetural informada.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧪</span>
+          <h3>Ragas — Evals para RAG</h3>
+          <p>Framework de avaliação reference-free para RAG pipelines. Com o gap de 37 pontos entre observabilidade e evals em produção, o Ragas é o ponto de entrada mais prático para fechar essa lacuna sem ground-truth manual.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que satura o feed técnico merece atenção. Hoje, estes temas podem esperar — ou ser descartados sem custo:</p>
+
+      <div class="highlight-card">
+        <h3>"Fadiga de Modelos" na mídia generalista</h3>
+        <p>A CNBC publicou em 6 de setembro uma peça sobre "model fatigue" — a tese de que labs estão lançando modelos rápido demais e o mercado está exausto. Narrativa interessante para colunistas; zero utilidade técnica. O ritmo de lançamentos é real, mas a resposta não é parar de avaliar novos modelos — é ter um processo de avaliação estruturado e repetível. Artigos de opinião sobre fadiga do mercado não substituem esse processo.</p>
+        <a class="card-source" href="https://www.cnbc.com/2026/09/06/meta-google-openai-anthropic-ai-model-fatigue.html" target="_blank" rel="noopener">🔗 CNBC — Model Fatigue</a>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Meta Muse Spark 1.3</h3>
+        <p>Lançado em 2 de setembro junto com o Gemini 3.8 Flash. Sem documentação técnica suficiente disponível publicamente e sem integração consolidada no LangChain4j ou Spring AI. Para observar no próximo ciclo, não para avaliar adoção agora.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Z.ai GLM-5.3-Flash (por enquanto)</h3>
+        <p>Tecnicamente interessante: primeiro GLM nativo multimodal, com variantes 320B/18B e contexto de 1 milhão de tokens. Mas sem ecossistema enterprise de suporte, sem SDK Java maduro e sem histórico de produção. Anotar e revisitar em 6 meses.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O ecossistema Java com IA chegou ao ponto de maturidade que eu esperava ver em 2026. <strong>Spring AI 2.0</strong>, lançado em junho com alinhamento ao Spring Boot 4, e <strong>LangChain4j na série 1.10.x</strong> formam uma dupla complementar que cobre qualquer cenário enterprise sem comprometer a robustez: RAG com múltiplas vector stores, tool calling nativo, suporte a MCP, memória conversacional, streaming e observabilidade.</p>
+
+        <p>A escolha entre os dois frameworks continua sendo uma questão de contexto. Spring AI é a opção natural para times que já vivem no ecossistema Spring — beans anotadas com <code>@AiService</code> se integram ao contexto familiar, e o roteamento de modelos usa os abstractions que o time já conhece. LangChain4j é mais explícito e mais maleável: você constrói a pipeline diretamente, o que facilita debug e customização fina de retrieval. Para arquiteturas de agentes complexos, essa transparência tem valor.</p>
+
+        <p>O ponto que chama minha atenção hoje, no contexto do gap de evals discutido acima: ambos os frameworks têm hooks para instrumentação, mas nenhum entrega uma camada de avaliação pronta. Você precisa construí-la. Para RAG, o Ragas funciona independente de framework Java — a avaliação é feita sobre os pares (pergunta, contexto recuperado, resposta gerada) e pode ser orquestrada via chamada direta à API. O exemplo abaixo é o padrão base que uso internamente para RAG em produção:</p>
+
+        <pre><code>// LangChain4j 1.10.x — Pipeline RAG com PgVector e threshold de relevância
+@AiService
+interface AssistenteTecnico {
+    @SystemMessage("""
+        Você é um arquiteto de software especialista em Java e IA.
+        Responda apenas com base no contexto fornecido.
+        Se o contexto não contiver a informação, diga que não sabe.
+        """)
+    String consultar(@UserMessage String pergunta);
+}
+
+// Vector store — PgVector (PostgreSQL com extensão pgvector)
+EmbeddingStore&lt;TextSegment&gt; vectorStore = PgVectorEmbeddingStore.builder()
+    .host(env.getProperty("DB_HOST"))
+    .port(5432)
+    .database("wrapperlead_kb")
+    .table("document_embeddings")
+    .dimension(1536)
+    .build();
+
+// Retriever com threshold mínimo de similaridade coseno
+ContentRetriever retriever = EmbeddingStoreContentRetriever.builder()
+    .embeddingStore(vectorStore)
+    .embeddingModel(embeddingModel)
+    .maxResults(5)
+    .minScore(0.75)  // calibre com seus dados — começo em 0.70
+    .build();
+
+// AiService com RAG, memória e model configurado
+AssistenteTecnico assistente = AiServices.builder(AssistenteTecnico.class)
+    .chatLanguageModel(chatModel)
+    .contentRetriever(retriever)
+    .chatMemory(MessageWindowChatMemory.withMaxMessages(10))
+    .build();</code></pre>
+
+        <p>O detalhe crítico aqui é o <code>minScore(0.75)</code>. A maioria dos tutoriais não define um threshold mínimo de relevância — o resultado é contexto de baixa qualidade sendo injetado no prompt, o que degrada as métricas de faithfulness sem nenhum sinal visível. Em produção, calibre esse valor com seus dados reais: use o Ragas para medir context precision antes e depois de ajustes e trate o threshold como parâmetro de configuração, não como constante no código.</p>
+
+        <p>Com a queda do preço de cache-read do Fable 5.1 para $0,25 por milhão de tokens, o modelo agora compete diretamente nos cálculos de FinOps para pipelines RAG de alto volume. Vale rever os custos projetados de qualquer projeto que use Anthropic como backend principal.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p class="footer-text">O que levo deste dia é que os dois maiores riscos nos projetos de IA que acompanho não são técnicos — são de processo. O primeiro é a falta de avaliação em produção: times que observam o agente mas não medem se ele está certo. O segundo é a despreparação para conformidade regulatória: empresas que trataram o EU AI Act como problema futuro até o futuro chegar em forma de auditor.</p>
+
+      <p class="footer-text">Modelos mais avançados — Fable 5.1, GPT-6 Astra — não resolvem nenhum dos dois. Eles amplificam o que você já tem. Se o que você tem é um pipeline sem evals, você tem um pipeline mais rápido e mais barato de cometer os mesmos erros.</p>
+
+      <p class="footer-text">Se você está construindo com agentes, reserve tempo essa semana para instrumentar ao menos uma métrica de avaliação em produção. E se você atende o mercado europeu, abra o EU AI Act e classifique seus sistemas antes que o European AI Office faça essa pergunta por você.</p>
+
+      <p class="footer-text">Compartilhe sua visão nos comentários ou me encontre no LinkedIn. Amanhã tem mais.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
