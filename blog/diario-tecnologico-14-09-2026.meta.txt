@@ -1,0 +1,27 @@
+TÍTULO: Diário Tecnológico — 14/09/2026
+SLUG: diario-tecnologico-14-09-2026
+EXCERPT: Semana histórica: Claude Fable 5.1, GPT-6 Astra e Gemini 3.8 Flash chegaram juntos. EU AI Act em vigor com multas de até €35M muda o jogo enterprise.
+TAGS: IA, Java, LangChain4j, Spring AI, Claude, GPT-6, EU AI Act, Agentes, RAG, FinOps, Agentic, Regulatório
+CATEGORIA: Diário Tecnológico
+AUTOR: Ray da Costa
+FOTO_AUTOR: https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg
+
+BANNER_PROMPT (para Bing Image Creator):
+Dark tech cinematic 16:9 banner, deep navy blue and electric cyan color palette, abstract AI neural network overlaid with glowing Java code fragments and three floating model names in circuit-board style lettering, agentic workflow nodes interconnected by data streams, dramatic directional lighting with subtle lens flare, sharp geometric shapes and hexagonal grid overlay, photorealistic digital art render, no human faces, no text
+
+GERADOR DE IMAGEM/BANNER: https://www.bing.com/images/create/ai-image-creator?cc=br
+
+---
+FONTES UTILIZADAS:
+- https://startupfortune.com/anthropic-openai-meta-and-google-all-shipped-new-ai-models-in-one-week/
+- https://aireleasetracker.com/releases/september-2026
+- https://tiinside.com.br/03/09/2026/openai-lanca-gpt-6-astra-com-avancos-em-agentes-programacao-e-uso-autonomo-de-computadores/
+- https://thehackernews.com/2026/09/google-anthropic-and-openai-unveil.html
+- https://artificialintelligenceact.eu/enforcement-of-chapter-v-under-the-eu-ai-act/
+- https://digital-strategy.ec.europa.eu/en/policies/enforcement-ai-act
+- https://aiagentstore.ai/ai-agent-news/this-week
+- https://rendageek.com.br/noticias/agentes-gerenciados-da-openai-no-devday/
+- https://docs.langchain4j.dev/tutorials/agents/
+- https://javapro.io/2026/07/08/langchain4j-agentic-workflows-from-ai-calls-to-multi-agent-systems-in-java/
+- https://www.javacodegeeks.com/2026/03/choosing-a-java-llm-integration-strategy-in-2026-spring-ai-1-1-vs-langchain4j-vs-direct-api-calls.html
+- https://blog.lunatech.com/posts/2026-09-04-javazone-2026-building-secure-ai-agents/
