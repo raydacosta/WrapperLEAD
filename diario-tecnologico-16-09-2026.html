@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 16/09/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section {
+      opacity: 0.7;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    .urgency-banner {
+      background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(245,158,11,0.05) 100%);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 12px;
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .urgency-banner span {
+      font-family: var(--font-title);
+      font-size: 14px;
+      font-weight: 600;
+      color: #f87171;
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 16 de setembro de 2026</div>
+      <h1>Diário Tecnológico — 16 de setembro de 2026</h1>
+      <p class="excerpt">Spring AI 2.0.1 exige upgrade imediato por três CVEs críticos; LangChain4j 1.19.0 entrega MCP e A2A em produção. O ecossistema Java com IA madureceu de vez esta semana.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-green">Spring AI</span>
+        <span class="tag tag-red">CVE</span>
+        <span class="tag tag-cyan">Anthropic</span>
+        <span class="tag tag-violet">OpenAI</span>
+        <span class="tag tag-amber">FinOps</span>
+        <span class="tag tag-green">EU AI Act</span>
+        <span class="tag tag-cyan">Agentes</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Há semanas em que o ecossistema de IA avança em aceleração controlada — novidades incrementais, releases de manutenção, benchmarks que ninguém vai usar em produção. E há semanas como esta. A segunda quinzena de setembro de 2026 trouxe uma combinação rara: vulnerabilidades de segurança reais no stack Java com IA, mudanças de preço que afetam diretamente a conta de infraestrutura de qualquer operação RAG séria, e dois releases de plataforma — Spring AI 2.0.1 e LangChain4j 1.19.0 — que eu considero, sem exagero, os mais densos em valor para arquitetos Java que vi nos últimos seis meses.</p>
+
+      <p>No front das grandes plataformas, a Anthropic consolidou o Claude Fable 5.1 como o modelo geral disponível e ajustou o preço de leitura de cache para um quarto do valor anterior — um sinal claro de que a empresa quer escalar o uso em workloads de alta frequência. A OpenAI lançou o GPT-6 Astra com foco em uso de computador e navegador, e o OpenHands chegou à versão 1.0 com sandboxing Docker de produção. São movimentos que ampliam o perímetro do que agentes autônomos conseguem fazer, com implicações sérias para quem está desenhando orquestrações em cima dessas APIs.</p>
+
+      <p>O que eu vou detalhar hoje é o que efetivamente importa para quem constrói sistemas: o que exige ação agora, o que vale estudar com calma e o que pode esperar. Sem hype, sem lista de features que ninguém vai implementar. Apenas o que mudou o meu radar esta semana.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <div class="urgency-banner">
+        ⚠️ <span>Ação urgente: deadline de depreciação do gemini-omni-flash-preview é 30/09/2026. Equipes que usam esse endpoint têm menos de duas semanas.</span>
+      </div>
+
+      <!-- SPRING AI 2.0.1 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Spring AI 2.0.1: três CVEs críticos e mudanças quebrando retrocompatibilidade</h3>
+        <p>O Spring AI 2.0.1 saiu em 21 de agosto e é a primeira release de manutenção sobre o GA 2.0 (lançado em junho sobre o Spring Boot 4). A parte que me preocupa não é a quantidade de issues resolvidos — são mais de 80 — mas os três CVEs de segurança corrigidos: <strong>CVE-2026-47851</strong>, <strong>CVE-2026-47852</strong> e <strong>CVE-2026-59318</strong>. Qualquer equipe que rodou o Spring AI 2.0.0 em produção está, neste momento, exposta. Não tem justificativa para postergar esse upgrade.</p>
+        <p>Além das vulnerabilidades, o 2.0.1 aposentou os modelos Mistral AI deprecated — o que significa que código que ainda usa os nomes antigos de modelo vai falhar em runtime. O módulo de auto-configuração do chat memory do Redis também foi renomeado (de <code>spring-ai-autoconfigure-*</code> para um padrão diferente), o que pode quebrar configurações declarativas sem aviso óbvio. A minha recomendação é clara: upgrade agora, revise os nomes dos modelos Mistral no seu <code>application.yml</code> antes, e valide o módulo Redis se você usa chat memory persistente.</p>
+        <a class="card-source" href="https://spring.io/blog/2026/08/21/spring-ai-2-0-1-available-now/" target="_blank" rel="noopener">🔗 Spring.io — Spring AI 2.0.1 release notes</a>
+      </div>
+
+      <!-- LANGCHAIN4J 1.19.0 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>LangChain4j 1.19.0: MCP client em produção e módulo A2A disponível</h3>
+        <p>A versão 1.19.0 do LangChain4j, liberada em 14 de agosto, é o release mais relevante da biblioteca para quem está construindo agentes Java sérios. A entrega principal é dupla: um <strong>MCP client de produção</strong> (Model Context Protocol) e o módulo <strong>A2A — Agent-to-Agent</strong> para comunicação entre agentes. Isso muda a arquitetura de sistemas multi-agente em Java de forma fundamental: antes, você era forçado a implementar a comunicação entre agentes manualmente ou via chamadas HTTP arbitrárias. Agora você tem um protocolo padronizado com suporte nativo na biblioteca que provavelmente já está no seu classpath.</p>
+        <p>O MCP client permite que agentes Java consumam ferramentas expostas por servidores MCP — incluindo os que já existem no ecossistema Python (LangChain, CrewAI). Isso abre uma janela de interoperabilidade que estava fechada até agora. O módulo A2A usa um padrão de descoberta e delegação que facilita escalonamento horizontal de agentes especializados. A biblioteca chega a 1.19.0 suportando mais de 20 provedores LLM e 30 stores de embedding/vector — o que a posiciona como a alternativa mais completa para Java enterprise sem depender de Python em runtime.</p>
+        <a class="card-source" href="https://github.com/langchain4j/langchain4j/releases" target="_blank" rel="noopener">🔗 GitHub — LangChain4j releases</a>
+      </div>
+
+      <!-- CLAUDE FABLE 5.1 + CACHE PRICING -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Anthropic: Claude Fable 5.1 GA com cache reads a 1/4 do preço anterior</h3>
+        <p>A Anthropic lançou o Claude Fable 5.1 como disponível geralmente em 1º de setembro. A versão restrita, Claude Mythos 5.1, segue limitada a parceiros em cibersegurança e ciências da vida. O que me interessa mais do que o modelo em si é a mudança de preço no cache: <strong>leituras de cache agora custam 1/4 do valor padrão</strong> em todos os modelos Claude. Para workloads de RAG com alta frequência de requisições — onde o cache de prompts de sistema e contexto fixo é a alavanca de custo mais importante — essa mudança pode representar uma redução de 25 a 40% na conta de inferência, dependendo do padrão de acesso.</p>
+        <p>A Anthropic também lançou em beta os <em>smart reports</em> para clientes Enterprise, com análise de uso por equipe, custos, fricções e skills compartilhadas. É o primeiro movimento concreto da empresa em direção a uma camada de AI FinOps própria — algo que a maioria das equipes está montando manualmente hoje com Langfuse ou LangSmith. Vale acompanhar se isso vai evoluir para controles granulares de orçamento por equipe ou projeto.</p>
+        <a class="card-source" href="https://www.axios.com/2026/09/01/anthropic-releases-new-models-cost-structures-and-safeguards" target="_blank" rel="noopener">🔗 Axios — Anthropic Fable 5.1 e nova estrutura de custos</a>
+      </div>
+
+      <!-- EU AI ACT -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>EU AI Act: obrigações para sistemas de alto risco já estão em vigor desde agosto</h3>
+        <p>Agosto de 2026 marcou a entrada em vigor das obrigações para sistemas de IA de alto risco da EU AI Act. O staged rollout está completo: os modelos de propósito geral já estavam sob obrigações desde agosto de 2025, e agora o perímetro de aplicação cobre sistemas classificados como alto risco — o que inclui uma parte significativa do que as empresas estão construindo em saúde, finanças, RH e infraestrutura crítica. Claude, ChatGPT, Gemini e Grok agora ativam obrigações da Digital Services Act para plataformas online de muito grande porte.</p>
+        <p>Nos EUA, a California SB 53 — Frontier AI Transparency Act — está em vigor desde janeiro de 2026 e é a lei de IA mais substantiva em jurisdição americana até agora, na ausência de um framework federal. Quem atende clientes nos dois mercados precisa ter revisado compliance em ambas as jurisdições. Para arquitetos de software, o impacto prático é: documentação de modelos, auditabilidade de decisões automatizadas, e rastreabilidade de dados de treinamento se tornam requisitos, não boas práticas.</p>
+        <a class="card-source" href="https://www.modulos.ai/ai-compliance-guide/" target="_blank" rel="noopener">🔗 Modulos.ai — Guia de compliance EU AI Act 2026</a>
+      </div>
+
+      <!-- GPT-6 ASTRA + OPENHANDS -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>GPT-6 Astra e OpenHands 1.0: agentes autônomos chegam ao nível de produção</h3>
+        <p>A OpenAI lançou o GPT-6 Astra em 3 de setembro, descrito como um novo patamar em uso de computador e navegador. O modelo está disponível no ChatGPT e na API, incluindo integração com AWS. Na mesma semana, o <strong>OpenHands chegou à versão 1.0</strong> com sandboxing Docker de produção, políticas de segurança integradas, limites de recursos e benchmarks mostrando conclusão autônoma de ~68% das tarefas do SWE-bench Verified. Isso representa uma mudança qualitativa: agentes que completam tarefas de engenharia de software de forma autônoma, com segurança operacional suficiente para ambientes controlados.</p>
+        <p>Para quem está avaliando pipelines agenticos, o OpenHands 1.0 é mais relevante do que o GPT-6 Astra neste momento — porque o OpenHands é open source, auditável, e pode ser integrado em stacks Java via API. O Astra ainda carrega restrições de acesso que limitam sua viabilidade enterprise imediata. Monitoro ambos com interesse, mas ainda não recomendo colocar nenhum dos dois em pipelines críticos sem um ciclo completo de avaliação.</p>
+        <a class="card-source" href="https://techcrunch.com/2026/09/03/openai-launches-astra-its-powerful-and-controversial-new-model/" target="_blank" rel="noopener">🔗 TechCrunch — OpenAI lança Astra, GPT-6</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei esta semana, estes são os temas e recursos que recomendo colocar na fila de estudo agora — não daqui a seis meses, quando já vai estar consolidado demais para gerar diferencial.</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>LangChain4j A2A: Agent-to-Agent Protocol</h3>
+          <p>O módulo A2A do LangChain4j 1.19.0 define como agentes Java se descobrem e delegam tarefas entre si. Estudar agora significa entender a arquitetura enquanto o ecossistema ainda é pequeno — mais fácil de contribuir, mais fácil de adaptar.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔌</span>
+          <h3>Model Context Protocol (MCP) em Java</h3>
+          <p>Com o MCP client estável no LangChain4j, há uma janela real de interoperabilidade com o ecossistema Python. Estudar o protocolo agora posiciona você para integrar ferramentas MCP existentes sem reescrever em Python.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>AI FinOps: gestão de custos de inferência</h3>
+          <p>Inferência já é o segundo maior custo em budgets de IA enterprise, atrás só de talento. Organizações com FinOps maduro reportam 40–60% menos custo por inferência. Langfuse, LangSmith e plataformas de atribuição de custo são o ponto de partida prático.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Agentic RAG: retrieval como camada cognitiva ativa</h3>
+          <p>A análise de falhas em produção em 2026 aponta a camada de dados — dados desatualizados, incompletos ou mal indexados — como a principal fonte de falha em sistemas RAG, não a lógica de orquestração. Entender esse padrão muda onde você foca esforço de otimização.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚖️</span>
+          <h3>EU AI Act: obrigações práticas para engenharia</h3>
+          <p>Documentação de modelos, auditabilidade e rastreabilidade de dados saíram do campo regulatório para o campo de requisitos de sistema. Entender as obrigações técnicas evita retrabalho quando o compliance team aparecer — e ele vai aparecer.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔒</span>
+          <h3>Spring AI 2.0.1: CVEs e mudanças de configuração</h3>
+          <p>Antes de fazer o upgrade, leia as release notes do 2.0.1 em detalhe. Entender o que mudou no módulo Redis e os nomes de modelo Mistral deprecated vai poupar horas de debug em pipelines de CI que vão quebrar silenciosamente em runtime.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados sem culpa:</p>
+
+      <div class="highlight-card">
+        <h3>Leanstral 1.5 da Mistral (modelo para Lean 4)</h3>
+        <p>A Mistral lançou um modelo especializado em prova formal com Lean 4, com 6B parâmetros e benchmarks técnicos respeitáveis. Fora do contexto de verificação formal de software — que ainda é extremamente nichado no enterprise Java — não há aplicação prática imediata. Pode ignorar até o ecossistema amadurecer.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Previsão do Gartner: 40% dos projetos agenticos serão cancelados até 2027</h3>
+        <p>A previsão é real e tem embasamento — projetos sem controle de custo e sem governança de risco tendem a ser cancelados. Mas o dado sem contexto vira munição para quem quer travar iniciativas de IA por conservadorismo. A resposta certa não é parar projetos, é implementar AI FinOps e controles de risco desde o início. Ignore a narrativa do medo; use o dado para justificar governança.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>GPT-Live-1 e API de voz full-duplex da OpenAI</h3>
+        <p>A API de voz com 12 vozes novas, transcrição nativa e integração Codex é tecnicamente interessante, mas ainda sem massa crítica de casos de uso enterprise validados. Se você não tem uma demanda concreta de interface conversacional por voz em produção, esse é um investimento de exploração — não de sprint.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>A semana foi densa para o ecossistema Java com IA, e vou ser direto: se você mantém alguma aplicação em Spring AI 2.0.0, o primeiro item do seu backlog de hoje é o upgrade para 2.0.1. Não é opcional. Três CVEs com severidades documentadas são motivo suficiente — a empresa não pode esperar o próximo ciclo de release planning.</p>
+
+        <p>O <strong>LangChain4j 1.19.0</strong> é o release que muda a equação de agentes Java. O MCP client em produção resolve um problema que todo arquiteto que trabalha com Java e Python no mesmo stack conhece bem: a fragmentação de ferramentas. Com o MCP, um agente Java pode consumir ferramentas expostas por qualquer servidor MCP — incluindo ferramentas construídas no ecossistema Python ou em serviços externos. O módulo A2A, por sua vez, padroniza como agentes Java se comunicam em arquiteturas multi-agente, eliminando a necessidade de implementar protocolos de comunicação ad hoc. O código abaixo mostra como configurar um agente Java com MCP client no LangChain4j 1.19.0:</p>
+
+        <pre><code>// LangChain4j 1.19.0 — MCP Client em agente Java
+// Dependência: langchain4j-mcp:1.19.0
+
+McpClient mcpClient = McpClient.builder()
+    .serverUrl("http://mcp-server:8080")
+    .transport(McpTransport.HTTP_SSE)
+    .timeout(Duration.ofSeconds(30))
+    .build();
+
+// Registrar ferramentas MCP no agente
+List&lt;ToolSpecification&gt; mcpTools = mcpClient.listTools();
+
+ChatLanguageModel model = AnthropicChatModel.builder()
+    .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+    .modelName("claude-fable-5-1")
+    .build();
+
+AiAgent agent = AiAgent.builder()
+    .chatLanguageModel(model)
+    .tools(mcpTools)      // ferramentas via MCP
+    .tools(localTools)    // ferramentas locais Java
+    .build();
+
+// A2A: delegar subtarefa a agente especializado
+A2aClient a2aClient = A2aClient.builder()
+    .agentDiscoveryUrl("http://agent-registry:9090")
+    .build();
+
+AgentResponse result = a2aClient
+    .findAgent("rag-specialist")
+    .delegate(UserMessage.from(query));</code></pre>
+
+        <p>No <strong>Spring AI 2.0.1</strong>, além do upgrade de segurança, preste atenção especial às mudanças de nomenclatura de modelos Mistral. O código que usa <code>mistral-small</code> ou <code>mistral-medium</code> pelos nomes antigos vai falhar silenciosamente em runtime — o Spring AI vai lançar uma exceção de configuração que não é óbvia de diagnosticar sem conhecer o release note. A solução é simples: atualize o <code>spring.ai.mistralai.chat.options.model</code> no seu <code>application.yml</code> para o nome de modelo atual antes de fazer deploy.</p>
+
+        <p>Em termos de tendência de arquitetura, o que observo com mais atenção é o movimento de <strong>orquestração sobre prompt</strong>: a alavanca de qualidade em sistemas agênticos deixou de ser o refinamento de prompt e passou a ser a decomposição de tarefas, gestão de contexto, escopo de ferramentas e controles operacionais. Isso tem implicações diretas para equipes Java — arquitetura e governança voltam a ser o diferencial, não o acesso privilegiado a modelos proprietários.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>O que fica desta semana para mim é a confirmação de uma transição que venho acompanhando há meses: o ecossistema Java com IA saiu da fase de experimentação e entrou na fase de manutenção — CVEs para corrigir, breaking changes para gerenciar, obrigações regulatórias para cumprir. Isso é o que acontece quando a tecnologia amadurece de verdade. Não é glamouroso, mas é onde o trabalho real acontece. Se você está construindo em Java com IA, esta semana foi uma semana de trabalho necessário, não de exploração empolgante. E está tudo bem com isso.</p>
+
+      <p>Amanhã, sigo monitorando o deadline de depreciação do <code>gemini-omni-flash-preview</code> — faltam menos de duas semanas. Se você usa esse endpoint, o momento de agir é agora. Se quiser discutir qualquer um dos tópicos de hoje ou compartilhar como seu time está lidando com o Spring AI 2.0.1, estou nos comentários.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
