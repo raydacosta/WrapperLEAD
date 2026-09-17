@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 17/09/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    section { padding: 60px 0; }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon { font-size: 28px; }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p { color: var(--text); margin-bottom: 16px; }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 { font-size: 16px; margin-bottom: 8px; }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 { color: #34d399; }
+    .radar-java h3 { color: #6ee7b7; }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    .radar-java a {
+      color: #34d399;
+      border-bottom-color: rgba(52,211,153,0.3);
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section { opacity: 0.75; }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(25%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .pricing-table th {
+      background: var(--surface-2);
+      color: var(--cyan);
+      font-family: var(--font-title);
+      font-weight: 600;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pricing-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(45,55,72,0.5);
+      color: var(--text);
+    }
+
+    .pricing-table tr:last-child td { border-bottom: none; }
+
+    .pricing-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .highlight-price {
+      color: var(--cyan);
+      font-weight: 600;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span { color: var(--cyan); }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+      .pricing-table { font-size: 12px; }
+      .pricing-table th, .pricing-table td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 17/09/2026</div>
+      <h1>Diário Tecnológico — 17 de setembro de 2026</h1>
+      <p class="excerpt">Fable 5.1 corta 75% no custo de cache e muda o ROI de agentes Java; EU AI Act entra em fase de auditorias ativas com 78% das empresas sem conformidade.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-green">LangChain4j</span>
+        <span class="tag tag-amber">Spring AI</span>
+        <span class="tag tag-red">EU AI Act</span>
+        <span class="tag tag-cyan">Claude Fable 5.1</span>
+        <span class="tag tag-violet">Agentes</span>
+        <span class="tag tag-amber">FinOps</span>
+        <span class="tag tag-green">Observabilidade</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section id="intro">
+      <p>Setembro de 2026 está sendo um mês de consolidação no ecossistema de IA — não de explosão de hype, mas de decisões que afetam diretamente budget, arquitetura e compliance. Enquanto os grandes laboratórios continuam liberando modelos com cadência cada vez mais frenética (já estão falando em "fadiga de modelos" na mídia especializada), o que realmente importa para quem arquiteta sistemas é diferente: preço de inferência, maturidade de frameworks Java e o peso crescente da regulação.</p>
+      <p>Hoje acordei com três itens que exigem decisão imediata de qualquer arquiteto Java que usa a API da Anthropic em produção: o corte de 75% no cache read do Fable 5.1 muda completamente o cálculo de ROI de qualquer workload agêntico. Junto a isso, o LangChain4j lançou ontem, 15 de setembro, um patch crítico na linha 1.19.x, e há duas semanas saiu a 1.20.0 com suporte reativo nativo — mudança arquitetural relevante para quem usa Spring WebFlux. Do lado regulatório, a primeira onda de auditorias do EU AI Act começou em 30 de agosto e os auditores estão pedindo documentação que a maioria das empresas simplesmente não tem.</p>
+      <p>Vou cobrir cada um desses pontos com profundidade técnica e o que faço com eles na Wrapper. Nada de lista de novidades sem contexto — cada item vem com uma decisão ou ação concreta.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Claude Fable 5.1: 75% de corte no cache read muda a matemática de agentes</h3>
+        <p>Anthropic lançou o Fable 5.1 em 1º de setembro com uma mudança que passou despercebida em parte da mídia generalista, mas que é cirúrgica para quem opera workloads agênticos em produção: o preço de leitura de cache caiu de $1,00 para <strong>$0,25 por milhão de tokens</strong>. Preço de escrita de cache e de tokens de output não mudaram — $10/M entrada e $50/M saída permanecem.</p>
+        <p>O impacto real: em workflows onde o mesmo contexto longo é reutilizado repetidamente — agentes de código que mantêm o repositório inteiro em contexto, pipelines de análise financeira com histórico longo, ou qualquer loop agêntico que revisita system prompt + tools a cada iteração — a Anthropic estima queda de 25% a 45% na fatura. Na prática o desconto é proporcional à parcela do seu bill que vinha de cache reads. Para workloads altamente agênticos a conta fecha mais perto dos 45%. Isso não é marketing: é aritmética direta do novo multiplicador de 0.025x sobre o input rate.</p>
+        <p>Para a Wrapper isso significa revisitar os modelos de custo de todos os projetos em que usamos Fable via API com prompt caching habilitado. Se você ainda não fez essa análise, é a tarefa mais rentável desta semana.</p>
+
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Modelo</th>
+              <th>Entrada ($/1M)</th>
+              <th>Saída ($/1M)</th>
+              <th>Cache Read ($/1M)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Haiku 4.5</td><td>$1,00</td><td>$5,00</td><td>—</td></tr>
+            <tr><td>Sonnet 5</td><td>$2,00</td><td>$10,00</td><td>—</td></tr>
+            <tr><td>Opus 5</td><td>$5,00</td><td>$25,00</td><td>—</td></tr>
+            <tr><td><strong>Fable 5.1</strong></td><td>$10,00</td><td>$50,00</td><td class="highlight-price"><strong>$0,25</strong></td></tr>
+          </tbody>
+        </table>
+
+        <a class="card-source" href="https://venturebeat.com/technology/anthropics-claude-fable-5-1-and-mythos-5-1-arrive-with-a-75-cost-reduction-for-fable-cache-reads" target="_blank" rel="noopener">🔗 VentureBeat</a>
+        <a class="card-source" href="https://www.ghacks.net/2026/09/03/anthropic-releases-claude-fable-5-1-and-cuts-cached-token-pricing-by-75/" target="_blank" rel="noopener" style="margin-left: 16px;">🔗 gHacks Tech News</a>
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>EU AI Act: auditorias ativas desde 30 de agosto — 78% das empresas não estão prontas</h3>
+        <p>O EU AI Act saiu da fase teórica. O AI Office da União Europeia iniciou em 30 de agosto a primeira onda de auditorias em sistemas de IA de alto risco — triagem de currículos automatizada, avaliação de crédito e triagem de saúde são os focos iniciais. A France CNIL, Germany BfDI e Spain AESIA lideram os pedidos. O que os auditores estão solicitando: <strong>diagramas de arquitetura, logs de governança de dados, esquemas de supervisão humana e registros de gestão de riscos</strong>.</p>
+        <p>O número que preocupa: 78% das organizações afetadas ainda não tomaram medidas concretas de conformidade. As multas chegam a €35 milhões ou 7% do faturamento global anual, o que for maior. Para qualquer empresa que vende sistemas Java com IA embutida para o mercado europeu — e isso inclui boa parte das casas de desenvolvimento enterprise —, a pergunta não é mais "quando isso vai acontecer" mas "o que o auditor vai encontrar se bater na porta amanhã".</p>
+        <p>Do ponto de vista de arquitetura: observabilidade deixou de ser optional. Distributed tracing de cada chamada LLM, logs de decisão, e mecanismos de override humano precisam existir e estar documentados. A ISO/IEC 42001 começa a aparecer em contratos de procurement enterprise como pré-requisito — algo que antes era diferencial.</p>
+        <a class="card-source" href="https://www.tonishatagoe.com/september-2026-ai-regulation-surge-how-enterprises-can-preserve-sovereignty-amid-fragmented-rules/" target="_blank" rel="noopener">🔗 AI Regulation Surge — Tonisha Tagoe</a>
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>LangChain4j 1.19.3 (ontem) e 1.20.0 (início de setembro): dois patches que importam</h3>
+        <p>Duas releases relevantes no LangChain4j que precisam estar no seu radar imediatamente. A <strong>1.19.3</strong>, publicada ontem (15/09) às 10:29 UTC no GitHub, é um patch de manutenção na linha estável 1.19.x com um fix crítico: <em>Allow to configure ClassLoader on the ObjectMapper used for AgenticScope serialization</em>. Parece técnico demais, mas é exatamente o tipo de bug que explode em produção em ambientes enterprise com OSGi containers ou classloaders customizados — situação comum em application servers como JBoss/WildFly. Se você está na linha 1.19.x, essa é a versão a estar.</p>
+        <p>Já a <strong>1.20.0</strong>, de 4 de setembro, é uma mudança arquitetural mais substantiva: introduz <strong>suporte nativo a métodos assíncronos e reativos nos AI Services</strong>. A interface de serviço AI pode agora retornar <code>CompletableFuture&lt;T&gt;</code> ou <code>Flow.Publisher&lt;T&gt;</code> (JDK 9 reactive streams), o que abre integração limpa com Spring WebFlux sem gambiarras de threading. Também chega o opt-in para Jackson 3 ao lado do Jackson 2 — essencial para projetos no Spring Boot 4.x que já migrou para Jackson 3 como default. Um bugfix notável: a versão 1.19.1 foi publicada por erro — não use.</p>
+        <a class="card-source" href="https://github.com/langchain4j/langchain4j/releases" target="_blank" rel="noopener">🔗 GitHub Releases — LangChain4j</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>LangChain "State of Agent Engineering": qualidade, não custo, é a barreira principal</h3>
+        <p>O relatório anual da LangChain com 1.300+ practitioners traz números que precisam ser lidos com cuidado por quem está levando agentes para produção. 57% dos entrevistados já têm agentes em produção — crescimento real em relação ao ano anterior. Mas os números de qualidade operacional são preocupantes: <strong>48% ainda não executam avaliações offline</strong> e <strong>63% não têm monitoramento online</strong>. Isso significa que mais da metade das equipes com agentes em produção não sabe quantitativamente se eles estão funcionando bem.</p>
+        <p>O achado mais operacionalmente relevante: <strong>60% das falhas em chamadas LLM vêm de rate limit errors</strong>, não de indisponibilidade do provider. Loops agênticos com múltiplos agents paralelos que disparam chamadas em burst atingem os limites de TPM/RPM dos providers muito mais rápido do que workloads síncronos tradicionais. O controle de concorrência e backoff exponencial dentro do loop agêntico não é opcional — é a primeira linha de estabilidade.</p>
+        <a class="card-source" href="https://www.langchain.com/state-of-agent-engineering" target="_blank" rel="noopener">🔗 LangChain — State of Agent Engineering</a>
+        <a class="card-source" href="https://www.kdnuggets.com/the-state-of-agent-engineering-report-overview" target="_blank" rel="noopener" style="margin-left: 16px;">🔗 KDnuggets</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Anthropic, OpenAI e Google propõem body de autorregulação estilo FINRA</h3>
+        <p>Representatives dos três grandes laboratórios estão em conversas desde julho para estruturar um órgão de autorregulação modelado no FINRA — o regulador de brokers/investidores dos EUA. O escopo discutido cobre avaliações pré-release por terceiros, checks de segurança padronizados e protocolos unificados para riscos de cybersegurança, biossegurança e comportamento enganoso. A proposta é atribuída a Demis Hassabis do Google DeepMind; Sam Altman confirmou suporte mas quer que seja industry-led, sem backing governamental dos EUA.</p>
+        <p>Para arquitetos enterprise: nenhuma mudança imediata, mas o movimento sinaliza que o landscape regulatório vai convergir mais rápido do que o esperado. Um órgão desse tipo, se formado, influenciará procurement e compliance nas mesmas cadeias que já são afetadas pelo EU AI Act. Vale acompanhar, sem urgência de ação imediata.</p>
+        <a class="card-source" href="https://thehackernews.com/2026/09/google-anthropic-and-openai-unveil.html" target="_blank" rel="noopener">🔗 The Hacker News</a>
+        <a class="card-source" href="https://www.cnbc.com/2026/09/06/meta-google-openai-anthropic-ai-model-fatigue.html" target="_blank" rel="noopener" style="margin-left: 16px;">🔗 CNBC — Model Fatigue</a>
+      </div>
+
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>GPT-6 Astra estável e Gemini 3.8 Flash Cyber</h3>
+        <p>OpenAI publicou a versão estável (não-preview) do GPT-6 Astra em 8 de setembro, disponibilizando-o para integrações de API em produção com SLAs de canal estável. Google lançou o Gemini 3.8 Flash em 2 de setembro com um variant <em>Cyber</em> especializado que bate benchmarks de outros modelos frontier em descoberta autônoma de vulnerabilidades. Para a maioria das operações enterprise Java, nenhum dos dois justifica troca imediata de provider — o ROI de reescrever integrações existentes não fecha sem um caso de uso muito específico que só esses modelos atendam. Vale monitorar os benchmarks de raciocínio do Astra para decisões de adoção no Q4.</p>
+        <a class="card-source" href="https://llm-stats.com/llm-updates" target="_blank" rel="noopener">🔗 LLM Stats</a>
+        <a class="card-source" href="https://capitalandcompute.net/blog/new-ai-models-september-2026/" target="_blank" rel="noopener" style="margin-left: 16px;">🔗 Capital &amp; Compute</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar — priorizados por impacto imediato em projetos Java enterprise com IA:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🔀</span>
+          <h3>CompletableFuture e Flow.Publisher no LangChain4j 1.20</h3>
+          <p>O suporte reativo nativo dos AI Services mudou a proposta de integração com WebFlux. Vale ler o release notes do 1.20.0 e testar a migração de interfaces síncronas existentes — é o passo prático mais imediato desta semana.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧾</span>
+          <h3>EU AI Act — Documentação de Sistemas de Alto Risco</h3>
+          <p>Se qualquer sistema da sua stack faz screening automatizado de pessoas (CV, crédito, triagem), estude agora o Annex III do EU AI Act e os requisitos de Artigo 9 (Risk Management). Os auditores já estão ativos — a checklist de conformidade não pode esperar.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>Prompt Caching com Fable 5.1 — Modelo de Custo</h3>
+          <p>Com cache reads a $0,25/M, qualquer workload com contexto longo e reutilizável precisa de um modelo de custo revisado. A Anthropic tem documentação técnica sobre como estruturar o cache de forma eficiente — leitura obrigatória antes de re-precificar projetos.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔭</span>
+          <h3>OpenTelemetry para Agentes LLM</h3>
+          <p>O relatório State of Agent Engineering mostra 89% das equipes de produção com observabilidade implementada. MLflow e Arize Phoenix são os líderes open-source. A padronização em OTel (OpenTelemetry) é a aposta de longo prazo — evita vendor lock-in em observabilidade.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚙️</span>
+          <h3>Spring AI 2.0 — Anotações MCP e Stateless Servers</h3>
+          <p>Para quem está no Spring Boot 4.1 + Java 21, o suporte a <code>@McpTool</code>, <code>@McpResource</code> e <code>@McpPrompt</code> transforma qualquer Spring Service em servidor MCP com uma anotação. O suporte stateless via WebMVC/WebFlux elimina o requisito de session affinity — relevante para deployments em cloud horizontalmente escalados.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🛡️</span>
+          <h3>FinOps Guardrails para Loops Agênticos</h3>
+          <p>Hard ceilings por tarefa (ex: máximo 15 tool calls, máximo $0,50 por execução) precisam ser políticas de código, não só alertas de monitoramento. Um loop agêntico sem limites pode gerar faturas significativas antes do primeiro alerta disparar. Estude os padrões de cost-aware agent design documentados pelo Finout.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados sem culpa:</p>
+
+      <div class="highlight-card">
+        <h3>Mistral Leanstral 1.5 — modelo de prova formal em Lean 4</h3>
+        <p>Modelo interessante de nicho para engenharia de provas formais, mas com aposentadoria agendada para 30 de setembro. Já nasceu depreciado — não investir tempo ou integração nele.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Hype em torno das "capacidades" do GPT-6 Astra para enterprise</h3>
+        <p>Muito artigo circulando sobre o potencial transformador do Astra para casos de uso enterprise. A versão estável acabou de sair; benchmarks de raciocínio ainda são preliminares em contextos do mundo real. Para decisões de adoção, aguarde ao menos 60 dias de dados de produção reportados pela comunidade.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Comparativos superficiais entre Spring AI 2.0 e LangChain4j</h3>
+        <p>Vários blogs publicando comparativos que ignoram o fato de que Spring AI 2.0 exige Java 21 + Spring Boot 4.1 como prerequisito estrito. Se você está em Spring Boot 3.x, não é uma escolha — LangChain4j é o caminho. O debate só é relevante para projetos greenfield ou já em migração.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O ecossistema Java de IA está em dois estados simultâneos: a linha LangChain4j 1.19.x/1.20.x continua sendo a referência para quem precisa de estabilidade produtiva sem exigências de upgrade de runtime, enquanto o Spring AI 2.0 GA (desde junho) representa a aposta de longo prazo para quem está disposto a migrar para o stack Jakarta EE 11 / Spring Boot 4.1 / Java 21.</p>
+
+        <p>O patch mais urgente do dia é o <strong>LangChain4j 1.19.3</strong> (15/09/2026). O fix de ClassLoader no ObjectMapper do AgenticScope é silencioso mas impacta diretamente ambientes enterprise com isolamento de classloader — OSGi, alguns application servers, e qualquer setup com custom module loaders. Se você está na 1.19.x, a atualização deve entrar na próxima janela de deploy sem hesitação.</p>
+
+        <p>Para novos projetos ou componentes isolados em stacks WebFlux, a <strong>1.20.0</strong> abre a possibilidade de interfaces AI Service totalmente não-bloqueantes. O pattern abaixo mostra a evolução: a mesma interface agora expõe a operação síncrona, assíncrona e streaming reativo sem duplicar a lógica de prompt ou a configuração do model:</p>
+
+        <pre><code>// LangChain4j 1.20.0 — AI Service com suporte reativo nativo
+// Três assinaturas, mesma configuração de modelo e system prompt
+
+import dev.langchain4j.service.AiServices;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Flow;
+
+public interface AgenteAnaliseFiscal {
+
+    // Síncrono — comportamento legado, continua suportado
+    String analisar(@UserMessage String documentoFiscal);
+
+    // Assíncrono — integração com CompletableFuture (Java 8+)
+    CompletableFuture&lt;String&gt; analisarAsync(@UserMessage String documentoFiscal);
+
+    // Streaming reativo — JDK 9 Flow.Publisher
+    // Compatível com Flux.from() no Spring WebFlux
+    Flow.Publisher&lt;String&gt; analisarStream(@UserMessage String documentoFiscal);
+}
+
+// Configuração: idêntica para todos os três métodos
+AgenteAnaliseFiscal agente = AiServices.builder(AgenteAnaliseFiscal.class)
+    .chatLanguageModel(model)
+    .systemMessageProvider(memId -&gt; "Você é um especialista fiscal brasileiro...")
+    .build();
+
+// Uso em controlador WebFlux — sem blocking thread
+Flux&lt;String&gt; stream = Flux.from(agente.analisarStream(docFiscal));
+</code></pre>
+
+        <p>No front do <strong>Spring AI 2.0</strong>, o ponto que merece mais atenção arquitetural neste momento é o suporte a MCP servers stateless via <code>spring-ai-starter-mcp-server-webmvc</code>. A eliminação do requisito de session affinity é o que viabiliza escalar horizontalmente um MCP server em Kubernetes sem sticky sessions — até setembro passado isso não era possível de forma limpa. Combinado com as métricas Micrometer + OpenTelemetry embutidas por interação MCP, você tem observabilidade e escalabilidade juntos sem código extra.</p>
+
+        <p>Para equipes em <strong>Java 17 com Spring Boot 3.x</strong>: LangChain4j 1.20.0 é a rota. Spring AI 2.0 não é uma opção sem migração completa do runtime. A boa notícia é que o LangChain4j resolve os mesmos casos de uso — agents, MCP client/server, RAG, tool calling — com menor barreira de entrada. A escolha não é Spring AI vs LangChain4j em abstrato; é onde sua equipe está no ciclo de migração.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+          loading="lazy"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>O dia de hoje deixou clara uma tensão que vai definir os próximos meses no enterprise: a redução de custos de inferência (Fable 5.1, cache reads mais baratos) está acelerando a adoção de agentes, mas a maturidade operacional não está acompanhando o ritmo. 48% sem avaliação offline, 63% sem monitoramento — esses números aparecem num contexto em que reguladores europeus já batem à porta pedindo justamente o que essas equipes não têm. O gap entre "agente em produção" e "agente auditável em produção" é o próximo problema real a resolver.</p>
+
+      <p>Amanhã vou aprofundar o tema de FinOps para loops agênticos com Java — os guardrails práticos que coloco em todos os projetos novos na Wrapper. Se você tem uma abordagem diferente ou um caso de uso específico que quer discutir, deixa nos comentários.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
