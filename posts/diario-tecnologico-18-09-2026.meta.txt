@@ -1,0 +1,13 @@
+TÍTULO: Diário Tecnológico — 18/09/2026
+SLUG: diario-tecnologico-18-09-2026
+EXCERPT: Fable 5.1 reduz custo de cache em 75%, Gemini 3.8 Flash domina benchmarks de agentes e LangChain4j 1.19.0 consolida módulo agêntico com MCP e A2A.
+TAGS: IA, Java, LangChain4j, Spring AI, Anthropic, OpenAI, Gemini, RAG, AgentOps, FinOps, LangGraph
+CATEGORIA: Diário Tecnológico
+AUTOR: Ray da Costa
+FOTO_AUTOR: https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg
+DATA: 18/09/2026
+
+BANNER_PROMPT (para Bing Image Creator):
+Dark tech cinematic 16:9 scene, deep navy blue and electric cyan color palette, abstract AI neural network nodes and glowing Java code streams intertwining in 3D space, floating holographic model cards labeled "Fable 5.1" "Gemini 3.8" "LangChain4j", hexagonal data grid background, volumetric light rays, no human faces, photorealistic render, dramatic lighting, high detail
+
+ARQUIVO HTML: diario-tecnologico-18-09-2026.html
