@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 20 de Setembro de 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    section { padding: 60px 0; }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon { font-size: 28px; }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p { color: var(--text); margin-bottom: 16px; }
+    p:last-child { margin-bottom: 0; }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .card-source:hover { color: var(--cyan); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 { color: #34d399; }
+    .radar-java h3 { color: #6ee7b7; font-size: 17px; margin-bottom: 10px; }
+    .radar-java p { color: #a7f3d0; opacity: 0.9; }
+    .radar-java ul { margin: 0 0 16px 20px; }
+    .radar-java li { color: #a7f3d0; opacity: 0.9; margin-bottom: 6px; font-size: 15px; }
+    .radar-java strong { color: #6ee7b7; }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section { opacity: 0.72; }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(20%);
+    }
+
+    .ignore-section .highlight-card:hover {
+      box-shadow: 0 12px 40px rgba(45,55,72,0.3);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p { font-size: 14px; color: var(--text-muted); margin: 0; }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 32px;
+    }
+
+    .footer-closing span { color: var(--cyan); }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 20/09/2026</div>
+      <h1>Diário Tecnológico — 20 de Setembro de 2026</h1>
+      <p class="excerpt">
+        Fable 5.1 e GPT-6 Astra redefinem o topo da IA corporativa; EU AI Act entra em modo de inspeção ativa e o Congresso americano regula o custo energético dos data centers.
+      </p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-cyan">Anthropic</span>
+        <span class="tag tag-red">OpenAI</span>
+        <span class="tag tag-green">Regulação IA</span>
+        <span class="tag tag-violet">Spring AI</span>
+        <span class="tag tag-amber">Agentic RAG</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>
+        Esta semana de setembro de 2026 vai entrar para a história como um dos períodos de maior densidade de movimentações no ecossistema de IA que eu já acompanhei. Em menos de 20 dias, Anthropic, OpenAI, Google e Mistral colocaram novos modelos no ar — e o mercado começa a falar abertamente em <strong>"model fatigue"</strong>: o cansaço de gestores de TI que precisam re-avaliar stack, contratos e benchmarks a cada semana. Não estou reclamando — isso é exatamente o tipo de pressão que força decisões arquiteturais sérias, e quem está de olho sai na frente.
+      </p>
+      <p>
+        No lado regulatório, o cenário evoluiu de forma igualmente acelerada. O EU AI Act saiu da teoria e entrou em campo: as primeiras inspeções de conformidade já acontecem em Bruxelas e em 24 países europeus. Nos Estados Unidos, o Congresso agiu com velocidade incomum e aprovou, por 417 votos a 3, a <strong>Lei de Proteção aos Consumidores de Energia</strong> — obrigando data centers a arcarem com os custos de infraestrutura elétrica que geram. O sinal é claro: a conta da IA vai chegar para quem é capaz de pagar.
+      </p>
+      <p>
+        Do ponto de vista técnico, o destaque que mais me interessa neste momento é a consolidação do <strong>Harness Engineering</strong> como paradigma dominante. Não se fala mais em "prompt engineering" — o que define a qualidade de um sistema de agentes hoje é a qualidade do harness que os governa: os loops de feedback, os mecanismos de auto-correção, as ferramentas de observabilidade. Quem ainda está otimizando prompt e não a arquitetura do harness está atrás da curva. Vou detalhar tudo isso abaixo.
+      </p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Claude Fable 5.1 em disponibilidade geral — 1M de contexto e cache 4x mais barato</h3>
+        <p>
+          A Anthropic lançou o <strong>Claude Fable 5.1</strong> em disponibilidade geral no dia 1º de setembro, e é uma mudança substancial para quem trabalha com workloads agentic pesados. O modelo suporta janela de contexto de 1 milhão de tokens, permite output de até 128k tokens por chamada, e tem o "adaptive thinking" ativado por padrão — o raciocínio interno é ligado ou desligado conforme a complexidade da tarefa, sem custo adicional fixo.
+        </p>
+        <p>
+          O detalhe que muda a conta no final do mês: <strong>cache reads custam $0,25 por milhão de tokens</strong> — o equivalente a 0,025× da taxa de input base. Na prática, em arquiteturas que fazem cache de system prompts longos ou bases de conhecimento, o custo real de uma sessão agentic cai drasticamente. Na Wrapper, já estamos revisando nossos contratos de uso com clientes para refletir essa economia. O modelo Mythos 5.1 (parceiros restritos) ainda existe, mas para 95% das aplicações enterprise o Fable 5.1 é o caminho.
+        </p>
+        <a class="card-source" href="https://www.axios.com/2026/09/01/anthropic-releases-new-models-cost-structures-and-safeguards" target="_blank" rel="noopener">🔗 Axios — Anthropic releases new models</a>
+      </div>
+
+      <!-- DESTAQUE 2 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>GPT-6 Astra: OpenAI declara AGI e aposta no "digital worker" autônomo</h3>
+        <p>
+          Em 3 de setembro, a OpenAI lançou o <strong>GPT-6 Astra</strong> — e não foi um lançamento silencioso. O presidente Greg Brockman declarou que o modelo poderia ser interpretado como a chegada da AGI. Discordo da narrativa, mas o produto em si é relevante: o Astra foi desenhado para operar como um "trabalhador digital autônomo" para fluxos corporativos, com capacidades de uso de computador (computer-use) muito mais maduras do que o que vimos antes.
+        </p>
+        <p>
+          Do ponto de vista arquitetural, o que mais me interessa é a afirmação de raciocínio recorrente com "recurrent depth reasoning" — uma tentativa de simular loop de deliberação em tempo de inferência, sem re-treino. O rollout foi faseado: primeiro para participantes do programa de cibersegurança, depois para usuários ChatGPT Plus/Pro/Business/Enterprise e API. Para equipes Java e .NET que usam a API OpenAI diretamente, o endpoint de versão estabilizada deve chegar ao AWS Marketplace nas próximas semanas.
+        </p>
+        <a class="card-source" href="https://www.cnbc.com/2026/09/03/open-ai-astra-gpt-6-cyber.html" target="_blank" rel="noopener">🔗 CNBC — OpenAI Astra GPT-6</a>
+      </div>
+
+      <!-- DESTAQUE 3 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Anthropic publica catálogo de automação de P&D: 15.000 tarefas, 26% já automatizáveis</h3>
+        <p>
+          No dia 18 de setembro, a Anthropic publicou um catálogo de medição de automação de pesquisa com <strong>15.000 tarefas organizadas em uma hierarquia de 542 nós</strong>. O dado mais revelador: 26% dessas tarefas estão no nível "leads" — o modelo executa com supervisão mínima. Mais de 90% estão no nível "colaborates" ou acima. Este é o primeiro sistema empírico público para rastrear a progressão em direção à IA que pesquisa de forma autônoma.
+        </p>
+        <p>
+          Para mim, isso é mais importante do que qualquer benchmark de LLM. É a Anthropic dizendo em voz alta: estamos medindo quanto do trabalho de P&D já está sendo delegado a agentes, e isso informa nossos planos de segurança. O fato de o modelo ser publicado abertamente é um gesto de transparência raro no setor. Combinado com a notícia de que a Anthropic deve fechar 2026 acima de $100 bilhões de receita anualizada, fica claro que a empresa está operando em uma liga completamente diferente de há dois anos.
+        </p>
+        <a class="card-source" href="https://blog.buildfastwithai.com/ai-news-today-september-18-2026" target="_blank" rel="noopener">🔗 Build Fast with AI — September 18 digest</a>
+      </div>
+
+      <!-- DESTAQUE 4 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>EU AI Act em campo: primeiras inspeções de conformidade começaram em setembro</h3>
+        <p>
+          Desde 2 de agosto de 2026, o EU AI Act está em vigor pleno — artigo 50 (transparência), poderes de enforcement sobre GPAI e regime de penalidades. Em setembro, o AI Office de Bruxelas e 24 autoridades nacionais iniciaram a primeira leva de inspeções presenciais. Os alvos iniciais: ferramentas de triagem de currículos em RH, avaliação de crédito algorítmica em bancos de varejo e sistemas de triagem médica em saúde privada.
+        </p>
+        <p>
+          Para qualquer empresa que desenvolva ou opere sistemas de IA na Europa, o prazo mais crítico é <strong>2 de dezembro de 2026</strong>: a partir daí, práticas proibidas passam a ser ativamente perseguidas. Em 2027, os sistemas de alto risco do Anexo III entram no radar. Se você ainda não fez um mapeamento de quais sistemas seus clientes usam e que se enquadram nessas categorias, o momento é agora — não no trimestre que vem.
+        </p>
+        <a class="card-source" href="https://www.legalnodes.com/article/eu-ai-act-2026-updates-compliance-requirements-and-business-risks" target="_blank" rel="noopener">🔗 Legalnodes — EU AI Act 2026</a>
+      </div>
+
+      <!-- DESTAQUE 5 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Ratepayer Protection Act aprovado por 417-3: data centers pagam a conta elétrica</h3>
+        <p>
+          Na semana de 18 de setembro, a Câmara dos Representantes dos EUA aprovou por <strong>417 votos a 3</strong> a Lei de Proteção aos Contribuintes de Energia, que obriga operadores de grandes data centers a arcarem integralmente com os custos de upgrades da rede elétrica que suas operações exigem — em vez de rateá-los entre consumidores residenciais. A aprovação por margem tão expressiva sinaliza que o Congresso está alinhado, independente de partido, nesse ponto.
+        </p>
+        <p>
+          O impacto para o mercado de IA é direto: os custos de expansão de data centers sobem, o que pressiona as margens dos providers de cloud e pode desacelerar a oferta de capacidade de inferência barata. A médio prazo, isso favorece arquiteturas mais eficientes — menos chamadas de modelo por tarefa, cache bem dimensionado, e modelos menores onde cabem. FinOps de LLM deixa de ser prática de vanguarda e vira necessidade competitiva.
+        </p>
+        <a class="card-source" href="https://solutionsreview.com/ai-news-for-the-week-of-september-18-updates-from-agentic-ai-foundation-cisco-ey-more/" target="_blank" rel="noopener">🔗 Solutions Review — AI News Sep 18</a>
+      </div>
+
+      <!-- DESTAQUE 6 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Gemini 3.8 Flash + Human-in-the-Loop para Workspace: Google equilibra autonomia com controle</h3>
+        <p>
+          Google lançou o <strong>Gemini 3.8 Flash</strong> em 2 de setembro — mais uma atualização de seu modelo de propósito geral, desta vez com melhorias em engenharia de software, workflows agentic e raciocínio multi-etapa, a custo menor que os modelos frontier. O que me interessa mais é a decisão de negócio: o Workspace Agents agora exige confirmação explícita do usuário antes de enviar e-mails, agendar eventos ou executar ações externas. É uma postura de "Human-in-the-Loop" por padrão.
+        </p>
+        <p>
+          Isso reflete um aprendizado claro da indústria: agentes com autonomia irrestrita geram fricção e desconfiança. Para sistemas de médio risco — onde erros são custosos mas não críticos — o design com ponto de aprovação humana aumenta a adoção. Relevante para qualquer time que esteja construindo assistentes em ambientes corporativos.
+        </p>
+        <a class="card-source" href="https://ai.google.dev/gemini-api/docs/changelog" target="_blank" rel="noopener">🔗 Google AI — Gemini API Changelog</a>
+      </div>
+
+      <!-- DESTAQUE 7 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Harness Engineering substitui Prompt Engineering como paradigma dominante em 2026</h3>
+        <p>
+          Um relatório da Epsilla e análises convergentes da comunidade técnica apontam para uma mudança de paradigma que confirma o que venho defendendo há meses: a evolução foi de <strong>Prompt Engineering (2022–24)</strong> para <strong>Context Engineering (2025)</strong> e agora para <strong>Harness Engineering (2026)</strong>. A tese validada pela OpenAI e Anthropic é direta: "Agents aren't hard; the Harness is hard."
+        </p>
+        <p>
+          O Harness define o workflow do agente, seus constraints, seus loops de feedback, seu toolchain e seu ciclo de vida. Quem ainda passa o dia otimizando temperatura e top-p está resolvendo o problema errado. O que diferencia sistemas de agentes robustos hoje é a qualidade da infraestrutura que os cerca — e isso inclui observabilidade, políticas de retry, gestão de estado e rastreabilidade de custo.
+        </p>
+        <a class="card-source" href="https://www.epsilla.com/blogs/harness-engineering-evolution-prompt-context-autonomous-agents" target="_blank" rel="noopener">🔗 Epsilla Blog — Harness Engineering</a>
+      </div>
+
+      <!-- DESTAQUE 8 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Claude Sonnet 5 com pricing congelado em $2/$10 por MTok — sem aumento de setembro</h3>
+        <p>
+          A Anthropic anunciou em 11 de agosto que o pricing introdutório do <strong>Claude Sonnet 5</strong> — $2 por milhão de tokens de input e $10 por milhão de output — se torna permanente, cancelando o aumento que estava planejado para setembro. Para referência: Opus 5 está em $5/$25, Haiku 4.5 em $1/$5, e Fable 5.1 em $10/$50 por MTok (com Batch API na metade do preço).
+        </p>
+        <p>
+          Para workloads de produção de volume médio — que é onde a maioria dos clientes da Wrapper opera — o Sonnet 5 com preço congelado é o ponto ideal de custo-benefício. É mais capaz que o Haiku para tarefas de raciocínio complexo, e significativamente mais barato que o Fable para chamadas que não precisam de 1M de contexto ou thinking avançado.
+        </p>
+        <a class="card-source" href="https://benchlm.ai/anthropic/api-pricing" target="_blank" rel="noopener">🔗 BenchLM.ai — Anthropic API Pricing</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar nos próximos dias:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🧱</span>
+          <h3>Harness Engineering para Agentes</h3>
+          <p>O novo paradigma que substituiu prompt engineering. Estude loops de feedback, toolchains compostos e gestão de estado em sistemas multi-agente. A série da Epsilla é um bom ponto de partida.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔭</span>
+          <h3>OpenTelemetry GenAI Semantic Conventions</h3>
+          <p>Padronização vendor-neutral para rastreamento de chamadas LLM em produção. Essencial para qualquer equipe que queira observabilidade real em sistemas agentic — e não depender de ferramentas proprietárias.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚖️</span>
+          <h3>EU AI Act — Anexo III e Práticas Proibidas</h3>
+          <p>Com inspeções já em curso, é hora de entender o que classifica um sistema como "alto risco" e quais práticas são terminantemente proibidas a partir de dezembro de 2026. Consulte artificialintelligenceact.eu.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>FinOps para LLMs — Token-Level Cost Tracking</h3>
+          <p>Com o Ratepayer Protection Act elevando custos de infraestrutura, rastrear tokens por tarefa, por agente e por tenant vira vantagem competitiva. Estude Langfuse e Finout para esse nível de granularidade.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🗂️</span>
+          <h3>Agentic RAG — Adaptive Routing e Hybrid Retrieval</h3>
+          <p>O RAG simples está maduro e chegando ao limite. O próximo passo é o roteamento adaptativo antes do agente: classificar a query e escolher o tipo de retrieval dinamicamente. Hybrid search já triplicou em adoção em 2026.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🤖</span>
+          <h3>Claude Fable 5.1 — Prompt Cache Avançado</h3>
+          <p>Entender a mecânica de cache reads a 0.025× do preço base muda completamente o design de aplicações agentic. Se você não sabe como cachear system prompts e bases de conhecimento no Fable 5.1, esta é a prioridade esta semana.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que domina o feed merece atenção. Estes temas podem esperar — ou ser arquivados sem culpa:</p>
+
+      <div class="highlight-card">
+        <h3>Debate "AGI foi atingida?" sobre o GPT-6 Astra</h3>
+        <p>Greg Brockman usando a palavra AGI no anúncio do Astra gerou uma semana de artigos de opinião. Minha posição: é retórica de marketing. O modelo é capaz e relevante — mas a pergunta filosófica sobre AGI não muda nenhuma decisão de arquitetura que você precisa tomar hoje. Ignore o debate, avalie o modelo.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Comparativos de benchmark entre Fable 5.1, Astra e Gemini 3.8 Flash</h3>
+        <p>Cada laboratório publica benchmarks nos quais seu modelo vence. Em setembro de 2026, qualquer ranking que você leia hoje estará desatualizado em três semanas. Prefira avaliar em seus próprios dados e tarefas específicas antes de migrar.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Meta Muse Spark 1.3 — sem caso de uso enterprise claro ainda</h3>
+        <p>A Meta lançou o Muse Spark 1.3 em 4 de setembro, mas a documentação técnica ainda é escassa e o posicionamento é difuso. Para uso em produção enterprise, aguarde estabilização e casos de uso documentados.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Proposta de autorregulação da indústria (modelo FINRA para IA)</h3>
+        <p>Demis Hassabis e Sam Altman apoiam um conselho de autorregulação. É um debate político legítimo, mas prematuro. O EU AI Act já está em vigor e define o marco regulatório real. Para decisões de produto e arquitetura, foque no que é lei — não no que pode virar proposta.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>
+          O ecossistema Java com IA está num momento de consolidação — menos experimentação, mais produção. As duas trilhas principais, <strong>LangChain4j</strong> e <strong>Spring AI</strong>, estão estabilizadas e com posicionamentos distintos o suficiente para você escolher com critério.
+        </p>
+
+        <h3>LangChain4j v1.19.0 — Agentic Module maduro</h3>
+        <p>
+          A versão 1.19.0 foi publicada em 14 de agosto de 2026 e é a mais recente tagged release. O módulo <code>langchain4j-agentic</code> está estável e permite declarar agentes como interfaces tipadas, compondo-os em workflows sequenciais, condicionais, em loop e paralelos — ou delegando controle a um agente supervisor. Integração com Spring Boot, Quarkus e mais de 20 providers de LLM (incluindo Anthropic, OpenAI, Ollama) e 30+ vector stores. Se você está no mundo Quarkus ou precisa de flexibilidade de provider, LangChain4j é a escolha certa.
+        </p>
+
+        <h3>Spring AI 2.0 GA — Cuidado com a quebra de compatibilidade</h3>
+        <p>
+          O Spring AI 2.0 ficou disponível em 12 de junho de 2026 e exige <strong>Spring Boot 4.x e Spring Framework 7+, com Java 17 mínimo</strong>. A versão 2.0 não é retrocompatível com Spring Boot 3.x — o que é um bloqueador real para a maioria dos projetos enterprise que ainda não migraram. Os diferenciais da 2.0 são o output estruturado com auto-correção e tool calling composável. Se seu projeto já está em Spring Boot 4, vale a migração; caso contrário, fique no Spring AI 1.1.x por ora.
+        </p>
+
+        <h3>Exemplo: Agente LangChain4j com Fable 5.1 e cache</h3>
+
+        <pre><code>// LangChain4j 1.19.0 — Agente com Claude Fable 5.1 e prompt cache
+AnthropicChatModel model = AnthropicChatModel.builder()
+    .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+    .modelName("claude-fable-5-1")           // Fable 5.1 GA
+    .maxTokens(4096)
+    .build();
+
+// Definição do agente como interface tipada
+interface ContratoAgent {
+    @SystemMessage("Você é um especialista em análise de contratos enterprise. " +
+                   "Identifique cláusulas de risco, obrigações de SLA e penalidades.")
+    String analisar(@UserMessage String contrato);
+}
+
+ContratoAgent agente = AiServices.builder(ContratoAgent.class)
+    .chatLanguageModel(model)
+    .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(20))
+    .build();
+
+// Cache de prompt ativado automaticamente no Fable 5.1
+// para system prompts > 1024 tokens (cache read: $0.25/MTok)
+String resultado = agente.analisar(textoDoContrato);</code></pre>
+
+        <p>
+          A observação prática aqui: no Fable 5.1, o cache de prompt é ativado automaticamente para system prompts acima de 1.024 tokens. Se o seu system prompt de domínio for longo (e em análise de contratos geralmente é), você vai pagar cache read em vez de input full — a diferença é de 40× no custo por token. Desenhe seus agentes com isso em mente desde o início.
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>
+        O que setembro de 2026 está mostrando com clareza é que a IA não é mais uma tendência de longo prazo — é infraestrutura de curto prazo com regulação chegando. Fable 5.1, GPT-6 Astra, EU AI Act em campo e o Congresso americano regulando energia: tudo acontecendo ao mesmo tempo. Quem esperar pelo "momento certo" para se posicionar vai chegar atrasado.
+      </p>
+      <p>
+        Amanhã trago mais detalhes sobre as novas práticas de FinOps para LLMs que estamos implementando aqui na Wrapper — com foco em rastreamento de custo por agente e por tenant. Se você tem dúvidas ou quer discutir como essas novidades impactam seu stack, me manda uma mensagem. Estarei por aqui.
+      </p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
