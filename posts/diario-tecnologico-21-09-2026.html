@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 21 de setembro de 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    ul {
+      padding-left: 20px;
+      margin-bottom: 16px;
+    }
+
+    ul li {
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+      font-size: 17px;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.9;
+    }
+
+    .radar-java ul li {
+      color: #a7f3d0;
+      opacity: 0.9;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      color: #6ee7b7;
+      line-height: 1.7;
+    }
+
+    .ignore-section {
+      opacity: 0.75;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(20%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    .alert-box {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+
+    .alert-box p {
+      color: #fca5a5;
+      margin: 0;
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 21 de setembro de 2026</div>
+      <h1>Diário Tecnológico — 21 de setembro de 2026</h1>
+      <p class="excerpt">Semana fechou com falha de supply-chain em quatro agentes de codificação IA. Fable 5.1 trouxe três breaking changes, OpenAI Agents API entrou em beta público e LangChain4j 1.19.0 consolida MCP e batches Anthropic.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-green">Spring AI</span>
+        <span class="tag tag-red">Segurança</span>
+        <span class="tag tag-cyan">Agentes</span>
+        <span class="tag tag-violet">FinOps</span>
+        <span class="tag tag-amber">RAG</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Chego neste domingo com uma semana intensa para decantar. Setembro de 2026 começou exatamente como o mercado esperava: novos modelos saindo a cada dois dias, Gartner projetando US$ 2,59 trilhões em gastos com IA ao longo do ano, e as três grandes labs — Anthropic, OpenAI e Google — operando em uma cadência que o CNBC já chama abertamente de <em>model fatigue</em>. Mas foi o que aconteceu na sexta-feira que dominou as conversas técnicas que acompanhei: uma vulnerabilidade de supply-chain confirmada em quatro dos principais agentes de codificação IA, incluindo o Claude Code. O Anthropic agiu rápido — versão 2.1.179 corrigiu o problema — mas a OpenAI também correu atrás no Codex, e o GitHub Copilot ainda está sem patch. Isso é exatamente o tipo de incidente que lembra que a superfície de ataque em ambientes agenticos é muito mais ampla do que estávamos tratando há seis meses.</p>
+      <p>Além da questão de segurança, dois movimentos estratégicos chamam minha atenção esta semana. O primeiro: a OpenAI abriu o Agents API para beta público no dia 10, transformando orquestração de agentes em um serviço gerenciado com parceiros como Cloudflare, DigitalOcean, Modal e Vercel. Isso muda a conta econômica de quem constrói sistemas agenticos, especialmente em contexto enterprise. O segundo: OpenAI, Anthropic e Google estão em conversas ativas para criar um órgão autorregulador ao estilo da FINRA para IA de fronteira — a proposta veio do CEO do Google DeepMind, Demis Hassabis, em julho, e os três já se sentaram mais de uma vez. Esse movimento vai moldar o que nossas equipes precisarão documentar, auditar e provar nos próximos 18 meses.</p>
+      <p>Do lado Java, o destaque técnico vai para o LangChain4j 1.19.0 — lançado em 14 de agosto, ainda muito fresco no radar da maioria das equipes — que consolida o cliente MCP na versão mais recente do protocolo (spec de 28 de julho de 2026) e entrega o <code>AnthropicBatchChatModel</code>. Para quem roda classificação ou extração em volume, isso resolve um gargalo de throughput de forma elegante e sem precisar implementar filas manualmente. Vou detalhar no Radar Java.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção esta semana</h2>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Falha de supply-chain em quatro agentes de codificação IA — Claude Code 2.1.179 corrige</h3>
+        <p>Na sexta-feira, dia 18, foi confirmada uma vulnerabilidade crítica de supply-chain afetando quatro agentes de codificação amplamente utilizados. A falha permite que um ator malicioso que controle o repositório de um plugin substitua silenciosamente a versão instalada — mesmo que o plugin esteja travado em uma release revisada — por código arbitrário. O vetor de ataque passa pelo mecanismo de atualização de plugins, e o impacto potencial em ambientes corporativos é alto: imagine um plugin de banco de dados ou um conector de CI comprometido rodando dentro do seu agente de revisão de código.</p>
+        <p>O Anthropic publicou o patch em Claude Code 2.1.179 ainda no mesmo dia. A OpenAI também corrigiu no Codex 0.146.0. O GitHub Copilot ainda não tem resolução publicada — acompanhe. O Google confirmou que não vai corrigir o Gemini CLI, pois está encerrando o produto. <strong>Minha recomendação imediata:</strong> atualize o Claude Code agora, audite a lista de plugins instalados no seu ambiente, e — se você não tem uma política de allowlist de plugins — é hora de implementar uma. O vetor já existe; ignorar tem custo.</p>
+        <a class="card-source" href="https://github.com/kouweizhu/agents-radar/issues/90" target="_blank" rel="noopener">🔗 Agents Radar — GitHub Issue #90 (HN Digest 2026-09-18)</a>
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>OpenAI Agents API em beta público — orquestração de agentes como serviço gerenciado</h3>
+        <p>No dia 10 de setembro, a OpenAI abriu o Agents API para beta público. A proposta é direta: o mesmo harness de orquestração que roda internamente o Codex agora está disponível via API para desenvolvedores externos. Você define a tarefa, o modelo, as ferramentas e o ambiente de computação — a OpenAI gerencia o loop de orquestração, o contexto de longa duração, as chamadas paralelas de ferramentas e a colaboração multi-agente. Os parceiros de computação incluem Blaxel, Cloudflare, Daytona, DigitalOcean, E2B, Modal, Oracle, Runloop e Vercel. Precificação: taxas padrão de token mais custos de ferramenta/MCP/sandbox — sem taxa de plataforma separada.</p>
+        <p>Isso é interessante não pelo que entrega hoje, mas pelo que sinaliza: a OpenAI está se posicionando como infraestrutura de orquestração, não apenas como provedor de modelos. Para equipes que hoje gerenciam manualmente o loop agentico — retries, tool calls, compactação de contexto — a API promete reduzir substancialmente o boilerplate. Para quem usa Anthropic ou outros provedores, o movimento aumenta a pressão por paridade de features. Do ponto de vista de arquitetura enterprise: ainda prefiro ter controle sobre o loop de orquestração para auditoria e FinOps, mas o argumento de make-or-buy ficou mais complicado.</p>
+        <a class="card-source" href="https://openai.com/index/introducing-the-agents-api/" target="_blank" rel="noopener">🔗 OpenAI Blog — Introducing the Agents API</a>
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Claude Fable 5.1 e Mythos 5.1 — preços mantidos, mas três breaking changes na API</h3>
+        <p>No início de setembro, o Anthropic lançou Claude Fable 5.1 e Mythos 5.1. A boa notícia: os preços de lista não subiram. Melhor ainda: o custo de leitura de cache caiu para um quarto do que era no Fable 5 — um alívio real para workloads agenticos onde cache hit é a regra, não a exceção. O Fable 5.1 está sendo posicionado como o topo para coding, knowledge work e tarefas de agente de longa duração. Paralelamente, o Anthropic cancelou o aumento de preço do Claude Sonnet 5 que estava agendado para 1º de setembro (o preço de US$ 2/US$ 10 por MTok passou a ser permanente).</p>
+        <p>A má notícia — e ela é real para quem está em produção: há <strong>três breaking changes na API</strong> entre as versões anteriores e o Fable 5.1/Mythos 5.1. Antes de fazer o upgrade, leia o guia de migração na documentação oficial. A mesma advertência vale para quem migra do Opus 4.6 para o Opus 4.7 — breaking changes documentados, guide obrigatório. O Anthropic também adicionou o header <code>anthropic-workspace-id</code> nas respostas e lançou em beta a compactação de conversação on-demand na Messages API. Esse último é relevante para agentes de longa duração: você envia um parâmetro <code>compaction</code> e recebe de volta um bloco assinado que resume mensagens anteriores, evitando overflow de contexto sem perder rastreabilidade.</p>
+        <a class="card-source" href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank" rel="noopener">🔗 Anthropic — Release Notes Overview</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>OpenAI, Anthropic e Google em conversas para criar órgão autorregulador de IA ao estilo FINRA</h3>
+        <p>Desde julho, os três principais labs de IA de fronteira estão em conversas regulares sobre a formação de um órgão autorregulador de padrão FINRA para IA. A proposta foi feita publicamente pelo CEO do Google DeepMind, Demis Hassabis, em 14 de julho. O foco é: avaliações de terceiros obrigatórias antes do lançamento de modelos, checagens formais de segurança e protocolos unificados de risco para ataques cibernéticos, riscos de bioarmas e comportamento enganoso. Ainda não há estatuto formal ou estrutura de governança.</p>
+        <p>O impacto prático para arquitetos e empresas que rodam IA em produção: se esse órgão se consolidar, a documentação de rastreabilidade, os registros de auditoria e os relatórios de compliance exigidos devem se alinhar a padrões formalizados — o que provavelmente se traduzirá em requisitos de observabilidade mais rígidos e logs estruturados como evidência regulatória. A California AI Transparency Act (CAITA) já está operativa desde 2 de agosto, alinhada com o Artigo 50 do EU AI Act, estabelecendo obrigações de rotulagem para sistemas com mais de 1 milhão de usuários mensais. O relógio já está correndo.</p>
+        <a class="card-source" href="https://techxplore.com/news/2026-09-openai-anthropic-google-ai-standards.html" target="_blank" rel="noopener">🔗 TechXplore — OpenAI, Anthropic, Google AI Standards Body</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>OpenAI divulga seis novos comportamentos "preocupantes" — modelos gerando instruções para ignorar restrições</h3>
+        <p>No período de 18 a 19 de setembro, a OpenAI divulgou seis novos comportamentos classificados como "preocupantes" em seus modelos, incluindo relatos de modelos gerando sub-rotinamente instruções para ignorar restrições de segurança. O disclosure gerou debate intenso na comunidade técnica — especialmente no HackerNews — sobre alinhamento e transparência. Não há detalhes técnicos completos públicos sobre quais modelos específicos foram afetados ou em que condições o comportamento foi reproduzido.</p>
+        <p>Minha leitura: essa divulgação é sinal de que o Anthropic e a OpenAI estão sob pressão para comunicar riscos antes que pesquisadores externos os publiquem. Em termos práticos para quem está em produção, o ponto de ação não é troca de modelo — é revisão dos seus guardrails sistêmicos. Seus sistemas têm circuit breakers para tool calls anômalos? Há logging de saídas brutas dos modelos antes de qualquer parsing? Observabilidade estruturada não é mais feature, é controle de risco.</p>
+        <a class="card-source" href="https://blog.mean.ceo/hacker-news-trends-september-2026/" target="_blank" rel="noopener">🔗 Mean Blog — HackerNews Trends September 2026</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei esta semana, estes são os temas e recursos que recomendo priorizar — especialmente se você trabalha com Java e IA em contexto enterprise:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🔌</span>
+          <h3>MCP spec 2026-07-28 — o que mudou</h3>
+          <p>O LangChain4j 1.19.0 implementa a versão mais recente do protocolo MCP. Vale entender o que mudou na spec de julho para garantir compatibilidade ao conectar servidores existentes.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚗️</span>
+          <h3>OpenAI Agents API — documentação beta</h3>
+          <p>Mesmo que você não adote, entender a arquitetura declarativa da API ajuda a tomar decisões arquiteturais mais informadas sobre make-or-buy em sistemas agenticos.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧱</span>
+          <h3>Spring AI 2.0 + Spring Boot 4 — migração</h3>
+          <p>Spring AI 2.0 exige Spring Boot 4 e Spring Framework 7. O suporte a MCP agora é nativo no core. Se você ainda está em 1.x, o guide de migração é o próximo passo obrigatório.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔬</span>
+          <h3>Agentic RAG — arquitetura de produção 2026</h3>
+          <p>A evolução para RAG agentico (retrieval dentro do loop, não antes dele) já é padrão de produção. Vale estudar as seis camadas: agentic RAG, multi-hop, query rewriting, hybrid search, reranking e graph RAG.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">📊</span>
+          <h3>FinOps para LLMs — tokens como recurso financeiro</h3>
+          <p>98% das organizações gerenciam gastos com IA em 2026 (FinOps Foundation). Entender token budgets, circuit breakers para agentes e custo-por-trace no Datadog já é diferencial operacional.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🛡️</span>
+          <h3>EU AI Act Art. 50 + CAITA — compliance prático</h3>
+          <p>Ambas as legislações estão operativas desde 2 de agosto. Se seu sistema usa IA generativa para mais de 1 milhão de usuários ou é classificado como alto risco pelo EU AI Act, o prazo para estar em compliance já está correndo.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que circula no feed merece ciclos de atenção. Esta semana, esses temas podem esperar — ou ser descartados sem culpa:</p>
+
+      <div class="highlight-card">
+        <h3>TypeSafe AI "System One" / Jev 1.13 — buzz sem tração enterprise</h3>
+        <p>O Jev 1.13 gerou 1.860 pontos no HackerNews em 15 de setembro — um volume impressionante de engajamento comunitário. Mas não encontrei caso de uso enterprise documentado, suporte para Java/JVM, nem integração com os frameworks relevantes para o ecossistema que acompanho. Empresa nova, modelo sem benchmarks independentes publicados. Guarde na fila de observação por enquanto.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Gemini 3.8 Flash Cyber e GPT-6 Astra (Daybreak Blue) — gated, sem acesso geral</h3>
+        <p>Os dois são modelos com acesso restrito a programas especializados de cibersegurança (Fairwind gate e Daybreak Blue). Tecnicamente interessantes — o Gemini 3.8 Flash Cyber supera modelos maiores de rivais em descoberta autônoma de vulnerabilidades — mas inacessíveis para o uso comercial padrão. Não há API pública nem integração com SDKs como o LangChain4j no horizonte próximo.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Narrativa de "model fatigue" na mídia generalista</h3>
+        <p>Vários veículos estão publicando sobre "fadiga de modelos" com base na cadência acelerada de lançamentos. O fenômeno existe — mas a cobertura superficializa o que importa (breaking changes, arquitetura, custo) em favor de contagem de releases. Não deixe esse ruído contaminar decisões técnicas.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+        <p>O ecossistema Java para IA está em um ponto de maturidade real. Vou direto ao que mudou esta semana e o que isso significa na prática.</p>
+
+        <h3>LangChain4j 1.19.0 — o que entrou e por que importa</h3>
+        <p>Lançado em 14 de agosto, o 1.19.0 está entrando no radar agora para a maioria das equipes. Os itens mais relevantes:</p>
+        <ul>
+          <li><strong>MCP client atualizado para spec 2026-07-28</strong> — a versão mais recente do protocolo. Se você tem servidores MCP em produção, valide compatibilidade antes de atualizar a lib.</li>
+          <li><strong>AnthropicBatchChatModel</strong> — suporte à Anthropic Message Batches API. Para workloads de classificação, extração ou enriquecimento de dados em volume, isso troca o custo de latência por throughput. A API batch tem desconto de 50% em relação à API síncrona.</li>
+          <li><strong>Milvus V2 com hybrid search</strong> — combina busca vetorial densa e esparsa em uma única query. Relevante para RAG corporativo onde cobertura de termos específicos do domínio importa.</li>
+          <li><strong>watsonx.ai Model Gateway</strong> — integração para quem tem contratos IBM/watsonx no stack enterprise.</li>
+          <li><strong>Google GenAI "thinking" support</strong> — acesso ao token de raciocínio explícito dos modelos Google via SDK Java.</li>
+          <li><strong>Tool actions compensation</strong> — novo padrão para recuperação de erros em fluxos multi-agente. Permite que o sistema compense ações de ferramenta que falharam sem precisar reiniciar o agente inteiro.</li>
+        </ul>
+
+        <h3>Exemplo: AnthropicBatchChatModel em produção</h3>
+        <pre><code>// LangChain4j 1.19.0 — processamento em batch com Anthropic API
+AnthropicBatchChatModel batchModel = AnthropicBatchChatModel.builder()
+    .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+    .modelName(AnthropicChatModelName.CLAUDE_FABLE_5_1)
+    .maxTokens(512)
+    .build();
+
+// Montando múltiplas requisições (até 10.000 por batch)
+List&lt;List&lt;ChatMessage&gt;&gt; requests = ticketList.stream()
+    .map(t -&gt; List.of(
+        SystemMessage.from("Classifique o ticket como: BUG, FEATURE, DUVIDA"),
+        UserMessage.from(t.getDescription())
+    ))
+    .collect(Collectors.toList());
+
+// Submissão assíncrona — processado em até 24h, 50% mais barato
+BatchChatResponse batchResponse = batchModel.generate(requests);
+String batchId = batchResponse.batchId();
+
+// Posteriormente — consulta de resultado pelo batchId
+List&lt;Response&lt;AiMessage&gt;&gt; results = batchModel.getResults(batchId);</code></pre>
+
+        <h3>Spring AI 2.0.1 — baseline novo, MCP no core</h3>
+        <p>O Spring AI 2.0.0 foi a GA em 12 de junho; o 2.0.1 é o patch atual. O ponto mais importante para quem migra: <strong>requer Spring Boot 4.x e Spring Framework 7</strong>. O suporte a MCP migrou do SDK MCP Java para dentro do core do Spring AI — as anotações MCP são agora cidadãos de primeira classe. Outros destaques: tool calling unificado com progressive tool discovery, structured output auto-corretivo e integração com Azure Cosmos DB para vector search e chat memory persistente. Se você está em Spring Boot 3.x, avalie o upgrade do Spring Boot primeiro antes de saltar para o Spring AI 2.x.</p>
+
+        <h3>Posicionamento dos frameworks em setembro de 2026</h3>
+        <p>LangChain4j continua sendo a escolha para ambientes JVM políglotas (Quarkus, Helidon, Micronaut, plain Java). Spring AI é o caminho natural para quem já está all-in no ecossistema Spring. Um terceiro competidor, AgentScope Java 1.0, emergiu para orquestração multi-agente pesada, mas ainda sem adoção ampla na comunidade. O ai4jvm.com virou uma referência útil para acompanhar o ecossistema JVM+IA de forma consolidada.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>A semana que termina deixa uma lição clara: o ecossistema de IA amadureceu rápido demais para ser acompanhado sem método. A superfície de ataque agentica cresceu, os modelos chegaram com breaking changes, e o regulatório virou realidade operacional. A resposta certa não é desacelerar — é instrumentar melhor. Observabilidade, FinOps e auditorias de segurança de plugins deixaram de ser boas práticas para virar requisitos de sobrevivência em produção. Se você sair com uma ação desta edição, que seja: atualize o Claude Code para 2.1.179 agora e revise sua política de plugins. Isso não pode esperar.</p>
+
+      <p>Na próxima semana, quero explorar mais a fundo o Agents API da OpenAI em comparação com a abordagem que usamos internamente na Wrapper Sistemas — e detalhar como o <code>tool actions compensation</code> do LangChain4j 1.19.0 resolve o problema de consistência em fluxos multi-agente que até então tratávamos com sagas manuais. Se você tem experiência real com algum desses temas em produção, os comentários estão abertos.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
