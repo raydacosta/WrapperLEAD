@@ -1,0 +1,515 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+  .dt-wrap *, .dt-wrap *::before, .dt-wrap *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .dt-wrap {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface-2: #252840;
+    --cyan: #00d4ff;
+    --violet: #7c3aed;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --green: #10b981;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #2d3748;
+    --font-title: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .dt-progress {
+    height: 3px;
+    background: linear-gradient(90deg, #00d4ff, #7c3aed);
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .dt-header {
+    background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+    border-bottom: 1px solid #2d3748;
+    padding: 64px 32px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dt-header::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+  }
+
+  .dt-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    color: #00d4ff;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .dt-header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 700;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #ffffff 0%, #00d4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .dt-excerpt {
+    font-size: 18px;
+    color: #94a3b8;
+    max-width: 640px;
+    line-height: 1.6;
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .dt-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    position: relative;
+  }
+
+  .dt-tag {
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .dt-tag-cyan { background: rgba(0,212,255,0.1); color: #00d4ff; border: 1px solid rgba(0,212,255,0.2); }
+  .dt-tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+  .dt-tag-amber { background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.2); }
+  .dt-tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+  .dt-main {
+    padding: 0 32px;
+  }
+
+  .dt-section {
+    padding: 56px 0;
+  }
+
+  .dt-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #2d3748, transparent);
+  }
+
+  .dt-section h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dt-section h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  .dt-section p {
+    color: #e2e8f0;
+    margin-bottom: 16px;
+  }
+
+  .dt-section a {
+    color: #00d4ff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0,212,255,0.3);
+    transition: border-color 0.2s;
+  }
+
+  .dt-section a:hover { border-color: #00d4ff; }
+
+  .dt-section strong { color: #fff; font-weight: 600; }
+
+  .dt-card {
+    background: #1a1d2e;
+    border: 1px solid #2d3748;
+    border-left: 4px solid #00d4ff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .dt-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+  }
+
+  .dt-card.alta { border-left-color: #ef4444; }
+  .dt-card.media { border-left-color: #f59e0b; }
+  .dt-card.baixa { border-left-color: #10b981; }
+
+  .dt-relevance {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+    margin-bottom: 12px;
+  }
+
+  .dt-relevance.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+  .dt-relevance.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+  .dt-relevance.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+  .dt-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #94a3b8;
+    border: none !important;
+  }
+
+  .dt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 24px;
+  }
+
+  .dt-grid-card {
+    background: #1a1d2e;
+    border: 1px solid #2d3748;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .dt-grid-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+  }
+
+  .dt-grid-card .dt-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .dt-grid-card h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .dt-grid-card p {
+    font-size: 14px;
+    color: #94a3b8;
+    margin: 0;
+  }
+
+  .dt-radar {
+    background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 16px;
+    padding: 40px;
+    margin-top: 8px;
+  }
+
+  .dt-radar h2 { color: #34d399; }
+  .dt-radar h3 { color: #6ee7b7; }
+  .dt-radar p { color: #a7f3d0; opacity: 0.85; }
+  .dt-radar a { color: #34d399; border-color: rgba(52,211,153,0.3); }
+
+  .dt-code-block {
+    background: #0a0f0d;
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 8px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  .dt-code-block code {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 14px;
+    color: #6ee7b7;
+    line-height: 1.6;
+    white-space: pre;
+    display: block;
+  }
+
+  .dt-ignore { opacity: 0.7; }
+  .dt-ignore .dt-card {
+    border-left-color: #2d3748;
+    filter: grayscale(30%);
+  }
+
+  .dt-footer {
+    background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+    border-top: 1px solid #2d3748;
+    padding: 60px 32px;
+    margin-top: 0;
+  }
+
+  .dt-author-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #1a1d2e;
+    border: 1px solid #2d3748;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 32px;
+  }
+
+  .dt-author-img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00d4ff;
+    flex-shrink: 0;
+  }
+
+  .dt-author-info h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .dt-author-info p {
+    font-size: 14px;
+    color: #94a3b8;
+    margin: 0;
+  }
+
+  .dt-footer-close {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+    margin-top: 24px;
+  }
+
+  .dt-footer-close span { color: #00d4ff; }
+
+  @media (max-width: 640px) {
+    .dt-header { padding: 40px 20px 32px; }
+    .dt-main { padding: 0 20px; }
+    .dt-grid { grid-template-columns: 1fr; }
+    .dt-author-card { flex-direction: column; text-align: center; }
+    .dt-radar { padding: 24px; }
+    .dt-section { padding: 40px 0; }
+    .dt-footer { padding: 40px 20px; }
+  }
+</style>
+
+<div class="dt-wrap">
+
+  <div class="dt-progress"></div>
+
+  <header class="dt-header">
+    <div class="dt-badge">&#128225; Diário Tecnológico &middot; 03/10/2026</div>
+    <h1>Diário Tecnológico &mdash; 03 de outubro de 2026</h1>
+    <p class="dt-excerpt">Google estreia o Gemini 4 Argon com janela de saída de 1 milhão de tokens. A Anthropic e a OpenAI respondem com cortes de preço, e o Spring AI 2.0 reescreve as regras do ecossistema Java.</p>
+    <div class="dt-tags-row">
+      <span class="dt-tag dt-tag-cyan">IA</span>
+      <span class="dt-tag dt-tag-violet">Java</span>
+      <span class="dt-tag dt-tag-amber">LangChain4j</span>
+      <span class="dt-tag dt-tag-cyan">Gemini</span>
+      <span class="dt-tag dt-tag-violet">Anthropic</span>
+      <span class="dt-tag dt-tag-amber">Spring AI</span>
+      <span class="dt-tag dt-tag-green">FinOps</span>
+      <span class="dt-tag dt-tag-cyan">RAG</span>
+    </div>
+  </header>
+
+  <main class="dt-main">
+
+    <div class="dt-section" id="intro">
+      <p>Acordei nesta sexta-feira, 3 de outubro, com três abas abertas que precisavam de atenção imediata. A primeira era o anúncio do Google para o Gemini 4 Argon. A segunda, a nota da Anthropic sobre o Claude Opus 5.5. A terceira, o release notes do Spring AI 2.0. Três sinais que, juntos, dizem muito sobre o momento que o ecossistema de IA está vivendo.</p>
+      <p>A semana não foi de conceitos ou promessas. Foi de produto. O Google colocou em campo um modelo focado em tarefas de programação, cibersegurança e trabalho jurídico — com métricas impressionantes em benchmark. A Anthropic e a OpenAI, por sua vez, parecem ter recebido o recado do mercado: custo de operação é argumento de compra. Reduções de 40 a 60 por cento no preço de API não são promoções; são reposicionamentos estratégicos.</p>
+      <p>No mundo Java, o Spring AI 2.0 chegou com suporte nativo ao Model Context Protocol, o que muda o patamar de integração entre aplicações Spring e qualquer LLM que implemente o padrão. Junto com os avanços do LangChain4j no módulo agêntico, o ecossistema Java está, finalmente, à altura das demandas enterprise de IA aplicada.</p>
+    </div>
+
+    <div class="dt-divider"></div>
+
+    <div class="dt-section" id="destaques">
+      <h2><span>&#128293;</span> O que chamou minha atenção hoje</h2>
+
+      <div class="dt-card alta">
+        <span class="dt-relevance alta">&#128308; Alta Relevância</span>
+        <h3>Google Gemini 4 Argon: 1 milhão de tokens de saída e foco em engenharia de software</h3>
+        <p>Em 30 de setembro de 2026, o Google apresentou o Gemini 4 Argon — primeiro modelo da nova família Gemini 4 — com um diferencial técnico imediato: suporte a até <strong>1 milhão de tokens de saída</strong> por requisição, em comparação aos 64 mil da geração anterior. Para quem trabalha com tarefas de geração de código longo, análise jurídica ou relatórios técnicos extensos, esse número muda a equação.</p>
+        <p>Nos benchmarks, o Argon marcou <strong>77,9% no DeepSWE</strong>, índice focado em engenharia de software, superando o GPT-6 Astra da OpenAI e o Opus 5.5 da Anthropic em certas dimensões de codificação. O preço de lançamento é <strong>US$ 2 por milhão de tokens de entrada</strong> e <strong>US$ 10 por milhão de saída</strong>, com rollout inicial restrito ao programa Fairwind — voltado a governos e parceiros de confiança com necessidades avançadas de cibersegurança.</p>
+        <p>O ponto de atenção, porém, é este: segundo a Bloomberg, funcionários internos do Google reportam que o modelo atinge pontuações altas em testes padronizados, mas apresenta dificuldades em tarefas reais de programação e design de interfaces. É um alerta importante para quem está avaliando o Argon como substituição direta de soluções em produção. Benchmark não é produção. Antes de migrar pipelines, teste com seus próprios casos de uso.</p>
+        <a class="dt-source" href="https://www.pcguia.pt/2026/10/google-tem-um-novo-modelo-de-inteligencia-artificial-chamado-gemini-4-argon/" target="_blank" rel="noopener">&#128279; PC Guia — Google lança Gemini 4 Argon</a>
+      </div>
+
+      <div class="dt-card alta">
+        <span class="dt-relevance alta">&#128308; Alta Relevância</span>
+        <h3>Anthropic e OpenAI cortam preços: Claude Opus 5.5 e GPT-6 Sol/Luna chegam mais baratos</h3>
+        <p>Em 23 de setembro, Anthropic e OpenAI anunciaram novos modelos no mesmo dia — e o principal argumento foi custo. A Anthropic lançou o <strong>Claude Opus 5.5</strong>, apresentado como 40% mais barato de operar que o Opus 5. O custo de leitura de cache caiu 60%, chegando a US$ 0,20 por milhão de tokens. Para arquiteturas com RAG que dependem de cache agressivo, isso é impacto direto no bottom line operacional.</p>
+        <p>A OpenAI expandiu a família GPT-6 com dois novos membros: <strong>GPT-6 Sol</strong>, para tarefas complexas como programação avançada, e <strong>GPT-6 Luna</strong>, otimizado para volumes altos como sumarização de documentos em escala. Ambos chegam com <strong>50% de redução em relação aos preços promocionais do GPT-5.6</strong>. O Sol fica um nível abaixo do GPT-6 Astra, o modelo topo de linha da empresa.</p>
+        <p>O movimento das duas empresas respondeu diretamente a pressões de clientes enterprise que buscam reduzir gastos com IA. Para equipes que operam workloads intensivos, essa semana representou uma queda real no custo de inferência. A janela para revisar contratos e estratégias de modelo está aberta — aproveite.</p>
+        <a class="dt-source" href="https://eco.sapo.pt/2026/09/23/anthropic-e-openai-lancam-modelos-mais-baratos-apos-apelos-para-abrandar-ia/" target="_blank" rel="noopener">&#128279; ECO — Anthropic e OpenAI lançam modelos mais baratos</a>
+      </div>
+
+      <div class="dt-card media">
+        <span class="dt-relevance media">&#128993; Média Relevância</span>
+        <h3>Spring AI 2.0 com suporte nativo ao Model Context Protocol</h3>
+        <p>O Spring AI chegou à versão 2.0.0 em 2026, acompanhando o Spring Boot 4. A adição mais estratégica desta versão é o <strong>suporte de primeira classe ao MCP (Model Context Protocol)</strong>, o padrão aberto que permite que aplicações exponham e consumam ferramentas de forma padronizada entre modelos e agentes. Isso significa que uma aplicação Spring pode agir tanto como servidor MCP — expondo recursos para agentes externos — quanto como cliente, consumindo ferramentas de outros sistemas.</p>
+        <p>A versão 2.0 cobre o espectro completo: chat, embeddings, geração de imagem, transcrição de áudio, TTS, moderação e agentes. O suporte inclui mais de 20 provedores de LLM, entre eles OpenAI, Anthropic, Google Gemini, Amazon Bedrock, Mistral, DeepSeek, Ollama e Groq. Para equipes que já rodam Spring Boot, a barreira de entrada para IA enterprise caiu significativamente.</p>
+        <a class="dt-source" href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-which-java-ai-framework-should-you-choose-in-2026-4mop" target="_blank" rel="noopener">&#128279; DEV Community — Spring AI vs LangChain4j 2026</a>
+      </div>
+
+      <div class="dt-card media">
+        <span class="dt-relevance media">&#128993; Média Relevância</span>
+        <h3>Marco Legal da IA no Brasil: votação final em pauta e empresas se adaptando</h3>
+        <p>O Marco Legal da IA no Brasil — PL 2338/2023, aprovado pelo Senado em 2024 — permanece aguardando votação final na Câmara dos Deputados. O projeto prevê a criação do Sistema Nacional de Regulação e Governança de IA (SIA), coordenado pela ANPD. Em 2026, <strong>setores regulados, organizações com alto grau de automação e empresas intensivas em dados já tratam o Marco Legal como parâmetro regulatório inevitável</strong>.</p>
+        <p>As adaptações em curso incluem revisão de contratos com fornecedores de IA, atualização de políticas internas de uso de dados e criação de estruturas de governança dedicadas. O ponto mais sensível para o contexto enterprise é a responsabilidade humana residual: o projeto exige que, mesmo em fluxos altamente automatizados, haja um responsável humano identificável por danos causados por vieses, alucinações ou decisões equivocadas do sistema. Para quem está implantando agentes autônomos, esse requisito precisa entrar no desenho da solução, não ser retrofitado depois.</p>
+        <a class="dt-source" href="https://blog.cbrdoc.com.br/marco-legal-da-ia-tera-votacao-final-em-2026/" target="_blank" rel="noopener">&#128279; CBRDoc — Marco Legal da IA terá votação final em 2026</a>
+      </div>
+
+    </div>
+
+    <div class="dt-divider"></div>
+
+    <div class="dt-section" id="estudar">
+      <h2><span>&#128218;</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei esta semana, estes são os temas e recursos que recomendo priorizar:</p>
+      <div class="dt-grid">
+
+        <div class="dt-grid-card">
+          <span class="dt-card-icon">&#128295;</span>
+          <h3>Model Context Protocol (MCP) com Spring AI 2.0</h3>
+          <p>Com o Spring AI 2.0 adotando MCP como padrão de primeira classe, vale entender a especificação e como criar servidores e clientes MCP em Java. É o padrão que vai dominar a integração entre agentes e ferramentas enterprise nos próximos anos.</p>
+        </div>
+
+        <div class="dt-grid-card">
+          <span class="dt-card-icon">&#128737;&#65039;</span>
+          <h3>LangChain4j Guardrails API</h3>
+          <p>O módulo langchain4j-guardrails permite interceptar mensagens do usuário antes de chegarem ao modelo — bloqueando prompt injections, redatando PII e validando schemas de entrada. Indispensável para qualquer aplicação Java com LLM em produção.</p>
+        </div>
+
+        <div class="dt-grid-card">
+          <span class="dt-card-icon">&#129504;</span>
+          <h3>Agentic RAG com restrição de budget</h3>
+          <p>Pesquisas recentes mostram que sistemas RAG agênticos com controle de custo por requisição entregam melhor custo-benefício do que os que maximizam qualidade sem restrições. Estudar padrões de budget-constrained RAG é estratégico para FinOps de LLM.</p>
+        </div>
+
+        <div class="dt-grid-card">
+          <span class="dt-card-icon">&#128200;</span>
+          <h3>FinOps para workloads de LLM</h3>
+          <p>Com os novos preços de Anthropic e OpenAI, é hora de revisar a arquitetura de custos. Estratégias como cache de embeddings por diff de conteúdo, roteamento de modelos por complexidade e monitoramento de custo por sessão fazem diferença real na conta no fim do mês.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="dt-divider"></div>
+
+    <div class="dt-section dt-ignore" id="ignorar">
+      <h2><span>&#128263;</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar:</p>
+
+      <div class="dt-card">
+        <h3>Gemini 4 Argon para uso geral imediato</h3>
+        <p>O Argon ainda está restrito ao programa Fairwind, voltado a governos e parceiros estratégicos com requisitos de cibersegurança avançados. Para desenvolvedores e times de produto em geral, o acesso comercial amplo ainda não foi aberto. Monitorar, não agir ainda.</p>
+      </div>
+
+      <div class="dt-card">
+        <h3>Tendências de IA para robótica em contexto enterprise genérico</h3>
+        <p>Muito conteúdo circulando sobre IA em robótica industrial sem substância aplicável ao contexto de software enterprise. Hype prematuro, sem casos de uso concretos para equipes de produto SaaS ou plataformas de dados. Pode aguardar 2027.</p>
+      </div>
+
+    </div>
+
+    <div class="dt-divider"></div>
+
+    <div class="dt-section" id="radar-java">
+      <div class="dt-radar">
+        <h2><span>&#9749;</span> Radar Java + IA</h2>
+        <p>O ecossistema Java está em um ponto de inflexão interessante. O Spring AI 2.0, lançado com o Spring Boot 4, encerrou de vez o debate sobre se a plataforma Spring é ou não adequada para desenvolvimento de IA em produção. O suporte nativo ao MCP transforma qualquer serviço Spring em um participante de pleno direito em arquiteturas multiagentes — seja como fornecedor de ferramentas, seja como orquestrador.</p>
+        <p>O LangChain4j, por sua vez, amadureceu o módulo agêntico com um modelo de programação elegante: agentes declarados como interfaces Java tipadas, compostos em workflows sequenciais, condicionais, paralelos ou supervisionados. A adição da <strong>Guardrails API</strong> (<code>langchain4j-guardrails</code>) é a peça que faltava para colocar aplicações Java com LLM em ambientes regulados: interceptação de mensagens de entrada antes de chegarem ao modelo, com suporte a bloqueio de prompt injection, redação de PII e validação de schema.</p>
+        <p>Para equipes que precisam decidir entre os dois frameworks: Spring AI para aplicações que já vivem no ecossistema Spring Boot; LangChain4j para cenários agnósticos de framework — Quarkus, Helidon, Micronaut, ou aplicações Java SE puras. Ambos são production-ready. A escolha é arquitetural, não técnica.</p>
+
+        <div class="dt-code-block"><code>// LangChain4j - Agente tipado com guardrails (exemplo conceitual)
+@AiService
+interface AnalisadorDePedidos {
+    @SystemMessage("Você é um analista de pedidos enterprise.")
+    @InputGuardrails(BlockPromptInjectionGuardrail.class)
+    @InputGuardrails(RedactPiiGuardrail.class)
+    String analisarPedido(@UserMessage String descricaoPedido);
+}
+
+// Spring AI 2.0 - Cliente MCP
+@Bean
+McpSyncClient mcpClient(McpClientProperties props) {
+    return McpClient.sync(
+        new HttpClientSseServerTransport(props.getServerUrl())
+    ).build();
+}</code></div>
+
+        <p>Ambos os trechos acima são ilustrativos dos padrões de API disponíveis. Sempre consulte a documentação oficial de cada versão antes de usar em produção.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="dt-footer">
+
+    <div class="dt-author-card">
+      <img
+        class="dt-author-img"
+        src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+        alt="Ray da Costa"
+      />
+      <div class="dt-author-info">
+        <h4>Ray da Costa</h4>
+        <p>Fundador da Wrapper Sistemas &middot; Arquiteto de Software &middot; Especialista em Java e IA Aplicada</p>
+      </div>
+    </div>
+
+    <p style="color:#e2e8f0; margin-bottom:16px;">Esta semana consolidou algo que eu já estava observando há meses: a guerra de preços de API deixou de ser exceção e virou estratégia permanente. Anthropic e OpenAI não estão fazendo promoções — estão reconhecendo que custo de inferência é argumento central de vendas enterprise. Para quem projeta plataformas com LLMs, este é o momento de renegociar contratos, revisar arquiteturas de roteamento de modelos e construir uma camada de FinOps séria para workloads de IA. A tecnologia está disponível. A conta precisa fechar. Se você tem dúvidas sobre como aplicar essas mudanças na sua stack Java, me escreve — é exatamente isso que a Wrapper Sistemas faz.</p>
+
+    <div class="dt-footer-close">
+      <p>Até amanhã. <span>&mdash; Ray</span></p>
+    </div>
+
+  </footer>
+
+</div>
