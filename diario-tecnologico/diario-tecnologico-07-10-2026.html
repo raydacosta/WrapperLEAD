@@ -1,0 +1,558 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+.dt-art {
+  font-family: 'Inter', sans-serif;
+  background: #0f1117;
+  color: #e2e8f0;
+  line-height: 1.7;
+  font-size: 16px;
+  padding: 0;
+  margin: 0;
+}
+
+.dt-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+.dt-progress {
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #00d4ff, #7c3aed);
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+.dt-header {
+  background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+  border-bottom: 1px solid #2d3748;
+  padding: 60px 24px 48px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.dt-header::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+  animation: dt-pulse 6s ease-in-out infinite;
+}
+
+@keyframes dt-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.dt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.3);
+  color: #00d4ff;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.dt-header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(26px, 5vw, 40px);
+  font-weight: 700;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #ffffff 0%, #00d4ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.dt-excerpt {
+  font-size: 17px;
+  color: #94a3b8;
+  max-width: 640px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.dt-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.dt-tag {
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.dt-tag-c { background: rgba(0,212,255,0.1); color: #00d4ff; border: 1px solid rgba(0,212,255,0.2); }
+.dt-tag-v { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+.dt-tag-a { background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.2); }
+.dt-tag-r { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+.dt-tag-g { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+.dt-main { padding-top: 48px; }
+
+.dt-section { padding: 48px 0; }
+
+.dt-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #2d3748, transparent);
+  border: none;
+  margin: 0;
+}
+
+.dt-section h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(20px, 3vw, 27px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dt-icon { font-size: 26px; }
+
+.dt-section h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.dt-section p {
+  color: #e2e8f0;
+  margin-bottom: 14px;
+}
+
+.dt-section a {
+  color: #00d4ff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,212,255,0.3);
+}
+
+.dt-section a:hover { border-color: #00d4ff; }
+
+.dt-section strong { color: #fff; font-weight: 600; }
+
+.dt-card {
+  background: #1a1d2e;
+  border: 1px solid #2d3748;
+  border-left: 4px solid #00d4ff;
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dt-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+}
+
+.dt-card.alta { border-left-color: #ef4444; }
+.dt-card.media { border-left-color: #f59e0b; }
+.dt-card.baixa { border-left-color: #10b981; }
+
+.dt-rel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  margin-bottom: 10px;
+}
+
+.dt-rel.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+.dt-rel.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.dt-rel.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+.dt-src {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #94a3b8;
+  border: none !important;
+}
+
+.dt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.dt-gcell {
+  background: #1a1d2e;
+  border: 1px solid #2d3748;
+  border-radius: 12px;
+  padding: 18px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dt-gcell:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+}
+
+.dt-gcell .dt-ci {
+  font-size: 30px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.dt-gcell h3 { font-size: 15px; margin-bottom: 7px; }
+.dt-gcell p { font-size: 13px; color: #94a3b8; margin: 0; }
+
+.dt-ignore { opacity: 0.7; }
+.dt-ignore .dt-card { border-left-color: #2d3748; filter: grayscale(30%); }
+
+.dt-radar {
+  background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+  border: 1px solid rgba(16,185,129,0.2);
+  border-radius: 16px;
+  padding: 36px;
+  margin-top: 8px;
+}
+
+.dt-radar h2 { color: #34d399; }
+.dt-radar h3 { color: #6ee7b7; font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+.dt-radar p { color: #a7f3d0; opacity: 0.88; }
+
+.dt-radar ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 18px;
+}
+
+.dt-radar ul li {
+  color: #a7f3d0;
+  opacity: 0.88;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(16,185,129,0.1);
+  font-size: 14px;
+}
+
+.dt-radar ul li::before { content: '&#9658; '; color: #34d399; font-size: 11px; }
+
+.dt-pre {
+  background: #0a0f0d;
+  border: 1px solid rgba(16,185,129,0.2);
+  border-radius: 8px;
+  padding: 18px;
+  overflow-x: auto;
+  margin: 14px 0;
+}
+
+.dt-code {
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 13px;
+  color: #6ee7b7;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.dt-footer {
+  background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+  border-top: 1px solid #2d3748;
+  padding: 48px 24px;
+  margin-top: 0;
+}
+
+.dt-author {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #1a1d2e;
+  border: 1px solid #2d3748;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 28px;
+}
+
+.dt-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #00d4ff;
+  flex-shrink: 0;
+}
+
+.dt-ainfo h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.dt-ainfo p { font-size: 13px; color: #94a3b8; margin: 0; }
+
+.dt-closing { text-align: center; color: #94a3b8; font-size: 14px; }
+.dt-closing span { color: #00d4ff; }
+
+@media (max-width: 640px) {
+  .dt-grid { grid-template-columns: 1fr; }
+  .dt-author { flex-direction: column; text-align: center; }
+  .dt-radar { padding: 20px; }
+  .dt-section { padding: 36px 0; }
+  .dt-header { padding: 40px 24px 36px; }
+}
+</style>
+
+<div class="dt-art">
+
+  <div class="dt-progress"></div>
+
+  <div class="dt-header">
+    <div class="dt-badge">&#128225; Diário Tecnológico · 07/10/2026</div>
+    <h1>Diário Tecnológico — 7 de outubro de 2026</h1>
+    <p class="dt-excerpt">OpenAI lança agentes Dots com GPT-6 Astra, Anthropic prepara IPO bilionário e o Spring AI 2.0 consolida suporte a MCP no ecossistema Java empresarial.</p>
+    <div class="dt-tags">
+      <span class="dt-tag dt-tag-c">IA</span>
+      <span class="dt-tag dt-tag-v">Java</span>
+      <span class="dt-tag dt-tag-a">LangChain4j</span>
+      <span class="dt-tag dt-tag-c">Spring AI</span>
+      <span class="dt-tag dt-tag-r">OpenAI</span>
+      <span class="dt-tag dt-tag-v">Anthropic</span>
+      <span class="dt-tag dt-tag-g">Agentes</span>
+      <span class="dt-tag dt-tag-a">RAG</span>
+      <span class="dt-tag dt-tag-c">MCP</span>
+    </div>
+  </div>
+
+  <div class="dt-wrap">
+    <div class="dt-main">
+
+      <div class="dt-section" id="dt-intro">
+        <p>Esta semana entrou em modo de aceleração máxima. O que vejo ao olhar para o ecossistema de IA hoje não é mais um cenário de experimentação — é uma corrida de consolidação. Os três grandes players, OpenAI, Anthropic e Google, estão todos em movimento simultâneo: novos modelos no topo do benchmark, estruturas de governança sendo enviadas para órgãos reguladores e, no caso da Anthropic, um IPO se aproximando em ritmo que poucos antecipavam para este ano.</p>
+        <p>No lado técnico, o que mais me chamou atenção foi a DevDay da OpenAI. O lançamento dos agentes <strong>Dots</strong>, movidos pelo GPT-6 Astra, representa uma mudança de paradigma na forma como enxergo o desenvolvimento de produtos com IA. Não é mais sobre chatbots — é sobre agentes que vivem em infraestrutura própria, têm acesso a browser, memória persistente e se conectam a mais de 4.000 aplicações. Isso muda a conversa sobre arquitetura de sistemas.</p>
+        <p>Para quem trabalha no ecossistema Java, como eu, a semana também trouxe sinais concretos: o Spring AI 2.0, lançado em junho com suporte de primeira classe ao MCP, recebeu um patch de segurança crítico em agosto corrigindo sete CVEs — incluindo injeção de prompt não anunciada e path traversal. Isso não é nota de rodapé. É sinal de que a maturidade do ecossistema Java com IA está sendo testada em produção, com todas as consequências que isso implica.</p>
+      </div>
+
+      <hr class="dt-divider">
+
+      <div class="dt-section" id="dt-destaques">
+        <h2><span class="dt-icon">&#128293;</span> O que chamou minha atenção hoje</h2>
+
+        <div class="dt-card alta">
+          <span class="dt-rel alta">&#128308; Alta Relevância</span>
+          <h3>OpenAI DevDay: Agentes Dots com GPT-6 Astra chegam ao mercado</h3>
+          <p>A OpenAI apresentou na sua DevDay desta semana o <strong>Dots</strong>, uma nova categoria de agentes always-on alimentados pelo GPT-6 Astra. Esses agentes rodam em computadores próprios na nuvem da OpenAI — com acesso a browser — e perseguem objetivos definidos pelo usuário de forma autônoma, conectando-se a mais de 4.000 aplicações via integrações com Slack, Teams e o próprio ChatGPT. A disponibilidade está restrita a assinantes Pro e Business Premium por enquanto.</p>
+          <p>Do ponto de vista arquitetural, o Dots não é só um produto — é uma afirmação sobre como a OpenAI enxerga a próxima camada de abstração da IA. Saímos do modelo "chat-and-respond" e entramos no modelo "deploy-and-forget": o agente existe, persiste e age. Para arquitetos de sistemas, isso levanta questões sérias sobre auditabilidade, controle de estado e como integrar esse tipo de entidade em fluxos de trabalho corporativos com SLA definido. Minha visão: quem não estiver pensando em políticas de governança para agentes autônomos hoje vai correr atrás daqui a 12 meses.</p>
+          <a class="dt-src" href="https://aiagentsdirectory.com/news/ai-agents-news-brief-october-6-2026" target="_blank" rel="noopener">&#128279; AI Agents Directory — Outubro 2026</a>
+        </div>
+
+        <div class="dt-card alta">
+          <span class="dt-rel alta">&#128308; Alta Relevância</span>
+          <h3>Anthropic mira IPO em novembro no Nasdaq com valuation de US$ 2 trilhões</h3>
+          <p>A Anthropic está em fase de marketing formal para um IPO planejado para meados de novembro, com listagem no Nasdaq e valuation-alvo de aproximadamente <strong>US$ 2 trilhões</strong> — uma captação que pode chegar a US$ 100 bilhões. Investidores institucionais selecionados foram convidados para uma reunião em 14 de outubro na sede da empresa em São Francisco. O Claude Opus 5.5 alcançou 167 pontos no Epoch Capabilities Index, ligeiramente à frente do GPT-6 Astra.</p>
+          <p>O que isso significa para o mercado: a Anthropic se tornando pública muda a dinâmica competitiva de forma significativa. Com acesso a capital público, a empresa passa a ter pressão por crescimento de receita trimestral — o que historicamente empurra empresas de IA para o enterprise mais rápido do que sua equipe técnica gostaria. Para quem depende da API do Claude, isso é um sinal para reavaliar a estratégia de vendor lock-in e garantir abstrações adequadas no código. A Anthropic também anunciou US$ 100 milhões investidos no treinamento de 10.000 engenheiros para endereçar o gap de talentos em IA corporativa.</p>
+          <a class="dt-src" href="https://www.cnbc.com/2026/10/02/tech-download-google-argon-frontier-openai-anthropic.html" target="_blank" rel="noopener">&#128279; CNBC Tech Download — Outubro 2026</a>
+        </div>
+
+        <div class="dt-card alta">
+          <span class="dt-rel alta">&#128308; Alta Relevância</span>
+          <h3>Google lança Gemini 4 Argon e TPU v7 otimizado para MoE</h3>
+          <p>O Google anunciou o <strong>Gemini 4 Argon</strong>, seu novo modelo flagship, em resposta direta à pressão da OpenAI e da Anthropic no topo do benchmark. Junto com o modelo, veio o anúncio do <strong>TPU v7</strong>, chip de sétima geração projetado do zero para acelerar arquiteturas Mixture-of-Experts (MoE) — exatamente a arquitetura dos modelos Gemini. Essa verticalização de hardware e modelo é uma vantagem competitiva difícil de replicar.</p>
+          <p>O que o TPU v7 representa é uma aposta clara de que a eficiência de inferência vai ser o campo de batalha do próximo ciclo. Treinar modelos grandes qualquer grande player consegue — mas servir bilhões de requests com latência aceitável e custo controlado é onde o Google tem vantagem estrutural. Para quem usa a API do Gemini em aplicações Java, isso se traduz em tokens mais baratos e latência menor no médio prazo.</p>
+          <a class="dt-src" href="https://aiconference.london/how-anthropic-openai-and-google-compare-in-2026-20261002-07" target="_blank" rel="noopener">&#128279; AI Conference London — Outubro 2026</a>
+        </div>
+
+        <div class="dt-card media">
+          <span class="dt-rel media">&#128993; Média Relevância</span>
+          <h3>OpenAI e Google submetem FMAF a NIST e BSI — governança colaborativa inédita</h3>
+          <p>OpenAI e Google anunciaram uma colaboração para submeter o <strong>Frontier Model Auditing Framework (FMAF)</strong> a órgãos de padronização como NIST (EUA) e BSI (Reino Unido). O framework propõe uma metodologia padronizada para auditoria de terceiros em modelos de fronteira, cobrindo riscos de uso indevido, segurança e capacidades emergentes.</p>
+          <p>O fato de dois concorrentes diretos colaborarem em governança é sinal de que a pressão regulatória chegou a um nível que não pode mais ser ignorado. Para empresas que desenvolvem aplicações com IA, o FMAF provavelmente vai virar referência contratual com clientes enterprise dentro de 18 meses. Começar a entender sua estrutura agora é uma vantagem competitiva.</p>
+          <a class="dt-src" href="https://www.theneuron.ai/digest/everything-that-happened-in-ai-today-thursday-october-1-2026/" target="_blank" rel="noopener">&#128279; The Neuron — 1 de outubro de 2026</a>
+        </div>
+
+        <div class="dt-card media">
+          <span class="dt-rel media">&#128993; Média Relevância</span>
+          <h3>Progress Software lança Agentic RAG com camada de conhecimento empresarial</h3>
+          <p>A Progress Software anunciou novas capacidades na sua plataforma de <strong>Agentic RAG</strong>, incluindo uma aplicação nativa no Microsoft Teams, um novo Smart Agent para recuperação autônoma multistep e um plugin WordPress para melhorar ingestão e governança de conteúdo. A proposta central é criar uma "Agentic Knowledge Layer" que conecta o conhecimento corporativo a experiências alimentadas por IA.</p>
+          <p>O conceito de camada de conhecimento compartilhada faz sentido para contextos enterprise onde o conhecimento está fragmentado em dezenas de sistemas. Em Java, implementar algo equivalente com LangChain4j e um grafo de agentes especializados é perfeitamente viável hoje, especialmente com o suporte a workflows agentic da versão 1.17.x.</p>
+          <a class="dt-src" href="https://www.globenewswire.com/news-release/2026/10/01/3373061/0/en/progress-software-connects-enterprise-knowledge-across-business-systems-with-new-agentic-rag-capabilities.html" target="_blank" rel="noopener">&#128279; GlobeNewswire — Progress Software, 1 de outubro de 2026</a>
+        </div>
+
+        <div class="dt-card baixa">
+          <span class="dt-rel baixa">&#128994; Baixa Relevância</span>
+          <h3>PL 2.338/2023 avança no Brasil — marco regulatório de IA ganha tração</h3>
+          <p>O Projeto de Lei 2.338/2023 continua avançando no Brasil como base para um marco regulatório de IA, com classificação de risco dos sistemas e exigência de responsabilidade humana por danos causados por IA. A tendência global de AI TRiSM (Trust, Risk, and Security Management) como framework de governança está se consolidando também no contexto brasileiro. Nada urgente para esta semana, mas o radar de compliance precisa estar ligado.</p>
+          <a class="dt-src" href="https://br.aprender21.com/blog/etica-ia-generativa-desafios-brasil" target="_blank" rel="noopener">&#128279; Aprender21 — Ética na IA Generativa no Brasil, 2026</a>
+        </div>
+
+      </div>
+
+      <hr class="dt-divider">
+
+      <div class="dt-section" id="dt-estudar">
+        <h2><span class="dt-icon">&#128218;</span> O que vale estudar hoje</h2>
+        <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar com foco técnico:</p>
+        <div class="dt-grid">
+
+          <div class="dt-gcell">
+            <span class="dt-ci">&#128279;</span>
+            <h3>Spring AI 2.0 — Suporte nativo ao MCP</h3>
+            <p>O Model Context Protocol é o padrão de fato para exposição de ferramentas em agentes. Spring AI 2.0 tem starters dedicados com suporte a STDIO, SSE e Streamable-HTTP. Vale mapear como integrar seus Spring Beans como ferramentas MCP.</p>
+          </div>
+
+          <div class="dt-gcell">
+            <span class="dt-ci">&#129302;</span>
+            <h3>LangChain4j 1.17.x — Módulo Agentic</h3>
+            <p>O novo módulo permite declarar agentes como interfaces tipadas e compô-los em workflows sequenciais, condicionais e paralelos. É a abstração mais próxima de Agentic Design disponível no ecossistema Java hoje.</p>
+          </div>
+
+          <div class="dt-gcell">
+            <span class="dt-ci">&#128737;&#65039;</span>
+            <h3>CVEs do Spring AI 2.0.1 — Leitura obrigatória</h3>
+            <p>Sete CVEs corrigidos incluindo prompt injection via tool dispatch e path traversal via parâmetros de ferramenta. Qualquer aplicação Spring AI em produção precisa estar na 2.0.1 ou superior.</p>
+          </div>
+
+          <div class="dt-gcell">
+            <span class="dt-ci">&#128208;</span>
+            <h3>FMAF — Frontier Model Auditing Framework</h3>
+            <p>Framework conjunto da OpenAI e Google submetido ao NIST define como auditar modelos de fronteira. Para quem vende IA para enterprise, entender essa estrutura hoje é vantagem competitiva de 18 meses.</p>
+          </div>
+
+          <div class="dt-gcell">
+            <span class="dt-ci">&#129713;</span>
+            <h3>Agentic RAG Architecture Patterns</h3>
+            <p>Research de 2026 mostrou que 85% do compute de um agente vai para tarefas de retrieval, com taxas de conclusão de 50-60% em setups não otimizados. Papers recentes sobre budget allocation têm impacto direto em custo e latência.</p>
+          </div>
+
+          <div class="dt-gcell">
+            <span class="dt-ci">&#9729;&#65039;</span>
+            <h3>Arquitetura de Agentes Autônomos (Dots Pattern)</h3>
+            <p>O modelo do Dots — agente com compute próprio, browser e estado persistente — representa um padrão que vai aparecer em RFPs enterprise. Vale desenhar como isso se comporta em termos de auditabilidade e controle de acesso.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <hr class="dt-divider">
+
+      <div class="dt-section dt-ignore" id="dt-ignorar">
+        <h2><span class="dt-icon">&#128263;</span> O que pode ser ignorado hoje</h2>
+        <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar:</p>
+
+        <div class="dt-card">
+          <h3>Plataformas no-code de IA com "agentes em um clique"</h3>
+          <p>O ciclo de hype de ferramentas no-code para criação de agentes está em alta, mas para contextos enterprise com requisitos de segurança, auditabilidade e integração com sistemas legados, essas ferramentas não chegam perto do que é necessário. Não vale o tempo de avaliação agora.</p>
+        </div>
+
+        <div class="dt-card">
+          <h3>Comparações genéricas de LLMs em benchmarks descontextualizados</h3>
+          <p>Ranking de modelos em MMLU ou equivalente sem contexto de tarefa, custo e latência específicos é ruído de feed. O que importa é o desempenho do modelo no seu caso de uso real, com seus dados. Filtre esse tipo de conteúdo do seu consumo diário.</p>
+        </div>
+
+        <div class="dt-card">
+          <h3>Anúncios de "AI Copilot" genérico sem roadmap técnico</h3>
+          <p>Vários fornecedores de SaaS anunciaram versões "AI-powered" sem detalhar a arquitetura, o modelo usado ou os controles de privacidade de dados. Aguardar documentação técnica antes de qualquer avaliação.</p>
+        </div>
+
+      </div>
+
+      <hr class="dt-divider">
+
+      <div class="dt-section" id="dt-radar">
+        <div class="dt-radar">
+          <h2><span class="dt-icon">&#9749;</span> Radar Java + IA</h2>
+
+          <p>O ecossistema Java com IA entrou em 2026 em modo de consolidação produtiva. A disputa entre Spring AI e LangChain4j parou de ser uma questão ideológica e virou uma escolha arquitetural — e isso é maturidade.</p>
+
+          <h3>LangChain4j 1.17.2 — Módulo Agentic em produção</h3>
+          <p>A versão 1.17.2 (julho de 2026) trouxe o módulo agentic com semântica real de workflows. A abstração que mais me interessa é a de agentes como interfaces Java tipadas — você define o contrato, a implementação é gerada pelo framework. Compose com workflows sequenciais, condicionais, com loop e paralelos. Suporte a 20+ providers e 30+ vector stores elimina o argumento de lock-in. A parceria com a Microsoft para aplicações Java enterprise seguras é sinal de que o LangChain4j está se posicionando para o mercado corporativo.</p>
+
+          <div class="dt-pre"><code class="dt-code">// LangChain4j 1.17.x — Agente como interface tipada
+@AiService
+public interface AnalisadorDeContratoAgent {
+
+    @SystemMessage("Voce e um analista de contratos juridicos. " +
+                   "Retorne riscos identificados em JSON estruturado.")
+    ContractAnalysisResult analisar(@UserMessage String textoDoContrato);
+}
+
+// Composicao em workflow sequencial
+AgenteWorkflow workflow = AgenteWorkflow.builder()
+    .step(extratorDeClausulasAgent)
+    .step(analisadorDeRiscosAgent)
+    .step(geradorDeSumariosAgent)
+    .build();
+
+ContractReport resultado = workflow.executar(documentoPdf);</code></div>
+
+          <h3>Spring AI 2.0.1 — Patch crítico de segurança</h3>
+          <p>O Spring AI 2.0.1 (21 de agosto de 2026) é atualização obrigatória. Os sete CVEs incluem: tool dispatch não autorizado via prompt injection; path traversal via parâmetros de ferramenta em chamadas de file system; denial-of-service remoto via PDFs envenenados em pipelines de ingestão. Se você tem Spring AI em produção, a pergunta não é se deve atualizar — é quando.</p>
+
+          <ul>
+            <li>Spring AI 2.0.1 — crítico, atualizar imediatamente se em produção</li>
+            <li>MCP via Spring AI: starters para server e client em STDIO/SSE/Streamable-HTTP</li>
+            <li>LangChain4j 1.17.2 — workflows agentic com tipos, sem código verboso</li>
+            <li>Microsoft + LangChain4j: parceria foca em Java enterprise seguro</li>
+            <li>Spring Boot 4 + Spring Framework 7 são pré-requisito obrigatório para Spring AI 2.x</li>
+          </ul>
+
+          <h3>Escolha do framework em 2026</h3>
+          <p>A análise atual aponta para uma divisão clara: <strong>Spring AI 2.0</strong> para quem já tem investimento em Spring Boot e quer integração idiomática (autoconfiguration, Actuator, Security); <strong>LangChain4j</strong> para quem precisa de flexibilidade máxima de providers, workflows agentic mais expressivos e suporte a múltiplos runtimes (Quarkus, Helidon, Micronaut). A escolha certa é a que seu time vai manter — não a que tem mais estrelas no GitHub.</p>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="dt-footer">
+    <div class="dt-wrap">
+
+      <div class="dt-author">
+        <img
+          class="dt-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="dt-ainfo">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p style="color:#e2e8f0; margin-bottom:20px;">O que levo deste 7 de outubro é a sensação de que o ecossistema chegou em um ponto de inflexão real. Não é mais sobre provar que IA funciona — é sobre como operacionalizar, governar e escalar com responsabilidade. O IPO da Anthropic, o FMAF da OpenAI com o Google, os CVEs do Spring AI em produção: tudo isso aponta para a mesma direção — a fase de laboratório acabou. Quem ainda estiver em modo de "explorar" vai acordar com produtos concorrentes em modo de "operar". Eu prefiro estar na segunda categoria. Se você está construindo algo com IA em Java e quer discutir arquitetura, me manda mensagem.</p>
+
+      <div class="dt-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </div>
+
+</div>

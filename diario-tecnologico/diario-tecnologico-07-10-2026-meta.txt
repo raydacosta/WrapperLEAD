@@ -1,0 +1,38 @@
+TÍTULO: Diário Tecnológico — 07/10/2026
+SLUG: diario-tecnologico-07-10-2026
+EXCERPT: OpenAI lança agentes Dots, Anthropic prepara IPO de US$2T e Spring AI 2.0.1 corrige CVEs críticos. Radar Java+IA do dia 07/10/2026.
+TAGS: IA, Java, LangChain4j, Spring AI, Agentes, RAG, MCP, OpenAI, Anthropic, Google, Regulamentação
+CATEGORIA: Diário Tecnológico
+AUTOR: Ray da Costa
+FOTO_AUTOR: https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg
+
+BANNER_PROMPT (para Bing Image Creator):
+Dark tech cinematic 16:9, deep navy blue and electric cyan tones, abstract AI agent nodes connected by glowing neon data streams, Java Spring framework gears integrated with neural network patterns, abstract Nasdaq financial data visualization with glowing ticker lines, no human faces, futuristic corporate skyline silhouette, MoE architecture abstract graph, photorealistic dark tech aesthetic
+
+DESTAQUES DO DIA:
+🔴 [ALTA] OpenAI DevDay: Agentes Dots com GPT-6 Astra — paradigma de agente always-on com browser próprio, 4000+ app integrations
+🔴 [ALTA] Anthropic IPO: Nasdaq mid-novembro, US$2T valuation, US$100B raise, Claude Opus 5.5 score 167 Epoch AI
+🔴 [ALTA] Google Gemini 4 Argon + TPU v7 (MoE-optimized) — verticalização hardware+modelo
+🟡 [MÉDIA] OpenAI + Google FMAF → NIST/BSI — governança colaborativa inédita entre concorrentes
+🟡 [MÉDIA] Progress Software Agentic RAG — Agentic Knowledge Layer, MS Teams native, Smart Agent
+🟢 [BAIXA] PL 2.338/2023 Brasil — avanço do marco regulatório de IA
+
+RADAR JAVA + IA:
+- LangChain4j 1.17.2 (julho 2026) — módulo agentic com interfaces tipadas e workflows compostos
+- Spring AI 2.0.1 (agosto 2026) — 7 CVEs críticos: prompt injection, path traversal, DoS via PDF
+- Spring Boot 4 + Spring Framework 7 obrigatórios para Spring AI 2.x
+- Microsoft + LangChain4j partnership para Java enterprise seguro
+
+FONTES:
+- https://aiagentsdirectory.com/news/ai-agents-news-brief-october-6-2026
+- https://www.cnbc.com/2026/10/02/tech-download-google-argon-frontier-openai-anthropic.html
+- https://aiconference.london/how-anthropic-openai-and-google-compare-in-2026-20261002-07
+- https://www.theneuron.ai/digest/everything-that-happened-in-ai-today-thursday-october-1-2026/
+- https://www.globenewswire.com/news-release/2026/10/01/3373061/0/en/progress-software-connects-enterprise-knowledge-across-business-systems-with-new-agentic-rag-capabilities.html
+- https://dev.to/jamilxt/spring-ai-vs-langchain4j-which-java-ai-framework-should-you-choose-in-2026-4mop
+- https://br.aprender21.com/blog/etica-ia-generativa-desafios-brasil
+
+ARQUIVOS GERADOS:
+- diario-tecnologico-07-10-2026.html         → HTML CMS-pronto (usar no /create)
+- diario-tecnologico-07-10-2026-preview.html → HTML standalone para preview local
+- diario-tecnologico-07-10-2026-meta.txt     → este arquivo de metadados
