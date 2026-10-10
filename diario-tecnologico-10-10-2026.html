@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 10/10/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section {
+      opacity: 0.7;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 10/10/2026</div>
+      <h1>Diário Tecnológico — 10 de outubro de 2026</h1>
+      <p class="excerpt">Claude Haiku 5.5 entra em cena com effort controls; Spring AI 2.1.0-M1 e LangChain4j 1.20.1 consolidam o ecossistema Java para IA enterprise.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-cyan">Spring AI</span>
+        <span class="tag tag-green">Agentic RAG</span>
+        <span class="tag tag-violet">FinOps LLM</span>
+        <span class="tag tag-amber">Regulatório</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>A semana que antecede a segunda quinzena de outubro chegou densa. Em menos de uma semana, a Anthropic entregou duas releases relevantes — Claude Opus 5.5 no dia 6 e Claude Haiku 5.5 no dia 7 — enquanto a OpenAI consolidava o GPT-6.1 Sol como seu modelo de custo-benefício para produção. O Google, por sua vez, anunciou a Gemini Nano Banana 2.1, que chega especificamente para geração e edição de imagens. O ecossistema está acelerando num ritmo que começa a exigir uma curadoria ativa de quem trabalha com IA em ambiente corporativo.</p>
+      <p>Do lado do ecossistema Java, setembro fechou com dois marcos importantes: Spring AI chegou ao primeiro milestone do ciclo 2.1.x e o LangChain4j publicou sua versão 1.20.1. Ambos os projetos seguem trilhas complementares — e na prática precisam ser escolhidos com critério dependendo do stack que você está usando. Isso é exatamente o que analiso com mais detalhe na seção Radar Java + IA mais abaixo.</p>
+      <p>No plano macro, dois movimentos merecem atenção: a regulação europeia com a EU AI Act já em plena vigência para sistemas de alto risco, e a maturação da disciplina de FinOps aplicado a LLMs, com empresas reportando gastos mensais acima de $250 mil com infraestrutura de IA e ainda sem ferramentas adequadas para atribuição granular de custo. Para quem constrói produtos sobre APIs de modelos, esse contexto operacional importa tanto quanto a capacidade técnica dos modelos em si.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Claude Haiku 5.5: o primeiro modelo compacto da Anthropic com effort controls</h3>
+        <p>Lançado em 7 de outubro, o <strong>Claude Haiku 5.5</strong> representa uma virada silenciosa mas significativa na linha de modelos econômicos da Anthropic. Com ID <code>claude-haiku-5-5</code>, janela de contexto de 1 milhão de tokens e output de até 128K tokens, ele chega como o modelo mais rápido e barato da família 5.x — mas o diferencial real está em outro lugar: é o primeiro Haiku com <strong>adaptive thinking e effort controls</strong>. Isso significa que você pode, pela primeira vez em um modelo compacto da Anthropic, ajustar o esforço computacional da inferência, equilibrando custo e qualidade por chamada.</p>
+        <p>Do ponto de vista de precificação, os números divulgados em agregadores indicam <strong>$0,10 por milhão de tokens de entrada e $0,50 por milhão de saída</strong>, com desconto de 50% no Batch API. Para cargas de trabalho de classificação, extração e roteamento em alto volume — exatamente os casos de uso que mais aparecem em sistemas corporativos — essa combinação de preço, contexto longo e effort ajustável é altamente relevante. Minha leitura: qualquer pipeline que ainda usa Claude Haiku 4.5 deve avaliar migração imediata.</p>
+        <a class="card-source" href="https://llmgateway.io/models/claude-haiku-5-5" target="_blank" rel="noopener">🔗 LLM Gateway — Claude Haiku 5.5</a>
+      </div>
+
+      <!-- DESTAQUE 2 -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Spring AI 2.1.0-M1 e LangChain4j 1.20.1 chegam juntos — e a escolha entre eles ficou mais difícil</h3>
+        <p>Em 25 de setembro, os dois principais frameworks Java para integração com LLMs entregaram versões simultâneas. O <strong>Spring AI 2.1.0-M1</strong> é o primeiro milestone do ciclo 2.1.x, construído sobre o GA lançado em junho (Spring AI 2.0.0, que exige Spring Boot 4 e Spring Framework 7). O <strong>LangChain4j 1.20.1</strong> é um patch release sobre a 1.20.0, que trouxe suporte nativo a operações non-blocking — e um novo módulo <code>langchain4j-agentic</code> que permite declarar agentes como interfaces tipadas e compô-los em workflows sequenciais, condicionais e paralelos.</p>
+        <p>A decisão entre os dois agora depende mais do contexto arquitetural do projeto do que de funcionalidade. Para aplicações Spring Boot puras, Spring AI é a escolha natural — especialmente porque as integrações com Anthropic, OpenAI e Google migraram para os SDKs oficiais dos próprios vendors no ciclo 2.0. Para aplicações Quarkus, Micronaut, Jakarta EE tradicional ou Java puro sem Spring, o LangChain4j continua sendo a escolha mais limpa. Usar os dois juntos num mesmo projeto sem uma camada de abstração cuidadosa é pedir problema de manutenção no médio prazo.</p>
+        <a class="card-source" href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0" target="_blank" rel="noopener">🔗 DEV Community — Spring AI vs LangChain4j October 2026</a>
+      </div>
+
+      <!-- DESTAQUE 3 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>FinOps com LLMs: 2 em 3 empresas gastam mais de $250k/mês e ainda não enxergam onde o dinheiro vai</h3>
+        <p>Uma pesquisa divulgada no FinOps Weekly revela um dado preocupante: <strong>dois em cada três organizações já gastam mais de $250.000 mensais</strong> com infraestrutura de IA — e a principal dificuldade declarada é exatamente visibilidade sobre esses custos. A atribuição de chamadas de API por time, feature ou cliente segue sendo o gargalo número um da disciplina. Ferramentas de APM tradicionais não foram construídas para rastrear economia de tokens por modelo e por rota de inferência.</p>
+        <p>O sinal mais concreto do tamanho do problema está no mercado de trabalho: a Bloomberg abriu em maio de 2026 uma posição específica de <em>AI and LLM FinOps Analyst</em>, descrevendo o papel como responsável por embutir transparência de custo no próprio stack de IA — do nível de token até a utilização de clusters de GPU. Para quem está construindo produtos sobre APIs de modelos, a lição é clara: monitoramento de custo por unidade de negócio precisa estar na arquitetura desde o início, não como afterthought.</p>
+        <a class="card-source" href="https://finopsweekly.com/?p=8307" target="_blank" rel="noopener">🔗 FinOps Weekly — AI Cost Management & FinOps</a>
+      </div>
+
+      <!-- DESTAQUE 4 -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>EU AI Act em plena vigência para sistemas de alto risco: o que muda na prática</h3>
+        <p>A partir de 2 de agosto de 2026, os requisitos da EU AI Act para sistemas de IA de alto risco passaram a ser totalmente exigíveis na Europa, com multas de até <strong>€35 milhões ou 7% do faturamento global</strong>. Isso inclui sistemas usados em RH, crédito, infraestrutura crítica e saúde. Para quem desenvolve ou implanta LLMs em contextos enterprise no mercado europeu, os impactos são concretos: documentação de treinamento, transparência sobre dados usados, rastreabilidade de decisões e mecanismos de supervisão humana deixam de ser recomendações e se tornam obrigações legais.</p>
+        <p>No mesmo período, estados americanos como Califórnia (SB 53) e Texas (TRAIGA) passaram a exigir demonstração ativa de conformidade. Não estamos mais no ciclo de princípios éticos — estamos no ciclo de auditoria e enforcement. Para arquitetos que tomam decisões sobre onde e como hospedar modelos, qual nível de logging manter e como documentar pipelines de decisão, esse contexto regulatório deixa de ser responsabilidade jurídica para ser requisito de design.</p>
+        <a class="card-source" href="https://www.cliffordchance.com/insights/thought_leadership/trends/2026/artificial-intelligence-in-2026--our-top-ten-trends-to-watch.html" target="_blank" rel="noopener">🔗 Clifford Chance — AI in 2026: Top Ten Trends</a>
+      </div>
+
+      <!-- DESTAQUE 5 -->
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>GPT-6.1 Sol: mais um modelo de custo-benefício, desta vez da OpenAI</h3>
+        <p>Lançado em 29 de setembro, o <strong>GPT-6.1 Sol</strong> é o novo ponto de equilíbrio da OpenAI entre performance e custo, posicionado abaixo do GPT-6 Astra. Não há breaking changes de API e o acesso segue os mesmos padrões do ciclo 6.x. Para quem já está na plataforma OpenAI e precisa otimizar custo em produção, vale avaliar. Para quem está avaliando troca de plataforma ou iniciando projetos novos, o contexto competitivo hoje — com Anthropic, Google e outros todos entregando releases simultâneas — favorece uma análise comparativa antes de qualquer lock-in.</p>
+        <a class="card-source" href="https://www.microcenter.com/site/mc-news/article/this-week-in-ai-oct-2-2026.aspx" target="_blank" rel="noopener">🔗 Microcenter — This Week in AI: Oct 2, 2026</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Effort Controls em LLMs</h3>
+          <p>Claude Haiku 5.5 introduz effort controls no segmento compacto. Entender como calibrar esforço de inferência por tipo de tarefa é a próxima fronteira de otimização de custo em pipelines de produção.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>LangChain4j Agentic Module</h3>
+          <p>O novo módulo <code>langchain4j-agentic</code> permite declarar agentes como interfaces Java tipadas e compô-los em workflows. Investimento técnico de baixo risco com alto retorno para arquiteturas multi-agente em Java.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>Token-Level Cost Attribution</h3>
+          <p>Com 2/3 das empresas gastando +$250k/mês em IA sem visibilidade granular, dominar as técnicas de atribuição de custo por chamada, feature e cliente é diferencial competitivo imediato para arquitetos e líderes técnicos.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚖️</span>
+          <h3>EU AI Act: Requisitos Técnicos para Alto Risco</h3>
+          <p>A lei está em vigor. Entender o que significa "documentação de treinamento", "rastreabilidade de decisão" e "supervisão humana" em termos de design de sistema é tarefa urgente para quem atende o mercado europeu.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔗</span>
+          <h3>Agentic RAG com LangGraph + LlamaIndex</h3>
+          <p>O padrão onde o LLM controla o próprio fluxo de recuperação — Adaptive RAG, roteamento por complexidade — está se consolidando como arquitetura de produção. A combinação LangGraph + LlamaIndex é a mais citada em 2026.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🏗️</span>
+          <h3>Spring AI 2.0 + SDKs Oficiais dos Vendors</h3>
+          <p>A migração das integrações de Anthropic, OpenAI e Google para os SDKs oficiais no Spring AI 2.0 muda como você configura e versiona dependências. Vale revisar arquiteturas existentes antes que o ciclo 2.1 avance.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados:</p>
+
+      <div class="highlight-card">
+        <h3>Gemini Nano Banana 2.1 (Google)</h3>
+        <p>Modelo de geração e edição de imagens lançado em 6 de outubro. Interessante para casos de uso de conteúdo visual, mas sem relevância imediata para quem trabalha com aplicações de linguagem e raciocínio em contexto enterprise. Pode ser revisitado quando houver integração documentada com o ecossistema Vertex AI.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Métricas do mercado de ética em IA ($1,94 bi → $2,47 bi)</h3>
+        <p>Os números de crescimento do "mercado de ética em IA" aparecem em vários relatórios, mas são categorias analíticas de firmas de pesquisa, não indicadores operacionais. O que importa para quem está construindo é o impacto regulatório concreto — EU AI Act, SB 53, TRAIGA — não a métrica de mercado em si.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Comparativos genéricos de frameworks de agentes (CrewAI, Mastra, AG2)</h3>
+        <p>A proliferação de frameworks de agentes continua alta, com novos comparativos surgindo toda semana. Sem um caso de uso específico em mãos, gastar tempo lendo rankings genéricos tem retorno próximo de zero. Espere ter um problema concreto antes de avaliar.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O ecossistema Java para IA está num dos momentos mais produtivos dos últimos anos. Setembro fechou com dois projetos entregando releases na mesma semana — Spring AI 2.1.0-M1 (25/09) e LangChain4j 1.20.1 (25/09) — e a curva de adoção em projetos enterprise está acelerando de forma visível em fóruns, issues e contratações.</p>
+
+        <p>Com o <strong>Spring AI 2.0 GA</strong> (junho de 2026) como baseline, o ciclo 2.1.x começa com um primeiro milestone que consolida ajustes de API e prepara terreno para novos adapters. O ponto de atenção desta versão é a confirmação de que as integrações com Anthropic, OpenAI e Google agora delegam para os SDKs oficiais dos vendors — o que muda a árvore de dependências e pode quebrar configurações existentes que dependiam de wrappers Spring AI anteriores. Se você tem projetos em 1.x ou em 2.0.x com essas integrações, o momento de revisar o <code>pom.xml</code> é agora, antes que o M2 chegue com mais mudanças.</p>
+
+        <p>No LangChain4j, a grande novidade estrutural desta linha 1.20.x não é o patch — é o módulo <code>langchain4j-agentic</code> introduzido na 1.20.0. Ele permite declarar agentes como interfaces Java com anotações, criar instâncias via builder e compô-los em workflows com semântica explícita de sequência, condição e paralelismo. A Microsoft publicou um post de parceria com o time do LangChain4j especificamente sobre aplicações enterprise seguras usando esse padrão, o que sinaliza adoção corporativa crescente.</p>
+
+        <p>Para contexto de decisão: se o projeto roda <strong>Spring Boot 4+</strong>, a escolha natural é Spring AI — a DX é melhor e a integração com o ecossistema Spring (Security, Data, Actuator para observabilidade) é nativa. Se o projeto usa <strong>Quarkus, Micronaut, Jakarta EE</strong> ou é Java puro, LangChain4j é a escolha sem rival. Usar os dois no mesmo projeto sem uma interface de abstração compartilhada cria acoplamento desnecessário.</p>
+
+        <pre><code>// LangChain4j 1.20.x — declaração de agente tipado com @AiService
+@AiService
+public interface SupportAgent {
+
+    @SystemMessage("Você é um assistente de suporte técnico especializado em Java.")
+    @UserMessage("Usuário: {{userMessage}}")
+    String responder(String userMessage);
+}
+
+// Composição em workflow com langchain4j-agentic
+AgentWorkflow workflow = AgentWorkflow.builder()
+    .step("triagem", triageAgent::classificar)
+    .conditionalStep("tecnico", r -> r.equals("TECNICO"), techAgent::responder)
+    .conditionalStep("comercial", r -> r.equals("COMERCIAL"), salesAgent::responder)
+    .build();
+
+String resultado = workflow.execute(mensagemDoUsuario);</code></pre>
+
+        <p>A combinação de declaração via interface e composição explícita de workflow é exatamente o que a maioria dos times Java precisava para adotar agentes sem abrir mão da tipagem estática e da testabilidade que o ecossistema Java exige. Fica de olho na 1.21.0 — as releases têm saído a cada duas a quatro semanas.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>Dias como este confirmam que a janela de diferenciação técnica para quem trabalha com IA enterprise está aberta — mas vai se estreitando. Com Claude Haiku 5.5 chegando com effort controls, Spring AI e LangChain4j evoluindo em sincronia e o marco regulatório europeu já ativo, o próximo nível de maturidade não é mais sobre experimentação com LLMs. É sobre arquitetura, governança e economia de custo. São exatamente os temas em que a Wrapper Sistemas está investindo. Amanhã trago mais atualizações — acompanhe o diário ou deixe nos comentários se algum tema merece cobertura mais profunda.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
