@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diario Tecnologico 12/10/2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+.dt-root *, .dt-root *::before, .dt-root *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.dt-root {
+  --bg: #0B1220;
+  --surface: #13283A;
+  --surface-2: #1a2f44;
+  --cyan: #38BDF8;
+  --violet: #818CF8;
+  --amber: #FCD34D;
+  --red: #F87171;
+  --green: #34D399;
+  --text: #E5E7EB;
+  --text-muted: #94A3B8;
+  --border: #1E3A4F;
+  --font-title: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.75;
+  padding: 0 0 60px;
+}
+.dt-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.dt-progress {
+  height: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--violet));
+  margin-bottom: 0;
+}
+.dt-header {
+  background: linear-gradient(160deg, #0B1220 0%, #13283A 60%, #0B1220 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 64px 0 52px;
+  position: relative;
+  overflow: hidden;
+}
+.dt-header::before {
+  content: '';
+  position: absolute;
+  top: -40%; left: -30%;
+  width: 160%; height: 180%;
+  background: radial-gradient(ellipse at 40% 30%, rgba(56,189,248,0.07) 0%, transparent 60%);
+  pointer-events: none;
+}
+.dt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(56,189,248,0.08);
+  border: 1px solid rgba(56,189,248,0.25);
+  color: var(--cyan);
+  padding: 5px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-title);
+  margin-bottom: 20px;
+}
+.dt-header h1 {
+  font-family: var(--font-title);
+  font-size: clamp(26px, 4.5vw, 40px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #F8FAFC;
+  margin-bottom: 18px;
+}
+.dt-header h1 span {
+  background: linear-gradient(135deg, #F8FAFC 0%, var(--cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.dt-excerpt {
+  font-size: 17px;
+  color: var(--text-muted);
+  max-width: 620px;
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+.dt-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.dt-tag {
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-title);
+  letter-spacing: 0.02em;
+}
+.dt-tag-cyan { background: rgba(56,189,248,0.1); color: var(--cyan); border: 1px solid rgba(56,189,248,0.2); }
+.dt-tag-violet { background: rgba(129,140,248,0.1); color: var(--violet); border: 1px solid rgba(129,140,248,0.2); }
+.dt-tag-amber { background: rgba(252,211,77,0.1); color: var(--amber); border: 1px solid rgba(252,211,77,0.2); }
+.dt-tag-green { background: rgba(52,211,153,0.1); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+.dt-section {
+  padding: 52px 0 0;
+}
+.dt-section + .dt-section {
+  margin-top: 4px;
+}
+.dt-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 48px 0 0;
+}
+.dt-section h2 {
+  font-family: var(--font-title);
+  font-size: clamp(20px, 2.8vw, 26px);
+  font-weight: 700;
+  color: #F8FAFC;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dt-section h3 {
+  font-family: var(--font-title);
+  font-size: 18px;
+  font-weight: 600;
+  color: #F8FAFC;
+  margin-bottom: 10px;
+}
+.dt-section p {
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.dt-section a {
+  color: var(--cyan);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(56,189,248,0.3);
+  transition: border-color 0.2s;
+}
+.dt-section a:hover { border-color: var(--cyan); }
+.dt-section strong { color: #F8FAFC; font-weight: 600; }
+.dt-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--cyan);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin-bottom: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.dt-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 36px rgba(56,189,248,0.08);
+}
+.dt-card.alta { border-left-color: var(--red); }
+.dt-card.media { border-left-color: var(--amber); }
+.dt-card.baixa { border-left-color: var(--green); }
+.dt-relevance {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-title);
+  margin-bottom: 12px;
+}
+.dt-relevance.alta { background: rgba(248,113,113,0.12); color: #FCA5A5; }
+.dt-relevance.media { background: rgba(252,211,77,0.12); color: var(--amber); }
+.dt-relevance.baixa { background: rgba(52,211,153,0.12); color: var(--green); }
+.dt-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+  border: none !important;
+}
+.dt-source:hover { color: var(--cyan); }
+.dt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.dt-grid-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--cyan);
+  border-radius: 10px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.dt-grid-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(129,140,248,0.12);
+}
+.dt-grid-card .ico { font-size: 28px; margin-bottom: 10px; display: block; }
+.dt-grid-card h3 { font-size: 15px; margin-bottom: 6px; }
+.dt-grid-card p { font-size: 14px; color: var(--text-muted); margin: 0; }
+.dt-ignore { opacity: 0.65; }
+.dt-ignore .dt-card { border-left-color: var(--border); filter: grayscale(20%); }
+.dt-radar {
+  background: linear-gradient(140deg, #0D1F1A 0%, #0B1820 100%);
+  border: 1px solid rgba(52,211,153,0.18);
+  border-radius: 14px;
+  padding: 36px;
+}
+.dt-radar h2 { color: #6EE7B7; }
+.dt-radar h3 { color: #A7F3D0; font-size: 17px; margin: 20px 0 8px; }
+.dt-radar p { color: #CFFAFE; opacity: 0.85; margin-bottom: 12px; }
+.dt-radar ul { padding-left: 20px; margin-bottom: 12px; }
+.dt-radar ul li { color: #CFFAFE; opacity: 0.85; margin-bottom: 6px; font-size: 15px; }
+.dt-pre {
+  background: #080F0C;
+  border: 1px solid rgba(52,211,153,0.15);
+  border-radius: 8px;
+  padding: 18px 20px;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.dt-pre code {
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 13px;
+  color: #6EE7B7;
+  line-height: 1.65;
+  white-space: pre;
+}
+.dt-highlight-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--violet);
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin: 28px 0;
+}
+.dt-highlight-box p { font-size: 15px; color: var(--text-muted); margin: 0; }
+.dt-highlight-box strong { color: var(--violet); }
+.dt-footer {
+  background: linear-gradient(140deg, #13283A 0%, #0B1220 100%);
+  border-top: 1px solid var(--border);
+  padding: 52px 0 40px;
+  margin-top: 52px;
+}
+.dt-author {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 28px;
+}
+.dt-author img {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--cyan);
+  flex-shrink: 0;
+}
+.dt-author h4 {
+  font-family: var(--font-title);
+  font-size: 17px;
+  font-weight: 700;
+  color: #F8FAFC;
+  margin-bottom: 4px;
+}
+.dt-author p { font-size: 14px; color: var(--text-muted); margin: 0; }
+.dt-closing { text-align: center; color: var(--text-muted); font-size: 14px; margin-top: 24px; }
+.dt-closing span { color: var(--cyan); }
+@media (max-width: 600px) {
+  .dt-grid { grid-template-columns: 1fr; }
+  .dt-author { flex-direction: column; text-align: center; }
+  .dt-radar { padding: 22px; }
+  .dt-section { padding-top: 36px; }
+}
+</style>
+</head>
+<body>
+<div class="dt-root">
+
+<div class="dt-progress"></div>
+
+<header class="dt-header">
+  <div class="dt-wrap">
+    <div class="dt-badge">&#128225; Diario Tecnologico &middot; 12/10/2026</div>
+    <h1><span>Diario Tecnologico &mdash; 12 de outubro de 2026</span></h1>
+    <p class="dt-excerpt">Claude Haiku 5.5 chega com 90% de reducao de preco e controle de esforco inedito; LangChain4j 1.22 aprimora caching nativo com Anthropic. Dois lancamentos que mudam o calculo de custo para quem constroi com IA.</p>
+    <div class="dt-tags">
+      <span class="dt-tag dt-tag-cyan">IA</span>
+      <span class="dt-tag dt-tag-violet">Java</span>
+      <span class="dt-tag dt-tag-amber">LangChain4j</span>
+      <span class="dt-tag dt-tag-cyan">Spring AI</span>
+      <span class="dt-tag dt-tag-green">FinOps</span>
+      <span class="dt-tag dt-tag-violet">Claude Haiku</span>
+      <span class="dt-tag dt-tag-amber">RAG Agentivo</span>
+    </div>
+  </div>
+</header>
+
+<main class="dt-wrap">
+
+  <div class="dt-section">
+    <p>Hoje o ecossistema de IA voltou ao tema que mais importa para quem constroe aplicacoes no mundo real: custo de operacao. A Anthropic acabou de lancar o Claude Haiku 5.5, e a reducao de preco e suficientemente expressiva para reabrir conversas que muitas equipes ja haviam encerrado. Quando um modelo se torna 90% mais barato e ainda ganha novos recursos como controle de esforco, isso nao e iteracao &mdash; e reposicionamento de mercado.</p>
+    <p>No ecossistema Java, a versao 1.22.0 do LangChain4j formalizou o suporte a prompt caching da Anthropic, o que conecta diretamente com o lancamento do Haiku 5.5. Isso nao e coincidencia: os grandes provedores de LLM e os frameworks de integracao estao cada vez mais sincronizados, e quem acompanha as duas frentes tem vantagem real na hora de desenhar arquiteturas.</p>
+    <p>Paralelamente, um dado do mercado corporativo chamou minha atencao: 73% das empresas que usam IA ja estouraram o orcamento de LLMs neste ano. O tooling de FinOps para IA ainda esta imaturo, mas o volume de solucoes surgindo nesse espaco deixa claro que essa vai ser uma area critica nos proximos 12 meses.</p>
+  </div>
+
+  <div class="dt-divider"></div>
+
+  <div class="dt-section">
+    <h2>&#128293; O que chamou minha atencao hoje</h2>
+
+    <div class="dt-card alta">
+      <span class="dt-relevance alta">&#128308; Alta Relevancia</span>
+      <h3>Claude Haiku 5.5: 90% mais barato, com controle de esforco</h3>
+      <p>A Anthropic lancou o Claude Haiku 5.5 em 7 de outubro de 2026, e o numero que define esse lancamento e simples: <strong>90% de reducao de preco em relacao ao Haiku 4.5</strong>, chegando a R$ 0,10 por milhao de tokens de entrada e R$ 0,50 por milhao de saida. Para quem opera pipelines de alto volume &mdash; classificacao de tickets, sumarizacao em lote, suporte ao vivo &mdash; isso muda o calculo completamente.</p>
+      <p>O detalhe mais relevante para mim, porem, nao e o preco: e o <strong>controle de esforco</strong>. Haiku 5.5 e o primeiro modelo da familia Haiku a permitir que voce ajuste dinamicamente o nivel de raciocinio por chamada. Isso significa que uma tarefa simples de extracao de dados pode rodar com esforco minimo, enquanto uma consulta mais complexa usa mais capacidade &mdash; sem trocar de modelo. Em arquiteturas multi-agente, onde Haiku 5.5 esta posicionado como subagente ao lado de Opus 5.5 e Sonnet 5.5, esse controle fino e um diferencial real de custo.</p>
+      <p>A Anthropic tambem aproveitou o lancamento para anunciar creditos mensais de API para os planos Claude Max e Team Enterprise, alem de suporte beta a <em>computer-use</em> e <em>browser-use</em> nos SDKs Python e TypeScript. O modelo esta disponivel na API propria, AWS Bedrock, Google Cloud e Azure.</p>
+      <a class="dt-source" href="https://venturebeat.com/technology/anthropic-launches-claude-haiku-5-5-with-90-api-price-reduction-matching-gpt-6-luna" target="_blank" rel="noopener">&#128279; VentureBeat</a>
+    </div>
+
+    <div class="dt-card media">
+      <span class="dt-relevance media">&#128993; Media Relevancia</span>
+      <h3>LangChain4j 1.22.0: caching automatico com Anthropic e modelos de decisao</h3>
+      <p>A versao 1.22.0 do LangChain4j trouxe tres novidades que merecem atencao. A mais relevante para o ecosistema Java com Anthropic e o <strong>suporte automatico a prompt caching</strong> &mdash; incluindo controle de TTL. Na pratica, isso significa que prompts de sistema extensos (documentos de contexto, instrucoes de agente) podem ser cacheados no lado da Anthropic, reduzindo custo e latencia em chamadas repetidas.</p>
+      <p>A segunda novidade sao os <strong>modelos de decisao via OpenAI Decisions API</strong>, com suporte a <code>OpenAiDecisionModel</code> e <code>OpenAiOfficialDecisionModel</code>. Isso abre um padrao interessante: usar um modelo leve e barato para classificacao e roteamento de intencoes antes de acionar modelos maiores. E a terceira e o <code>BedrockBatchChatModel</code> para inferencia em lote na AWS Bedrock, util para pipelines offline de alto volume.</p>
+      <p>Um ponto de atencao: o Spring Boot starter do LangChain4j ainda esta em beta para a versao 1.22. Quem usa Spring Boot 3.x deve continuar em Spring AI 1.1.x por ora; quem ja migrou para Spring Boot 4 pode explorar as novas APIs de integracao.</p>
+      <a class="dt-source" href="https://github.com/langchain4j/langchain4j/releases" target="_blank" rel="noopener">&#128279; GitHub LangChain4j</a>
+    </div>
+
+    <div class="dt-card media">
+      <span class="dt-relevance media">&#128993; Media Relevancia</span>
+      <h3>FinOps para LLMs: 73% das empresas estouraram o orcamento em 2026</h3>
+      <p>Um levantamento publicado esta semana traz um dado que precisa de atencao de qualquer CTO ou arquiteto que esteja escalando uso de IA: <strong>73% das empresas que adotaram LLMs em producao em 2026 reportaram estouro de orcamento</strong>. Ao mesmo tempo, 98% delas ja dizem monitorar gastos com IA &mdash; contra apenas 31% dois anos atras. Ou seja, a consciencia cresceu, mas o controle ainda nao acompanhou.</p>
+      <p>O problema e estrutural. Ao contrario do cloud tradicional, onde os SKUs sao estaveis e a visibilidade e granular, os LLMs tem precificacao volatil (mudancas semanais de SKU), disponibilidade de GPU imprevisivel e praticas de engenharia ainda imaturas para atribuicao de custo por tenant ou por fluxo. Provedores como Anthropic e OpenAI expoe alguma visibilidade em nivel de desenvolvedor, mas AWS Bedrock perde completamente o rastreamento por desenvolvedor, segundo analise da Vantage.</p>
+      <p>As ferramentas mais citadas em producao sao: <strong>Langfuse</strong> e <strong>LangSmith</strong> para tracing por cadeia, <strong>LiteLLM</strong> e <strong>Helicone</strong> como gateways de custo no caminho das requisicoes, e <strong>Finout</strong> e <strong>CloudZero</strong> para consolidacao de fatura e alocacao por equipe. Nenhuma ainda entrega monitoramento granular de token + LLM + GPU em escala enterprise, segundo os proprios praticantes.</p>
+      <a class="dt-source" href="https://finopsweekly.com/?p=8307" target="_blank" rel="noopener">&#128279; FinOps Weekly</a>
+    </div>
+
+    <div class="dt-card baixa">
+      <span class="dt-relevance baixa">&#128994; Baixa Relevancia</span>
+      <h3>OpenAI lanca GPT-6.1 Sol, pausando o Astra</h3>
+      <p>A OpenAI lancou o GPT-6.1 Sol no final de setembro, posicionado como um modelo que <strong>entrega desempenho proximo ao GPT-6 Astra com menor custo</strong>. O timing coincide com o lançamento do Haiku 5.5 pela Anthropic, e o padrao e claro: todos os grandes laboratorios estao comprimindo o trade-off entre capacidade e custo em seus tiers intermediarios.</p>
+      <p>Um detalhe que merece registro: a OpenAI pausou o desenvolvimento do GPT-6.1 Astra dias antes do lancamento do Sol, citando preocupacoes internas. Isso nao e algo que deva mudar sua estrategia imediatamente, mas vale monitorar &mdash; decisoes de pausar modelos de fronteira por razoes de segurança estao se tornando mais frequentes nos grandes labs.</p>
+      <a class="dt-source" href="https://www.microcenter.com/site/mc-news/article/this-week-in-ai-oct-2-2026.aspx" target="_blank" rel="noopener">&#128279; Microcenter AI Weekly</a>
+    </div>
+
+  </div>
+
+  <div class="dt-divider"></div>
+
+  <div class="dt-section">
+    <h2>&#128218; O que vale estudar hoje</h2>
+    <p>Com base no que acompanhei hoje, estes sao os temas e recursos que recomendo explorar:</p>
+    <div class="dt-grid">
+
+      <div class="dt-grid-card">
+        <span class="ico">&#9889;</span>
+        <h3>Effort controls no Claude Haiku 5.5</h3>
+        <p>Entenda como calibrar o nivel de esforco por chamada para equilibrar custo e qualidade em pipelines multi-agente com Anthropic.</p>
+      </div>
+
+      <div class="dt-grid-card">
+        <span class="ico">&#128204;</span>
+        <h3>Prompt caching no LangChain4j 1.22</h3>
+        <p>O caching automatico com Anthropic pode reduzir drasticamente o custo de aplicacoes Java com contextos de sistema extensos.</p>
+      </div>
+
+      <div class="dt-grid-card">
+        <span class="ico">&#128101;</span>
+        <h3>Agentic RAG com LangGraph</h3>
+        <p>O padrao Corrective RAG &mdash; com agente de validacao que reformula a query quando os documentos sao irrelevantes &mdash; esta ganhando tracoa em producao.</p>
+      </div>
+
+      <div class="dt-grid-card">
+        <span class="ico">&#128200;</span>
+        <h3>Langfuse + LiteLLM para FinOps</h3>
+        <p>Comece por aqui para ter visibilidade de custo por cadeia e por tenant antes que o orcamento de LLM escape do controle.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="dt-divider"></div>
+
+  <div class="dt-section dt-ignore">
+    <h2>&#128263; O que pode ser ignorado hoje</h2>
+    <p>Nem tudo que aparece no feed merece atencao. Hoje, estes temas podem esperar:</p>
+
+    <div class="dt-card">
+      <h3>Gemini Nano Banana 2.1 da Google</h3>
+      <p>Modelo de geracao de imagens lancado em 6 de outubro &mdash; relevante para casos de uso muito especificos, mas sem impacto imediato para arquiteturas corporativas Java. Pode esperar ate haver integracao madura com os SDKs que ja usamos.</p>
+    </div>
+
+    <div class="dt-card">
+      <h3>Hype sobre "AI agents vao substituir equipes inteiras de TI"</h3>
+      <p>O tema continua circulando em blogs e LinkedIn. Sem casos reais documentados em producao com metricas de ROI verificaveis. Ignore por enquanto e foque nos padroes de orquestracao que ja tem evidencia empirica.</p>
+    </div>
+
+  </div>
+
+  <div class="dt-divider"></div>
+
+  <div class="dt-section">
+    <div class="dt-radar">
+      <h2>&#9749; Radar Java + IA</h2>
+      <p>A semana foi movimentada no ecosistema Java com IA. Dois marcos merecem destaque direto:</p>
+
+      <h3>LangChain4j 1.22.0: caching, decisao e lote</h3>
+      <p>A versao GA 1.22.0 do LangChain4j consolida tres direcoes diferentes em um unico release. O <strong>prompt caching da Anthropic com TTL configuravel</strong> e o item de maior impacto financeiro imediato. Se voce tem um AI Service com um system prompt extenso rodando em alta frequencia, implementar caching pode reduzir o custo de entrada em ate 80%. O trecho abaixo mostra a configuracao minima:</p>
+
+      <div class="dt-pre"><code>// LangChain4j 1.22.0 + Anthropic prompt caching
+AnthropicChatModel model = AnthropicChatModel.builder()
+    .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+    .modelName(AnthropicChatModelName.CLAUDE_HAIKU_5_5)
+    .cacheSystemMessages(true)
+    .cacheTtlSeconds(300)
+    .build();</code></div>
+
+      <h3>Spring AI 2.0 com Spring Boot 4: breaking changes reais</h3>
+      <p>Spring AI 2.0 foi GA em junho de 2026 e requer Spring Boot 4. A migracao de 1.x nao e trivial: houve redesenho de APIs de structured output e tool calling. <strong>Quem ainda esta em Spring Boot 3.x deve permanecer em Spring AI 1.1.x</strong>, que segue com manutencao ativa. Nao faca a migracao so por pressao de versao &mdash; avalie os breaking changes com cuidado antes de planejar a atualizacao.</p>
+
+      <h3>O que monitorar</h3>
+      <div class="dt-tags" style="margin-top: 8px;">
+        <span class="dt-tag dt-tag-cyan">LangChain4j 1.23 (previsto)</span>
+        <span class="dt-tag dt-tag-green">Spring Boot 4 GA</span>
+        <span class="dt-tag dt-tag-amber">Haiku 5.5 no Bedrock Java SDK</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="dt-footer">
+  <div class="dt-wrap">
+
+    <div class="dt-author">
+      <img
+        src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+        alt="Ray da Costa"
+      />
+      <div>
+        <h4>Ray da Costa</h4>
+        <p>Fundador da Wrapper Sistemas &middot; Arquiteto de Software &middot; Especialista em Java e IA Aplicada</p>
+      </div>
+    </div>
+
+    <p style="color: var(--text-muted); font-size: 15px; line-height: 1.7; margin-bottom: 8px;">O lancamento do Haiku 5.5 e o que mais me ocupa hoje. Nao porque e um modelo novo &mdash; mas porque ele muda o custo-base de qualquer arquitetura que usa Anthropic em alto volume. Se voce ainda nao revisou seus pipelines de classificacao e sumarizacao a luz dessa nova precificacao, esse e o momento. Amanha continuo acompanhando como os frameworks Java vao absorver o effort control nas suas abstraocoes de AI Service.</p>
+
+    <div class="dt-closing">
+      <p>Ate amanha. <span>&mdash; Ray</span></p>
+    </div>
+
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
