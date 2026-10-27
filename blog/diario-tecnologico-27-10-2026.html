@@ -1,0 +1,166 @@
+<style>
+.ra-art{background:#0B1220;color:#E5E7EB;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.75;padding:40px 16px;border-radius:12px;overflow-wrap:anywhere}
+.ra-wrap{max-width:720px;margin:0 auto}
+.ra-art h2{color:#F8FAFC;font-size:1.55em;line-height:1.3;margin:2.2em 0 .6em;letter-spacing:-.01em}
+.ra-art h3{color:#F8FAFC;font-size:1.18em;line-height:1.35;margin:1.8em 0 .5em}
+.ra-art p{margin:0 0 1.1em}
+.ra-art strong{color:#F8FAFC}
+.ra-art a{color:#38BDF8;text-decoration:underline;text-underline-offset:3px}
+.ra-art a:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}
+.ra-art ul,.ra-art ol{margin:0 0 1.2em;padding-left:1.3em}
+.ra-art li{margin:.35em 0}
+.ra-art code{font-family:"JetBrains Mono",Consolas,monospace;font-size:.9em;background:#111827;border:1px solid #1E3A52;border-radius:4px;padding:.05em .35em}
+.ra-art pre{background:#111827;border:1px solid #1E3A52;border-radius:8px;padding:14px 16px;overflow-x:auto;margin:0 0 1.2em;line-height:1.55}
+.ra-art pre code{background:none;border:0;padding:0;font-size:.86em}
+.ra-lead{font-size:1.12em;color:#CBD5E1;border-left:3px solid #38BDF8;padding-left:16px;margin-bottom:1.6em}
+.ra-card{background:#13283A;border:1px solid #1E3A52;border-top:3px solid #38BDF8;border-radius:12px;padding:20px 22px;margin:1.8em 0}
+.ra-card h4{color:#38BDF8;font-size:.82em;text-transform:uppercase;letter-spacing:.08em;margin:0 0 .6em}
+.ra-card>:last-child{margin-bottom:0}
+.ra-card.ra-warn{border-top-color:#FBBF24}.ra-card.ra-warn h4{color:#FBBF24}
+.ra-card.ra-ok{border-top-color:#34D399}.ra-card.ra-ok h4{color:#34D399}
+.ra-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:1.4em 0}
+.ra-grid .ra-card{margin:0}
+.ra-steps{counter-reset:s;list-style:none;padding-left:0!important}
+.ra-steps li{counter-increment:s;position:relative;padding-left:2.4em;margin:.7em 0}
+.ra-steps li::before{content:counter(s);position:absolute;left:0;top:.1em;width:1.7em;height:1.7em;border-radius:50%;background:#38BDF8;color:#0B1220;font-weight:700;font-size:.85em;display:flex;align-items:center;justify-content:center}
+.ra-tbl{overflow-x:auto;margin:1.4em 0 1.6em;border:1px solid #1E3A52;border-radius:10px}
+.ra-tbl table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}
+.ra-tbl th{background:#13283A;color:#F8FAFC;text-align:left;padding:10px 12px;font-weight:600;border-bottom:1px solid #1E3A52}
+.ra-tbl td{color:#E5E7EB;padding:9px 12px;border-bottom:1px solid #1A2638;vertical-align:top}
+.ra-tbl tr:last-child td{border-bottom:none}
+.ra-art figure{margin:1.6em 0}.ra-art figcaption{font-size:.85em;color:#94A3B8;margin-top:.5em}
+.ra-note{font-size:.88em;color:#94A3B8}
+.ra-next ol{padding-left:1.3em}
+.ra-rec{display:inline-block;margin-left:.4em;padding:.05em .55em;border-radius:999px;background:#38BDF8;color:#0B1220;font-size:.78em;font-weight:700}
+.ra-refs{font-size:.86em;color:#94A3B8}
+.ra-refs a{color:#7DD3FC;word-break:break-all}
+@media (max-width:600px){.ra-art{font-size:16px;padding:28px 14px}.ra-card{padding:16px}.ra-art h2{font-size:1.4em}}
+</style>
+<div class="ra-art"><div class="ra-wrap">
+
+<p class="ra-lead">O ecossistema Java com IA está acelerando a passos largos: LangChain4j lançou a versão 1.22.0 com suporte a Anthropic prompt caching — o que pode mudar significativamente o custo de operação de agentes Java em produção. Ao mesmo tempo, o Gartner emitiu um alerta real sobre custos agênticos que todo arquiteto de software precisa levar a sério.</p>
+
+<div class="ra-card" aria-label="O que você vai aprender">
+<h4>O que você vai aprender</h4>
+<ul>
+  <li>O que mudou no LangChain4j 1.21.0 e 1.22.0 e por que importa para projetos Java com IA</li>
+  <li>O impacto do corte de preço do cache no Claude Sonnet 5.5 para arquiteturas RAG</li>
+  <li>Por que o Gartner projeta cancelamento de mais de 40% dos projetos agênticos e como evitar esse destino</li>
+  <li>Como a chegada do Spring AI 2.1.0-M1 afeta a escolha de framework para times Java</li>
+</ul>
+</div>
+
+<h2>A semana foi densa no ecossistema Java + IA</h2>
+
+<p>Acompanho há meses a corrida entre Spring AI e LangChain4j para definir quem vai ser o framework de referência para times Java que trabalham com IA aplicada. Esta semana, as duas stacks entregaram novidades relevantes quase ao mesmo tempo — e eu precisei sentar, testar e pensar sobre o impacto real de cada uma.</p>
+
+<p>O que mais me chamou a atenção não foi só o lançamento técnico, mas a combinação entre ele e a queda de preço no cache de prompts do Claude Sonnet 5.5, que aconteceu em 7 de outubro. A Anthropic reduziu o custo de leitura de cache para $0,10 por milhão de tokens — e o LangChain4j 1.22.0 trouxe suporte nativo ao Anthropic prompt caching. Isso não é coincidência: é janela de oportunidade para projetos Java em produção.</p>
+
+<p>Ao mesmo tempo, o Gartner publicou em 26 de outubro as tendências de infraestrutura e operações de TI para 2027, e o alerta sobre custos agênticos não é para ignorar. Vou trazer os números aqui.</p>
+
+<h2>LangChain4j 1.21.0 e 1.22.0 — o que mudou</h2>
+
+<p>O LangChain4j lançou duas versões em sequência rápida nas primeiras semanas de outubro. A 1.21.0 (2 de outubro) trouxe o conceito de <strong>Decision Models e Decision Services</strong> — uma abstração para roteamento de modelos, seleção dinâmica de ferramentas (tool selection), reranking de RAG com query routing e guardrails integrados. É a primeira vez que o framework oferece uma camada de roteamento nativa, sem precisar de lógica de orquestração manual <a href="https://www.infoq.com/news/2026/10/java-news-roundup-oct05-2026/">[1]</a>.</p>
+
+<div class="ra-card" aria-label="O que é um Decision Model">
+<h4>Conceito essencial — Decision Model</h4>
+<p>Um Decision Model no LangChain4j 1.21.0 é uma interface Java anotada que define <em>quando usar qual modelo ou ferramenta</em>, com base no conteúdo do prompt ou no contexto da sessão. O framework resolve o roteamento em tempo de execução, sem if/else no código de aplicação. É uma abstração análoga ao que LangGraph oferece em Python, mas com tipagem estática e integração com Spring/CDI.</p>
+</div>
+
+<p>A 1.22.0 (8 de outubro) foi além: adicionou suporte ao <strong>OpenAI Decisions API</strong>, melhorias no Decision Service, inferência em lote no Bedrock e — o que mais me interessa — suporte ao <strong>Anthropic prompt caching</strong>. Isso significa que posso configurar partes do prompt (system prompt longo, base de conhecimento estática, exemplos few-shot) para serem cacheadas diretamente na API da Anthropic, reduzindo custo e latência em chamadas repetidas <a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0">[2]</a>.</p>
+
+<div class="ra-card ra-ok" aria-label="Impacto prático do prompt caching">
+<h4>Impacto prático — Anthropic prompt caching</h4>
+<p>Em uma aplicação RAG típica, o system prompt com instruções e contexto fixo pode chegar facilmente a 50.000 tokens. Sem caching, cada chamada paga o custo de entrada integral. Com caching, a primeira chamada escreve o cache e as subsequentes leem a $0,10 por milhão — redução de 95% no custo do bloco cacheado. Em workloads de alto volume, isso muda completamente o TCO do sistema.</p>
+</div>
+
+<h2>Claude Sonnet 5.5 — preço do cache cortado em outubro</h2>
+
+<p>O Claude Sonnet 5.5 foi lançado em 28 de setembro, posicionado como o modelo de velocidade da família 5.5 — 30% mais rápido que o Sonnet 5 e com custo por tarefa até 30% menor, segundo a própria Anthropic. Em 7 de outubro, a empresa cortou o preço de leitura de cache para $0,10 por milhão de tokens, na metade do valor anterior <a href="https://benchlm.ai/anthropic/api-pricing">[3]</a>.</p>
+
+<div class="ra-tbl">
+<table>
+  <thead>
+    <tr>
+      <th>Modelo</th>
+      <th>Input ($/M)</th>
+      <th>Output ($/M)</th>
+      <th>Cache Read ($/M)</th>
+      <th>Contexto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Claude Opus 5.5</td>
+      <td>$4,00</td>
+      <td>$20,00</td>
+      <td>—</td>
+      <td>1M tokens</td>
+    </tr>
+    <tr>
+      <td>Claude Sonnet 5.5</td>
+      <td>$2,00</td>
+      <td>$10,00</td>
+      <td>$0,10</td>
+      <td>1M tokens</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Para projetos Java enterprise que usam Sonnet 5.5 com RAG e prompts de sistema longos, a combinação LangChain4j 1.22.0 + caching no Sonnet 5.5 é a decisão de custo mais relevante desta semana. O Opus 5.5 — lançado em 22 de setembro, com pensamento adaptativo sempre ativo — ainda é o modelo de referência para raciocínio complexo, mas o custo proibitivo o mantém fora da maioria dos workloads de produção <a href="https://atomicagent.io/blog/claude-sonnet-5-5/">[4]</a>.</p>
+
+<h2>Gartner alerta: 40% dos projetos agênticos serão cancelados até 2027</h2>
+
+<p>O Gartner publicou em 26 de outubro suas tendências de topo para infraestrutura e operações de TI em 2027. O dado que mais me preocupa: a projeção de que <strong>mais de 40% dos projetos de IA agêntica serão cancelados</strong> até o final de 2027 — por escalada de custos, ROI indefinido ou controles de risco insuficientes <a href="https://gartner.com/en/newsroom/press-releases/2026-10-26-gartner-identifies-the-top-ai-trends-in-infrastructure-and-it-operations-for-2027">[5]</a>.</p>
+
+<p>O Gartner também destaca que times de Infraestrutura e Operações (I&amp;O) estão emergindo como orquestradores de plataformas de IA corporativas — o que muda o papel do time de operações de forma significativa. A análise da EY reforça com um número concreto: uma conversa que custa $0,04 com um modelo direto pode custar $1,20 quando adicionamos ferramentas, planejamento e subagentes em uma cadeia orquestrada <a href="https://www.ey.com/en_lu/insights/ai/agentic-ai-entreprise-token-cost">[6]</a>.</p>
+
+<div class="ra-card ra-warn" aria-label="Alerta FinOps para agentes">
+<h4>Alerta — FinOps para agentes em Java</h4>
+<ul>
+  <li><strong>Instrumentação antes de produção:</strong> meça tokens por tarefa, por agente e por usuário desde o dia zero. Sem observabilidade de tokens, o custo agêntico é invisível até a fatura.</li>
+  <li><strong>Caching como obrigação, não otimização:</strong> com o LangChain4j 1.22.0 e o Sonnet 5.5, não há justificativa para não usar prompt caching em system prompts fixos.</li>
+  <li><strong>Limite de profundidade de orquestração:</strong> defina um máximo de iterações e subagentes por tarefa. Sem limites, loops agênticos consomem tokens de forma imprevisível.</li>
+</ul>
+</div>
+
+<h2>Spring AI 2.1.0-M1 e a reorganização do ecossistema</h2>
+
+<p>O Spring AI lançou o milestone 2.1.0-M1 em 25 de setembro, sobre a base do Spring Boot 4 e Spring Framework 7. A decisão mais importante do Spring AI 2.0 foi mover as integrações com OpenAI, Anthropic e Google para os próprios SDKs dos fornecedores — reduzindo o core do framework e entregando para os vendors a responsabilidade de manter as integrações atualizadas <a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0">[2]</a>.</p>
+
+<p>Isso tem implicações diretas para times Java: a escolha entre Spring AI e LangChain4j agora envolve também uma decisão sobre cadência de atualização. O LangChain4j 1.22.0 já suporta Anthropic prompt caching; o Spring AI 2.1.0-M1 ainda está em milestone. Se você precisa de features de ponta agora, o LangChain4j está na frente. Se precisa de integração profunda com o ecossistema Spring (segurança, observabilidade, configuração), o Spring AI é o caminho natural.</p>
+
+<h2>Google Gemini 4 Argon e o que vem depois</h2>
+
+<p>O Google lançou o Gemini 4 Argon, sendo posicionado como o segundo modelo mais capaz no Artificial Analysis Intelligence Index — atrás apenas do Claude Opus 5.5 e do Claude Sonnet 5.5. A CNBC noticiou que o rollout começou com parceiros de cibersegurança <a href="https://www.cnbc.com/2026/10/02/tech-download-google-argon-frontier-openai-anthropic.html">[7]</a>. Um relatório do The Information de 19 de outubro indica que o Google já desenvolve o Gemini 4 Carbon, atualização do Argon — mas sem datas confirmadas.</p>
+
+<h2>Conclusão</h2>
+
+<p>A semana de 27 de outubro de 2026 foi de consolidação no ecossistema Java com IA. O par LangChain4j 1.22.0 + Anthropic prompt caching é a decisão técnica mais acionável desta semana para times Java: a implementação é direta, o impacto em custo é mensurável e o risco é baixo. O alerta do Gartner sobre cancelamento de projetos agênticos não é hype — é a consequência previsível de quem construiu provas de conceito sem arquitetar observabilidade e controle de custo desde o início.</p>
+
+<p>Estamos em um momento em que os frameworks Java para IA chegaram à maturidade suficiente para produção. A questão não é mais "se Java com IA funciona" — é "qual arquitetura Java com IA sustenta o custo em produção". Essa é a pergunta que vou continuar respondendo aqui.</p>
+
+<h2>Fontes consultadas</h2>
+<ol class="ra-refs">
+  <li><a href="https://www.infoq.com/news/2026/10/java-news-roundup-oct05-2026/">Java News Roundup — InfoQ</a> (acesso em 27/10/2026)</li>
+  <li><a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0">Spring AI vs LangChain4j in October 2026 — DEV Community</a> (acesso em 27/10/2026)</li>
+  <li><a href="https://benchlm.ai/anthropic/api-pricing">Claude API Pricing October 2026 — BenchLM</a> (acesso em 27/10/2026)</li>
+  <li><a href="https://atomicagent.io/blog/claude-sonnet-5-5/">Sonnet 5.5 vs Opus 5.5 — AtomicAgent</a> (acesso em 27/10/2026)</li>
+  <li><a href="https://gartner.com/en/newsroom/press-releases/2026-10-26-gartner-identifies-the-top-ai-trends-in-infrastructure-and-it-operations-for-2027">Gartner Top AI Trends in Infrastructure and IT Operations for 2027 — Gartner</a> (acesso em 27/10/2026)</li>
+  <li><a href="https://www.ey.com/en_lu/insights/ai/agentic-ai-entreprise-token-cost">Agentic AI Token Cost — EY</a> (acesso em 27/10/2026)</li>
+  <li><a href="https://www.cnbc.com/2026/10/02/tech-download-google-argon-frontier-openai-anthropic.html">Google Argon Frontier — CNBC</a> (acesso em 27/10/2026)</li>
+  <li><a href="https://cloudinsight.cc/en/blog/claude-opus-5-5-sonnet-5-5-guide">Claude Opus 5.5 and Sonnet 5.5 Guide — CloudInsight</a> (acesso em 27/10/2026)</li>
+</ol>
+
+<div class="ra-next" aria-label="Próximo artigo">
+<h2>Qual tema você gostaria de ver no próximo artigo?</h2>
+<ol>
+  <li><strong>Implementando Anthropic prompt caching com LangChain4j 1.22.0 no Spring Boot</strong> <span class="ra-rec">★ Recomendado para continuar</span><br>Você aprenderá a configurar caching de prompts em uma aplicação Java real, medir o impacto em custo e latência, e criar testes que validam o comportamento do cache em produção.</li>
+  <li><strong>FinOps para agentes Java: como instrumentar e controlar custo de tokens em produção</strong><br>Você aprenderá a instrumentar métricas de consumo de tokens por agente e por usuário, criar alertas de custo e definir limites de orquestração para evitar explosões de custo em produção.</li>
+  <li><strong>Spring AI 2.1 vs LangChain4j 1.22: guia prático de decisão para times Java</strong><br>Você aprenderá os critérios técnicos concretos para escolher entre os dois frameworks, com benchmarks de velocidade de desenvolvimento, suporte a features e integração com infraestrutura Spring existente.</li>
+</ol>
+<p>Marque o tema que você mais gostaria de ver ou colocar em prática.</p>
+</div>
+
+</div></div>
