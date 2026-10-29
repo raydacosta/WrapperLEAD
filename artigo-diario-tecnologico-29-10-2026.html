@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 29/10/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section { padding: 60px 0; }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon { font-size: 28px; }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p { color: var(--text); margin-bottom: 16px; }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 { font-size: 16px; margin-bottom: 8px; }
+    .grid-card p { font-size: 14px; color: var(--text-muted); margin: 0; }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 { color: #34d399; border: none; }
+    .radar-java h3 { color: #6ee7b7; }
+    .radar-java p { color: #a7f3d0; opacity: 0.85; }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section { opacity: 0.7; }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p { font-size: 14px; color: var(--text-muted); margin: 0; }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span { color: var(--cyan); }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 29/10/2026</div>
+      <h1>Diário Tecnológico — 29 de outubro de 2026</h1>
+      <p class="excerpt">Anthropic lança Claude Duet, o agente proativo que age enquanto você dorme; família Claude 5.5 com Opus 40% mais barato; OpenAI DevDay com GPT-6.1 Terra e Decisions API; LangChain4j 1.20 muda modos de execução nos AI Services.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-cyan">Anthropic</span>
+        <span class="tag tag-violet">OpenAI</span>
+        <span class="tag tag-amber">Spring AI</span>
+        <span class="tag tag-cyan">Agentes</span>
+        <span class="tag tag-violet">RAG</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section id="intro">
+      <p>Outubro de 2026 está encerrando com uma densidade de anúncios que poucos ciclos anteriores conseguiram igualar. Nos últimos dias, Anthropic, OpenAI e Google lançaram modelos, mudaram preços, abriram previews e movimentaram o ecossistema de formas que têm impacto direto em quem trabalha com IA aplicada em produção. Não é hype de ciclo: são mudanças de API, breaking changes de frameworks e novos primitivos que precisam entrar no nosso kit de ferramentas agora.</p>
+      <p>Do lado da Anthropic, a semana foi especialmente significativa. A família Claude 5.5 ganhou seu membro mais capaz — o Opus 5.5 — com 40% de redução de custo em relação ao Opus 5 para cargas típicas, liderando benchmarks de programação agêntica. E em 21 de outubro, a empresa abriu a lista de espera para o <strong>Claude Duet</strong>: um agente proativo que roda numa máquina virtual na nuvem, monitora seus aplicativos conectados, envia briefings matinais e continua trabalhando quando você fecha o laptop. Isso já não é experimento — é produto.</p>
+      <p>Para o ecossistema Java, o evento mais importante da semana foi técnico e discreto: o LangChain4j 1.20 introduziu uma mudança de comportamento nos AI Services que pode quebrar código em produção silenciosamente. Se você mantém uma base Java com esse framework, leia a seção Radar Java + IA antes de qualquer atualização de dependência.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Anthropic: Claude Duet e a família Claude 5.5 completa</h3>
+        <p>Em 21 de outubro de 2026, a Anthropic abriu a lista de espera para a prévia de pesquisa do <strong>Claude Duet</strong> — disponível inicialmente apenas para assinantes Pro e Max nos EUA. O que torna o Duet diferente de outros produtos de IA não é só o que ele faz, mas como ele opera: roda em uma máquina virtual na nuvem com um navegador, o que significa que ele continua executando tarefas mesmo depois que você fecha o laptop ou o celular. Ele monitora aplicativos conectados, envia um briefing matinal com o que precisa da sua atenção, e executa tarefas por você — com uma salvaguarda importante: ações sensíveis como mensagens, pagamentos, assinatura de documentos e exclusões ainda requerem sua aprovação explícita.</p>
+        <p>Rodando sobre o <strong>Claude Opus 5.5</strong>, o Duet vem em um momento em que a Anthropic também atualizou toda a família: o Opus 5.5 custa 40% menos do que o Opus 5 para cargas típicas e lidera benchmarks de programação agêntica. O <strong>Sonnet 5.5</strong> chegou 30% mais rápido e 30% mais barato. O <strong>Haiku 5.5</strong>, lançado em 7 de outubro, foi projetado para subagentes e volumes altos. Em paralelo, a empresa abriu em beta os <strong>Dynamic Workflows</strong>, com suporte a coordenação de até 1.000 subagentes por agente.</p>
+        <p>Do ponto de vista prático: a redução de custo no Opus 5.5 já justifica reavaliar workloads que antes eram inviáveis economicamente. Se você estava usando Sonnet em tarefas complexas por razões de custo, recalcule com o novo Opus — a matemática mudou.</p>
+        <a class="card-source" href="https://www.cnbc.com/2026/10/21/anthropic-preview-of-claude-duet-personal-ai-agent-take-on-muse-dots.html" target="_blank" rel="noopener">🔗 CNBC — Anthropic anuncia prévia do Claude Duet</a>
+        <br>
+        <a class="card-source" href="https://claude.com/resources/articles/claude-duet" target="_blank" rel="noopener">🔗 Anthropic — Introducing Claude Duet</a>
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>OpenAI DevDay 2026: GPT-6.1 Terra, Decisions API e os agentes Dots</h3>
+        <p>O DevDay 2026 da OpenAI trouxe mais de 20 anúncios. O que ficou com mais peso na minha análise: o <strong>GPT-6.1 Terra</strong>, lançado em 26 de outubro, é o modelo da empresa voltado para computer use — automação de interface de computador — com precificação de US$ 1/US$ 5 por milhão de tokens de entrada e saída. Isso torna tarefas de automação de interface economicamente viáveis em escala pela primeira vez. Vale notar: o <strong>GPT-6.1 Astra</strong>, que estava previsto para outubro, foi adiado após testes de segurança internos, segundo o Wall Street Journal.</p>
+        <p>O outro anúncio que merece atenção imediata é a <strong>Decisions API</strong>, atualmente em prévia limitada. Ela foi projetada para classificar conteúdo e direcionar requisições — exatamente o tipo de primitivo que faz diferença em arquiteturas de roteamento inteligente de múltiplos modelos. Para quem constrói gateways de IA ou sistemas multi-modelo, este é o anúncio mais subestimado do DevDay. Os <strong>agentes Dots</strong> também foram apresentados: rodam sobre o GPT-6 Astra, acessam aplicativos conectados e mantêm contexto entre conversas. O <strong>ChatGPT Space</strong> completa a oferta com um espaço colaborativo para equipes.</p>
+        <p>A Decisions API é o que eu vou estudar primeiro nesta semana. Roteamento semântico nativo elimina uma camada de complexidade que muitas equipes estão construindo à mão hoje. Quando sair da prévia, vai mudar arquiteturas de gateway.</p>
+        <a class="card-source" href="https://openai.com/index/devday-2026-recap/" target="_blank" rel="noopener">🔗 OpenAI — DevDay 2026 Recap</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Gemini 4 Argon disponível globalmente com foco em programação e segurança</h3>
+        <p>Em 13 de outubro, o Google lançou globalmente o <strong>Gemini 4 Argon</strong>, com melhorias focadas em programação e tarefas de cibersegurança. O Google Cloud também apresentou um agente de trabalho para o Gemini capaz de executar tarefas de múltiplos dias usando sistemas internos da empresa — uma indicação de que a aposta do Google em agentes de longa duração está ganhando concretude além de demos.</p>
+        <p>Para quem usa a API do Google em produção: vale comparar o Argon nas suas tarefas específicas antes de migrar. As melhorias por versão de Gemini em tarefas de código têm sido consistentes, mas os ganhos variam por domínio e tipo de tarefa.</p>
+        <a class="card-source" href="https://buildez.ai/blog/ai-new-model-explosion-october-2026-builders" target="_blank" rel="noopener">🔗 BuildEZ — AI New Model Releases October 2026</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>LangChain4j 1.20: breaking change nos AI Services — atenção antes do upgrade</h3>
+        <p>O <strong>LangChain4j 1.20</strong>, com patch 1.20.1 lançado em 25 de setembro de 2026, introduziu uma mudança comportamental importante nos AI Services: o tipo de retorno do método agora determina automaticamente o modo de execução — bloqueante (<code>String</code>), assíncrono (<code>CompletableFuture&lt;String&gt;</code>), reativo ou streaming. Antes dessa versão, o modo de execução era configurado de forma mais explícita e desacoplada do tipo de retorno.</p>
+        <p>Se você mantém código Java com LangChain4j em produção, revise os tipos de retorno dos seus AI Services antes de atualizar. Uma declaração de retorno inadequada pode silenciosamente mudar como sua aplicação executa as chamadas. Detalho isso com código na seção Radar Java + IA.</p>
+        <a class="card-source" href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0" target="_blank" rel="noopener">🔗 DEV Community — Spring AI vs LangChain4j in October 2026</a>
+      </div>
+
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>Meta Muse: família de modelos abertos chega ao HuggingFace</h3>
+        <p>A Meta lançou três modelos da família Muse em outubro: <strong>Muse Wonder</strong> e <strong>Muse Wonder Full</strong> em 12 de outubro, e o <strong>Muse Spark Open</strong> em 15 de outubro, com pesos disponíveis no HuggingFace sob licença própria da Meta. A framing do mercado posicionou o Muse como resposta ao Claude Duet e ao Dots da OpenAI — o que é discutível em termos de maturidade.</p>
+        <p>Para o contexto de IA enterprise e aplicada em Java que acompanho aqui, esses modelos ainda não têm a infraestrutura de suporte e maturidade operacional para competir com as ofertas das big labs em uso corporativo. Vale monitorar a aceitação da comunidade, mas sem urgência de avaliação.</p>
+        <a class="card-source" href="https://aiagentsdirectory.com/news/ai-agents-news-brief-october-28-2026" target="_blank" rel="noopener">🔗 AI Agents Directory — News Brief Oct 28, 2026</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🤖</span>
+          <h3>Claude Duet — design de agentes proativos</h3>
+          <p>O paradigma de agentes que agem sem esperar instrução está tomando forma concreta. Entender como projetar sistemas que operem com autonomia controlada é essencial agora, antes que vire exigência de mercado.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔀</span>
+          <h3>Decisions API da OpenAI</h3>
+          <p>Roteamento semântico nativo para classificar e direcionar requisições entre modelos. Ainda em prévia limitada, mas representa uma mudança arquitetural relevante para quem constrói gateways de IA corporativa.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>LangChain4j 1.20 — novos modos de execução</h3>
+          <p>Breaking change relevante: o tipo de retorno dos AI Services agora determina o modo de execução. Revise antes de atualizar dependências em produção. A seção Radar Java + IA tem o detalhe técnico.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔍</span>
+          <h3>Agentic RAG com LangGraph (2026)</h3>
+          <p>Padrões de RAG agêntico com múltiplas chamadas de LLM por query estão se tornando o padrão para sistemas de busca semântica complexos. LangGraph e o OpenAI Agents SDK dominam esse espaço.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">📊</span>
+          <h3>Observabilidade de agentes em produção</h3>
+          <p>Com complexidade agêntica crescendo, ferramentas como Arize Phoenix (drift de embeddings, relevância de retrieval) e TruLens (groundedness em RAG) viram componentes críticos de qualquer stack enterprise.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🌱</span>
+          <h3>Spring AI 2.1.0-M1</h3>
+          <p>O primeiro milestone da linha 2.1 saiu em 25 de setembro. Para times já em Spring Boot 4, vale acompanhar o roadmap antes que a 2.1 entre em GA e traga novas decisões de migração.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar:</p>
+
+      <div class="highlight-card">
+        <h3>Genie 4 do Google DeepMind — modelos de mundo interativos</h3>
+        <p>Interessante como direção de pesquisa, mas completamente fora do horizonte de aplicação enterprise. Modelos de mundo interativos vivem no domínio de papers e demos controlados. Ignore até que alguma aplicação concreta surja.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Mistral Large 4 — aguardar avaliação independente</h3>
+        <p>O Mistral Large 4 foi anunciado, mas a cobertura disponível é escassa e provém de fontes não primárias. Sem benchmarks independentes e documentação técnica completa, não há como avaliar o impacto real. Aguarde antes de incluir em qualquer decisão arquitetural.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Opera WebAI — IA local no navegador</h3>
+        <p>Curioso como feature de produto de consumo, mas sem relevância para desenvolvimento enterprise ou integração com backend Java. Desativado por padrão e voltado para uso pessoal. Não impacta o que a Wrapper Sistemas constrói em nenhum horizonte razoável.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>Outubro de 2026 foi ativo para o ecossistema Java com IA. Dois frameworks seguem dominando o espaço: o <strong>LangChain4j</strong>, com sua cadência de releases de 2 a 4 semanas, e o <strong>Spring AI</strong>, que consolidou a versão 2.0 GA em junho e já aponta para a 2.1. A semana trouxe novidade relevante em ambos.</p>
+
+        <h3>LangChain4j 1.20 — a mudança que você precisa mapear</h3>
+        <p>A versão 1.20.0, com patch 1.20.1 lançado em 25 de setembro de 2026, introduziu uma alteração de comportamento nos AI Services: <strong>o tipo de retorno do método agora determina automaticamente o modo de execução</strong>. Um método com retorno <code>String</code> executa de forma bloqueante. <code>CompletableFuture&lt;String&gt;</code> executa de forma assíncrona. Tipos reativos como <code>Flux</code> ou <code>Mono</code> executam de forma reativa. E tipos de streaming executam em streaming.</p>
+        <p>Antes dessa mudança, o modo de execução era determinado de forma mais explícita. Se você tem AI Services em produção onde o tipo de retorno não reflete conscientemente o modo de execução desejado, a atualização para 1.20 pode mudar o comportamento da sua aplicação silenciosamente. Revise antes de fazer o upgrade. O exemplo abaixo ilustra os três modos mais comuns:</p>
+
+        <pre><code>// LangChain4j 1.20+ — modo de execução determinado pelo tipo de retorno
+// Java 21 | Dependência: dev.langchain4j:langchain4j:1.20.1
+
+interface AssistenteService {
+
+    // BLOQUEANTE — retorna String diretamente
+    String responder(String pergunta);
+
+    // ASSÍNCRONO — retorna CompletableFuture
+    CompletableFuture&lt;String&gt; responderAsync(String pergunta);
+
+    // STREAMING — retorna TokenStream (requer handler explícito)
+    TokenStream responderEmStreaming(String pergunta);
+}
+
+// Uso do modo bloqueante
+AssistenteService assistente = AiServices.builder(AssistenteService.class)
+    .chatLanguageModel(model)
+    .build();
+
+String resposta = assistente.responder("Qual o estado da arte em agentes Java?");
+
+// Uso do modo assíncrono
+assistente.responderAsync("Explique LangChain4j 1.20")
+    .thenAccept(System.out::println);
+
+// Uso do streaming
+assistente.responderEmStreaming("Gere um relatório detalhado")
+    .onNext(token -&gt; System.out.print(token))
+    .onComplete(response -&gt; System.out.println("\nConcluído."))
+    .onError(Throwable::printStackTrace)
+    .start();
+</code></pre>
+
+        <h3>Spring AI 2.1.0-M1 — o que esperar da próxima linha</h3>
+        <p>Em 25 de setembro de 2026, o Spring AI lançou o <strong>2.1.0-M1</strong>, o primeiro milestone da linha 2.1. A versão estável atual é a <strong>2.0.1</strong> (agosto de 2026, com correções de segurança), construída sobre o Spring Boot 4 e o Spring Framework 7. Para times em produção, o caminho seguro é permanecer na 2.0.1 e acompanhar os milestones da 2.1 antes de qualquer avaliação de migração. Milestones não são estáveis por definição — testá-los em ambientes isolados é válido, colocá-los em produção não é.</p>
+        <p>O posicionamento entre os dois frameworks em outubro de 2026 continua claro: <strong>Spring AI</strong> é a escolha natural para times já no ecossistema Spring — integração orgânica com Spring Boot, auto-configuração, suporte declarativo. <strong>LangChain4j</strong> é agnóstico de framework, funciona com Spring Boot, Quarkus e outros, e tem suporte a mais de 20 provedores de modelo. A decisão depende mais do contexto da equipe do que de superioridade técnica absoluta de um sobre o outro.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>Outubro de 2026 está encerrando com uma clareza que eu não via há alguns meses: os agentes proativos saíram do papel. Claude Duet, Dots, o agente do Google Cloud para tarefas de múltiplos dias — são produtos em preview, não conceitos em whitepaper. A pergunta para times que trabalham com IA aplicada deixou de ser "isso vai acontecer?" e virou "como minha arquitetura vai absorver isso?". A resposta não é urgente, mas a reflexão precisa começar agora.</p>
+      <p>Se algo neste diário foi útil, levantou uma dúvida ou apontou para algo que você queria aprofundar, deixa nos comentários. Volto amanhã com o próximo ciclo.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
