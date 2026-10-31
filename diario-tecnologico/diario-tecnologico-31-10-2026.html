@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 31/10/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section {
+      opacity: 0.7;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    .breaking-banner {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-left: 4px solid var(--red);
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #fca5a5;
+    }
+
+    .breaking-banner strong {
+      color: #f87171;
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 31/10/2026</div>
+      <h1>Diário Tecnológico — 31 de outubro de 2026</h1>
+      <p class="excerpt">Anthropic lança API 2026-10-21 com breaking changes críticos; LangChain4j 1.23.0 chega ao ecossistema Java. O Halloween do dev enterprise.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-red">Anthropic API</span>
+        <span class="tag tag-green">Spring AI</span>
+        <span class="tag tag-cyan">Agentic RAG</span>
+        <span class="tag tag-violet">FinOps</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- INTRODUÇÃO -->
+    <section id="intro">
+      <p>Existe uma certa ironia em fechar outubro de 2026 num 31 que é Halloween. O ecossistema de IA resolveu entrar no espírito da data: a Anthropic empacotou um conjunto de breaking changes no dia 21, que estão assustando integrações que não foram atualizadas, o LangChain4j entregou a versão 1.23.0 ainda quente — publicada dia 28 e ainda chegando ao Maven Central — e o mercado enterprise começou a tratar Agentic RAG como peça obrigatória de infraestrutura, não mais como experimento.</p>
+
+      <p>Para mim, o item mais importante desta semana não é o mais chamativo. Enquanto todo mundo debate os novos modelos — Claude Duet, GPT-6.1 Sol, Gemini 4 Argon GA — o que realmente vai dar trabalho nos próximos dias é a nova versão da API da Anthropic. Se você mantém integração Java com a API deles, o momento de ler o guia de migração é agora, não depois que a produção começar a retornar 400.</p>
+
+      <p>Na frente Java, também temos novidades concretas. O LangChain4j 1.22.0 — que já estava estável desde o dia 9 de outubro — trouxe suporte a prompt caching automático para Anthropic, algo que tem impacto direto em custo. E o Spring AI continua amadurecendo rumo à 2.1, com o Spring AI Agents project projetado para novembro sob o chapéu experimental. É um período de consolidação, não de revolução — e consolidação exige atenção.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DESTAQUES DO DIA -->
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <!-- DESTAQUE 1 - ALTA -->
+      <div class="breaking-banner">
+        <strong>⚠️ Ação necessária:</strong> Se você usa a Anthropic API diretamente ou via SDK Java, verifique se sua integração está preparada para a nova versão <code>2026-10-21</code> antes de atualizar dependências.
+      </div>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Anthropic API 2026-10-21: Breaking Changes que Impactam Qualquer Integração Java</h3>
+        <p>A Anthropic publicou a versão <strong>2026-10-21</strong> da API com um conjunto de breaking changes que precisam de atenção imediata de qualquer time que integre com os modelos Claude. As mudanças mais críticas: na nova versão, requisições que enviam <strong>temperature, top_p ou top_k</strong> junto a determinados tipos de mensagem retornam erro 400. Além disso, o Admin API renomeou cinco campos de resposta e o Claude Enterprise Analytics API renomeou dois — os nomes antigos foram removidos sem período de deprecação gradual.</p>
+
+        <p>Há também boas notícias no pacote: o limite de tamanho de requisição nas APIs de Messages e Token Counting subiu de 32 MB para <strong>128 MB</strong>, o que abre espaço para processamento de documentos maiores sem recorrer a chunking forçado. O dia 20 de outubro também trouxe Organization Webhooks em beta no Admin API e User Profiles — mudanças estruturais para quem gerencia workspaces corporativos.</p>
+
+        <p>Do ponto de vista prático: as integrações <em>pinadas</em> à versão antiga continuam funcionando. O problema começa quando você atualiza o SDK Java para a versão major mais recente, que por padrão envia a nova versão da API e passa a chave como <code>Authorization: Bearer</code>. Antes de qualquer atualização de dependência, leia o guia de migração oficial. Vale o tempo.</p>
+        <a class="card-source" href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank" rel="noopener">🔗 Anthropic — Claude Platform Release Notes</a>
+      </div>
+
+      <!-- DESTAQUE 2 - ALTA -->
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>LangChain4j 1.23.0 Publicado; 1.22.0 Traz Prompt Caching Automático para Anthropic</h3>
+        <p>Dois lançamentos relevantes na mesma semana para o ecossistema LangChain4j. O <strong>1.22.0</strong>, publicado em 9 de outubro e já estável no Maven Central, entregou três capacidades que interessam diretamente a quem usa Java com LLMs: suporte à OpenAI Decisions API, inferência em lote via AWS Bedrock, e — o mais impactante — <strong>prompt caching automático para Anthropic</strong>. Isso significa que chamadas repetidas com prefixos de contexto similares passam a se beneficiar do cache da Anthropic sem que você precise instrumentar nada explicitamente.</p>
+
+        <p>Já o <strong>1.23.0</strong> foi publicado em 28 de outubro pelo Dmytro Liubarskyi via Open Collective, mas ainda pode não ter chegado ao Maven Central no momento que você lê isso. O repositório Maven lista 1.22.0 como versão mais recente. Se você trabalha com repositórios do GitHub Packages, já pode testar; caso contrário, aguarde a propagação para o Central antes de atualizar.</p>
+
+        <p>Um detalhe importante para quem usa Spring Boot starter com LangChain4j: o starter e o módulo de embeddings ainda estão na 1.22.0-beta32 — não existe versão estável dessas dependências ainda. Estruture seu projeto para isolar essas dependências beta e facilitar o upgrade quando a estabilização vier.</p>
+        <a class="card-source" href="https://opencollective.com/langchain4j" target="_blank" rel="noopener">🔗 LangChain4j — Open Collective</a>
+        <a class="card-source" href="https://mvnrepository.com/artifact/dev.langchain4j/langchain4j" target="_blank" rel="noopener" style="margin-left: 16px;">🔗 Maven Repository</a>
+      </div>
+
+      <!-- DESTAQUE 3 - MÉDIA -->
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Agentic RAG Deixa de Ser Experimento e Vira Infraestrutura Enterprise</h3>
+        <p>A Progress Software anunciou em 1º de outubro uma expansão relevante da sua plataforma de Agentic RAG: integração nativa com Microsoft Teams e plugin de ingestão para WordPress. A proposta é reduzir a necessidade de orquestração customizada — o agente responde com citação de fontes diretamente no canal do Teams. É um movimento que sinaliza a maturidade do conceito: quando uma plataforma enterprise embute RAG agnéstico como feature de produto, é porque o mercado parou de perguntar "para que serve" e começou a perguntar "como faço funcionar".</p>
+
+        <p>O contexto macro reforça isso: o Gartner projeta que <strong>33% das aplicações enterprise incluirão Agentic AI até 2028</strong>, ante menos de 1% em 2024. O que me chama atenção não é o número em si — é a velocidade. Dois anos para sair de marginal para mainstream. Para quem está construindo plataformas Java hoje, isso significa que orquestração de agentes com acesso a base de conhecimento não é mais uma feature futura — é requisito de produto.</p>
+        <a class="card-source" href="https://investors.progress.com/news-releases/news-release-details/progress-software-connects-enterprise-knowledge-across-business" target="_blank" rel="noopener">🔗 Progress Software — Investor Relations</a>
+      </div>
+
+      <!-- DESTAQUE 4 - BAIXA -->
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância (mas vale registrar)</span>
+        <h3>FinOps para IA: 98% das Equipes Gerenciam Custos de LLM em 2026</h3>
+        <p>O relatório State of FinOps 2026 da FinOps Foundation aponta que <strong>98% dos profissionais de FinOps agora gerenciam gastos com IA</strong>, em comparação com 63% em 2025 e apenas 31% em 2024. O crescimento reflete a realidade das contas: tokens custam dinheiro, e chamadas sem controle chegam fácil a centenas de dólares por dia em projetos com usuário real.</p>
+
+        <p>A tendência que me parece mais madura é a separação entre LLM Observability (traces, latência, avaliação de qualidade) e AI FinOps (custo por token, chargeback, forecasting). Plataformas como Finout, Vantage e Kosmoy estão resolvendo o lado financeiro, enquanto Datadog e similares focam no comportamento. Para projetos Java enterprise, o ponto de partida pragmático é instrumentar o custo por requisição já na camada de serviço antes de escolher uma plataforma — você precisa do dado para justificar a ferramenta.</p>
+        <a class="card-source" href="https://www.kosmoy.com/resources/blog/best-llm-observability-ai-finops-platforms-2026/" target="_blank" rel="noopener">🔗 Kosmoy — LLM Observability &amp; AI FinOps Platforms 2026</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- VALE ESTUDAR -->
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar agora:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🔑</span>
+          <h3>Guia de migração Anthropic API 2026-10-21</h3>
+          <p>Se você integra com Claude, este é o item urgente da lista. Leia o changelog oficial antes de atualizar qualquer dependência do SDK.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>LangChain4j 1.22.0 — Prompt Caching para Anthropic</h3>
+          <p>O prompt caching automático pode reduzir significativamente o custo de chamadas com contexto repetitivo. Vale entender como o LangChain4j o habilita e quais prefixos são cacheáveis.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🤖</span>
+          <h3>Padrões de Agentic RAG</h3>
+          <p>O Google publicou análise mostrando ganho de até 34% em factualidade com RAG agnético versus RAG padrão. Vale estudar os padrões de planejamento iterativo com fontes de dados.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>Spring AI Agents (preview novembro)</h3>
+          <p>O projeto Spring AI Agents chega em novembro sob o chapéu experimental. Acompanhe o repositório spring-projects-experimental para saber o que está sendo definido antes do lançamento.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">📊</span>
+          <h3>AI FinOps: medir custo por requisição em Java</h3>
+          <p>Antes de escolher uma plataforma de FinOps, aprenda a instrumentar custo de tokens na camada de serviço. LangChain4j expõe TokenUsage — use isso como ponto de partida.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧩</span>
+          <h3>Spring AI 2.1.0-M1 — Novidades do Milestone</h3>
+          <p>O milestone de setembro consolidou mudanças sobre Spring Boot 4 e Framework 7. Se você usa Spring AI em produção, acompanhe o que está estabilizando para planejar o upgrade.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- PODE IGNORAR -->
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados:</p>
+
+      <div class="highlight-card">
+        <h3>Claude Duet (Research Preview)</h3>
+        <p>O anúncio gerou barulho, mas o acesso está limitado a waitlist para assinantes Pro e Max nos EUA. Sem acesso real, não há nada para testar ou implementar agora. Salve o link para quando abrir.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>DeepSeek V4.1 Flash Cyber (29/10)</h3>
+        <p>Mais uma variante de modelo numa série que cresce rápido. Sem benchmark independente publicado e sem integração documentada com LangChain4j ou Spring AI ainda, não há ação concreta a tomar hoje.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Spring AI Agents — anúncios especulativos</h3>
+        <p>O projeto está previsto para novembro sob Spring experimental. Conteúdo especulativo publicado antes do lançamento oficial tende a envelhecer mal. Espere o código aparecer no repositório.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- RADAR JAVA + IA -->
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>Esta semana foi mais movimentada do que parece no título dos releases. O ponto de maior impacto prático para o ecossistema Java com IA está na combinação de dois fatores: o LangChain4j 1.22.0 com prompt caching automático para Anthropic, e a nova versão da API da Anthropic com breaking changes. Juntos, eles criam uma situação onde você quer os benefícios de custo do novo recurso, mas precisa navegar a migração com cuidado.</p>
+
+        <p>No LangChain4j, o estado atual das dependências para quem usa Maven é: <strong>core em 1.22.0 estável</strong>, Spring Boot starter e módulo de embeddings ainda em beta (1.22.0-beta32). A versão 1.23.0 foi publicada em 28 de outubro mas pode ainda não estar no Maven Central — verifique antes de declarar a dependência. O suporte a AWS Bedrock batch inference na 1.22.0 é especialmente útil para pipelines de ingestão offline em RAG, onde você processa documentos em lote sem necessidade de resposta síncrona.</p>
+
+        <p>Para quem está construindo pipeline RAG em Java com LangChain4j e MongoDB como embedding store, o ponto de atenção desta semana é garantir que a versão do driver MongoDB está alinhada com a versão do módulo LangChain4j — incompatibilidades de versão do driver têm sido a causa raiz de bugs sutis em produção que só aparecem sob carga.</p>
+
+        <pre><code>// LangChain4j 1.22.0 — pom.xml snippet
+// Verifique o Maven Central para a versão mais recente antes de usar
+
+&lt;dependency&gt;
+  &lt;groupId&gt;dev.langchain4j&lt;/groupId&gt;
+  &lt;artifactId&gt;langchain4j&lt;/artifactId&gt;
+  &lt;version&gt;1.22.0&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Spring Boot starter: ainda em beta --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;dev.langchain4j&lt;/groupId&gt;
+  &lt;artifactId&gt;langchain4j-spring-boot-starter&lt;/artifactId&gt;
+  &lt;version&gt;1.22.0-beta32&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Anthropic integration --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;dev.langchain4j&lt;/groupId&gt;
+  &lt;artifactId&gt;langchain4j-anthropic&lt;/artifactId&gt;
+  &lt;version&gt;1.22.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+
+        <p>No Spring AI, a 2.0.0 GA (junho de 2026) está se consolidando. O milestone 2.1.0-M1 foi publicado em 25 de setembro e o foco está na estabilização do suporte a múltiplos provedores de embedding e na API de avaliação de modelos. O projeto Spring AI Agents é a grande promessa para novembro — segundo a equipe, virá como módulo experimental separado, o que é a abordagem certa para não contaminar o core estável com uma API ainda em formação.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>Halloween ou não, o ecossistema não para. O que fica do dia 31 de outubro de 2026 é a combinação de novidades que exigem ação imediata — migração da API Anthropic, atualização do LangChain4j com cuidado — e movimentos de mercado que confirmam a direção: Agentic RAG vai do lab para o produto, e custo de token virou métrica de negócio. Se você lê este diário, provavelmente já está construindo algo nessa direção. Continue. O próximo nível exige mais instrumentação, não mais hype.</p>
+
+      <p>Se alguma parte desta análise foi útil, ou se você quer discutir como está navegando a migração da API ou a adoção de LangChain4j no seu projeto, deixa um comentário. Leio tudo.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

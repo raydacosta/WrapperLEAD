@@ -1,0 +1,29 @@
+TÍTULO: Diário Tecnológico — 31/10/2026
+SLUG: diario-tecnologico-31-10-2026
+EXCERPT: Anthropic lança API 2026-10-21 com breaking changes críticos; LangChain4j 1.23.0 chega ao ecossistema Java. O Halloween do dev enterprise.
+TAGS: IA, Java, LangChain4j, Anthropic API, Spring AI, Agentic RAG, FinOps
+CATEGORIA: Diário Tecnológico
+AUTOR: Ray da Costa
+FOTO_AUTOR: https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg
+DATA: 31/10/2026
+
+BANNER_PROMPT (para Bing Image Creator):
+Dark tech scene showing abstract AI neural networks and floating Java code streams on deep navy blue background. Electric cyan (#00d4ff) glowing API connection nodes and binary code fragments scattered through the composition. Text "API 2026" in minimalist typography at the top. Center-right main composition with calm lower-left area for title overlay. Cinematic 16:9 aspect ratio. No human faces. Professional editorial style. Dark tech aesthetic.
+
+URL DE PUBLICAÇÃO: https://raydacosta.com/create
+
+DESTAQUES DO ARTIGO:
+1. [ALTA] Anthropic API 2026-10-21: breaking changes em temperature/top_p/top_k, renomeação de campos Admin API, limite de 128MB
+2. [ALTA] LangChain4j 1.22.0 (estável) com prompt caching automático para Anthropic; 1.23.0 publicado em 28/10 aguardando Maven Central
+3. [MÉDIA] Agentic RAG enterprise: Progress Software, Gartner projeta 33% das apps enterprise com Agentic AI até 2028
+4. [BAIXA] FinOps para IA: 98% das equipes gerenciam custo de LLM (FinOps Foundation State of FinOps 2026)
+
+FONTES UTILIZADAS:
+- https://platform.claude.com/docs/en/release-notes/overview
+- https://dev.to/tokely/claude-api-2026-10-21-what-breaks-and-how-to-upgrade-1954
+- https://opencollective.com/langchain4j
+- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j
+- https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0
+- https://investors.progress.com/news-releases/news-release-details/progress-software-connects-enterprise-knowledge-across-business
+- https://science-technology.news-articles.net/content/2026/10/30/beyond-zero-shot-the-rise-of-agentic-workflows.html
+- https://www.kosmoy.com/resources/blog/best-llm-observability-ai-finops-platforms-2026/
