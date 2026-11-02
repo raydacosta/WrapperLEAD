@@ -1,0 +1,235 @@
+<style>
+.ra-art{background:#0B1220;color:#E5E7EB;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.75;padding:40px 16px;border-radius:12px;overflow-wrap:anywhere}
+.ra-wrap{max-width:720px;margin:0 auto}
+.ra-art h2{color:#F8FAFC;font-size:1.55em;line-height:1.3;margin:2.2em 0 .6em;letter-spacing:-.01em}
+.ra-art h3{color:#F8FAFC;font-size:1.18em;line-height:1.35;margin:1.8em 0 .5em}
+.ra-art p{margin:0 0 1.1em}
+.ra-art strong{color:#F8FAFC}
+.ra-art a{color:#38BDF8;text-decoration:underline;text-underline-offset:3px}
+.ra-art a:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}
+.ra-art ul,.ra-art ol{margin:0 0 1.2em;padding-left:1.3em}
+.ra-art li{margin:.35em 0}
+.ra-art code{font-family:"JetBrains Mono",Consolas,monospace;font-size:.9em;background:#111827;border:1px solid #1E3A52;border-radius:4px;padding:.05em .35em}
+.ra-art pre{background:#111827;border:1px solid #1E3A52;border-radius:8px;padding:14px 16px;overflow-x:auto;margin:0 0 1.2em;line-height:1.55}
+.ra-art pre code{background:none;border:0;padding:0;font-size:.86em}
+.ra-lead{font-size:1.12em;color:#CBD5E1;border-left:3px solid #38BDF8;padding-left:16px;margin-bottom:1.6em}
+.ra-card{background:#13283A;border:1px solid #1E3A52;border-top:3px solid #38BDF8;border-radius:12px;padding:20px 22px;margin:1.8em 0}
+.ra-card h4{color:#38BDF8;font-size:.82em;text-transform:uppercase;letter-spacing:.08em;margin:0 0 .6em}
+.ra-card>:last-child{margin-bottom:0}
+.ra-card.ra-warn{border-top-color:#FBBF24}.ra-card.ra-warn h4{color:#FBBF24}
+.ra-card.ra-ok{border-top-color:#34D399}.ra-card.ra-ok h4{color:#34D399}
+.ra-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:1.4em 0}
+.ra-grid .ra-card{margin:0}
+.ra-steps{counter-reset:s;list-style:none;padding-left:0!important}
+.ra-steps li{counter-increment:s;position:relative;padding-left:2.4em;margin:.7em 0}
+.ra-steps li::before{content:counter(s);position:absolute;left:0;top:.1em;width:1.7em;height:1.7em;border-radius:50%;background:#38BDF8;color:#0B1220;font-weight:700;font-size:.85em;display:flex;align-items:center;justify-content:center}
+.ra-tbl{overflow-x:auto;margin:1.4em 0 1.6em;border:1px solid #1E3A52;border-radius:10px}
+.ra-tbl table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}
+.ra-tbl th{background:#13283A;color:#F8FAFC;text-align:left;padding:10px 12px;font-weight:600;border-bottom:1px solid #1E3A52}
+.ra-tbl td{color:#E5E7EB;padding:9px 12px;border-bottom:1px solid #1A2638;vertical-align:top}
+.ra-tbl tr:last-child td{border-bottom:none}
+.ra-art figure{margin:1.6em 0}.ra-art figcaption{font-size:.85em;color:#94A3B8;margin-top:.5em}
+.ra-note{font-size:.88em;color:#94A3B8}
+.ra-next ol{padding-left:1.3em}
+.ra-rec{display:inline-block;margin-left:.4em;padding:.05em .55em;border-radius:999px;background:#38BDF8;color:#0B1220;font-size:.78em;font-weight:700}
+.ra-refs{font-size:.86em;color:#94A3B8}
+.ra-refs a{color:#7DD3FC;word-break:break-all}
+@media (max-width:600px){.ra-art{font-size:16px;padding:28px 14px}.ra-card{padding:16px}.ra-art h2{font-size:1.4em}}
+</style>
+<div class="ra-art"><div class="ra-wrap">
+
+<p class="ra-lead">Dois dias dentro de novembro e o ecossistema já entregou bastante: Google com um novo modelo focado em agentes de longa duração, DeepSeek avançando em benchmarks de engenharia de software, e dois encerramentos simultâneos de serviços na Anthropic e na OpenAI no fim do mês. No Java, o Spring AI Agents está previsto para chegar ainda em novembro — e isso muda o que eu recomendo para novos projetos.</p>
+
+<div class="ra-card" aria-label="O que você vai aprender">
+<h4>O que você vai aprender</h4>
+<ul>
+  <li>O que é o Gemini 4 "Carbon" e por que o posicionamento em fluxos agênticos importa</li>
+  <li>O que significa o DeepSeek V4.1-Flash chegar a 77% no DeepSWE v1.1</li>
+  <li>Quais endpoints e modelos da Anthropic e da OpenAI serão encerrados em 30 de novembro</li>
+  <li>Por que o banco de dados virou protagonista em arquiteturas agênticas</li>
+  <li>O estado atual do Spring AI 2.1 e do LangChain4j 1.22.0 para projetos Java</li>
+</ul>
+</div>
+
+<h2>Gemini 4 Carbon: Google posiciona um modelo para fluxos agênticos de longa duração</h2>
+
+<p>Conforme reportado em newsletter especializada publicada nesta semana <a href="https://rssdsaisection.substack.com/p/november-2026-newsletter">[1]</a>, o Google lançou o Gemini 4 "Carbon" com foco declarado em tarefas de engenharia de longa duração e workflows agênticos sustentados. O nome segue a convenção de codinomes por elementos, e o posicionamento é claro: não é um modelo de chat, é um modelo de trabalho.</p>
+
+<p>O que me chama atenção aqui é a mudança de framing competitivo. O setor parou de competir apenas em benchmarks de raciocínio e passou a competir em "quanto tempo esse modelo consegue manter contexto e produtividade em uma tarefa complexa". Para quem arquiteta sistemas com agentes autônomos, esse critério vai dominar as conversas de seleção de modelo nos próximos meses.</p>
+
+<p>Um dado de contexto importante: segundo o ai.google.dev, o Google mantém hoje 85 modelos ativos na sua API. Isso é uma quantidade operacional alta, e sinaliza um portfólio fragmentado que pode complicar a tomada de decisão para equipes de desenvolvimento. Qual modelo, para qual tarefa, a qual custo? Essa pergunta ainda não tem resposta padronizada — e o Carbon é mais um item na lista.</p>
+
+<div class="ra-card ra-warn" aria-label="Caveat de fonte">
+<h4>Caveat de fonte</h4>
+<p>O Gemini 4 Carbon não tinha anúncio publicado no blog oficial do Google ao momento desta edição. A informação vem de uma newsletter com curadoria de múltiplas fontes. Recomendo confirmar em <strong>developers.googleblog.com</strong> antes de ajustar qualquer roadmap técnico.</p>
+</div>
+
+<h2>DeepSeek V4.1-Flash: 77% no DeepSWE e um Super-Agent de codificação</h2>
+
+<p>O DeepSeek continua acelerando. A versão atualizada do V4.1-Flash registrou 77% de resolução de tarefas no benchmark DeepSWE v1.1 <a href="https://aiagentsdirectory.com/news/ai-agents-news-brief-3">[2]</a>, contra 74,2% da versão de setembro. Para quem não acompanha, o DeepSWE mede resolução de issues reais em repositórios open source — não abstração matemática, mas engenharia de software do dia a dia.</p>
+
+<p>77% significa que, em 100 issues abertas num repositório típico, o modelo consegue resolver sozinho mais de três quartos. Isso tem impacto direto na discussão sobre agentes de codificação autônomos em pipelines de CI/CD.</p>
+
+<p>Além da atualização do V4.1-Flash, o DeepSeek lançou um "Super-Agent" de codificação autônoma <a href="https://aiagentsdirectory.com/news/ai-agents-news-brief-3">[2]</a>. Os detalhes técnicos ainda são limitados, mas o padrão é familiar: modelo base forte, scaffolding de agente e acesso a ferramentas como terminal, git e browser.</p>
+
+<div class="ra-card" aria-label="Reflexão prática">
+<h4>Reflexão prática</h4>
+<p>Para equipes Java, a pergunta operacional agora é: você vai usar apenas o modelo do seu provedor principal, ou vai considerar modelos alternativos como o DeepSeek para tarefas específicas de codificação onde o custo-performance é mais favorável? A resposta envolve avaliar latência, pricing, LGPD e onde os dados de código podem ser enviados.</p>
+</div>
+
+<h2>Anthropic e OpenAI: mudanças de API com prazo em 30 de novembro</h2>
+
+<p>Dois avisos importantes chegaram esta semana — e ambos têm data de expiração no mesmo dia.</p>
+
+<h3>Anthropic — 30 de novembro</h3>
+
+<p>O <strong>Claude Sonnet 4.5</strong> será descontinuado da API em 30 de novembro <a href="https://www.thehansindia.com/tech/upcoming-ai-updates-in-november-2026-major-developments-to-watch-1137527">[3]</a>. Se você tem código com <code>"claude-sonnet-4-5"</code> como string estática de model ID, tem menos de quatro semanas para migrar. O destino natural é o <code>claude-sonnet-4-6</code> ou o <code>claude-sonnet-5-5</code>, dependendo do seu perfil de custo e qualidade.</p>
+
+<p>Além disso, mudanças na política de uso da Anthropic estão previstas para o dia 12 de novembro. Vale revisar os termos em docs.anthropic.com antes dessa data — especialmente para casos de uso na linha de automação corporativa e processamento em lote.</p>
+
+<h3>OpenAI — 30 de novembro</h3>
+
+<p>A OpenAI vai encerrar o <strong>Agent Builder</strong>, o <strong>Evals Dashboard</strong>, a <strong>Evals API</strong> e o endpoint <code>v1/prompts</code> também em 30 de novembro <a href="https://www.thehansindia.com/tech/upcoming-ai-updates-in-november-2026-major-developments-to-watch-1137527">[3]</a>. Se você usa o Agent Builder para composição de agentes ou o endpoint de prompts via API, a migração precisa começar agora.</p>
+
+<div class="ra-card ra-warn" aria-label="Ação urgente">
+<h4>Ação urgente — antes de 30/11</h4>
+<ul>
+  <li>Auditar todos os model IDs hardcoded nos seus serviços (buscar por <code>claude-sonnet-4-5</code>)</li>
+  <li>Verificar se há chamadas ao <code>v1/prompts</code> ou ao Evals API da OpenAI</li>
+  <li>Revisar o Agent Builder da OpenAI — se você tem agentes configurados lá, migre para a Responses API</li>
+  <li>Ler as atualizações de política da Anthropic em docs.anthropic.com/usage-policy</li>
+</ul>
+</div>
+
+<h2>Agentic AI: o banco de dados virou protagonista de arquitetura</h2>
+
+<p>Uma das notícias mais técnicas da semana veio de uma entrevista publicada no SiliconANGLE em 1º de novembro <a href="https://siliconangle.com/2026/11/01/agentic-ai-architecture-demands-real-time-databases-evolve26">[4]</a>: arquiteturas agênticas exigem bancos de dados com características radicalmente diferentes do CRUD convencional.</p>
+
+<p>O argumento é cirúrgico. Um agente autônomo emite quantidades imprevisíveis de queries por segundo — frequentemente não planejadas — e espera latências da ordem de milissegundos. O banco de dados que serve bem um aplicativo transacional convencional pode se tornar o gargalo num sistema onde o agente precisa buscar contexto, registrar estado intermediário e tomar decisões em tempo real.</p>
+
+<p>Para quem arquiteta sistemas Java, isso tem implicações concretas que eu já estava observando em projetos:</p>
+
+<ul>
+  <li>JPA/Hibernate em modo lazy loading não serve para acesso agêntico de alta frequência</li>
+  <li>Bancos vetoriais (pgvector, Chroma, Weaviate) precisam estar no mesmo tier de latência que a lógica de agente</li>
+  <li>O padrão "buscar contexto → executar tool call → salvar resultado" precisa ser rápido o suficiente para não degradar a experiência do usuário final</li>
+  <li>Connection pooling agressivo e cache de embeddings passam a ser requisitos, não otimizações</li>
+</ul>
+
+<p>Outro ponto relevante do AI Agents News Brief de 1º de novembro <a href="https://aiagentsdirectory.com/news/ai-agents-news-brief-3">[2]</a>: desenvolvedores estão implementando mecanismos de pausa antes de ações irreversíveis — enviar um e-mail ao cliente errado, executar uma transação financeira, fazer um deploy. Esse padrão "human-in-the-loop seletivo" está se consolidando como boa prática de arquitetura agêntica. Não é sobre desconfiar do modelo; é sobre gerenciar risco operacional de forma inteligente.</p>
+
+<div class="ra-grid">
+  <div class="ra-card ra-ok" aria-label="Faça agora">
+    <h4>Faça agora</h4>
+    <p>Mapear quais chamadas de banco de dados no seu agente são síncronas e bloquantes. Qualquer query que leve mais de 50ms na média é candidata a otimização ou cache.</p>
+  </div>
+  <div class="ra-card" aria-label="Avalie depois">
+    <h4>Avalie depois</h4>
+    <p>Considerar pgvector (extensão do PostgreSQL) como primeira opção de banco vetorial para projetos Java/Spring — elimina a necessidade de um banco dedicado separado.</p>
+  </div>
+</div>
+
+<h2>O que pode esperar hoje</h2>
+
+<p>Nem tudo que aparece no feed merece atenção imediata. Dois temas recorrentes esta semana podem aguardar:</p>
+
+<p><strong>Nomes de modelos não anunciados oficialmente:</strong> "GPT-6", "Claude Duet" e variantes aparecem em agregadores de baixa autoridade sem nenhum anúncio oficial da OpenAI ou da Anthropic. Até sair algo nos blogs oficiais (openai.com/blog, anthropic.com/news), ignore. Construir sobre especulação de modelo ID é receita para retrabalho.</p>
+
+<p><strong>Certificações genéricas em IA:</strong> Programas como "quando usar prompting, quando usar RAG, quando usar agentes" cobrem conceitos corretos, mas o formato de certificação genérica tem retorno baixo comparado a implementar projetos reais. Se você está decidindo onde investir seu tempo de aprendizado em novembro, priorize código funcional sobre badge.</p>
+
+<h2>Radar Java + IA — novembro pode ser o mês do Spring AI Agents</h2>
+
+<p>O ecossistema Java com IA entrou num período produtivo. Spring AI e LangChain4j têm releases recentes com dinâmicas distintas, e vale entender onde cada um está.</p>
+
+<h3>Spring AI 2.1.0-M1 e o Spring AI Agents</h3>
+
+<p>A versão 2.1.0-M1 foi publicada em 25 de setembro de 2026 <a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0">[5]</a>, como primeiro milestone da linha 2.1 — projetada para Spring Boot 4.x e Spring Framework 7. O dado mais significativo para este mês: o <strong>Spring AI Agents</strong>, um módulo experimental dedicado à orquestração de agentes, está previsto para lançamento em novembro de 2026. Ainda não chegou com release estável, mas é o projeto a acompanhar de perto se você está planejando arquiteturas agênticas em Java enterprise.</p>
+
+<h3>LangChain4j 1.22.0</h3>
+
+<p>O core do LangChain4j está na versão 1.22.0 (outubro de 2026), com o Spring Boot starter ainda em beta (<code>1.22.0-beta32</code>) <a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0">[5]</a>. A abordagem que eu acho mais pragmática para quem vem do Java tradicional: você declara um agente como uma interface Java com anotações, e o framework cuida da orquestração. Agentes podem ser compostos em fluxos sequenciais, condicionais e paralelos.</p>
+
+<pre><code>// LangChain4j 1.22.0 — dependências: dev.langchain4j:langchain4j-spring-boot-starter:1.22.0-beta32
+// Requer Java 17+ e Spring Boot 3.x ou 4.x
+
+@AiService
+public interface CodeReviewAgent {
+
+    @SystemMessage("""
+        Você é um revisor de código Java especializado em segurança e performance.
+        Identifique vulnerabilidades, problemas de concorrência e oportunidades de otimização.
+        Responda em português do Brasil com exemplos de correção quando aplicável.
+        """)
+    String review(@UserMessage String diff);
+}
+</code></pre>
+
+<div class="ra-tbl">
+<table>
+  <thead>
+    <tr>
+      <th>Critério</th>
+      <th>Spring AI 2.1</th>
+      <th>LangChain4j 1.22</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Integração Spring Boot</td>
+      <td>Nativa, autoconfiguration completo</td>
+      <td>Starter em beta; funcional mas sem autoconfiguration completo</td>
+    </tr>
+    <tr>
+      <td>Suporte a agentes</td>
+      <td>Spring AI Agents previsto (experimental)</td>
+      <td>AI Services estáveis; composição em fluxos</td>
+    </tr>
+    <tr>
+      <td>Observabilidade</td>
+      <td>Spring Actuator + Micrometer integrados</td>
+      <td>Manual; sem integração nativa com Actuator</td>
+    </tr>
+    <tr>
+      <td>Suporte a RAG</td>
+      <td>VectorStore abstractions + múltiplos backends</td>
+      <td>EmbeddingStore + InMemory/pgvector/Chroma</td>
+    </tr>
+    <tr>
+      <td>Modelo de maturidade</td>
+      <td>GA no core; experimental nos agentes</td>
+      <td>GA no core; beta no Spring Boot starter</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Para projetos novos que começa hoje: se você já usa Spring Boot, minha recomendação é aguardar o lançamento do Spring AI Agents este mês antes de escolher o framework de orquestração. Se o projeto não pode esperar, o LangChain4j 1.22 é uma escolha segura com API estável no core.</p>
+
+<h2>Conclusão</h2>
+
+<p>O início de novembro confirmou a velocidade que o ecossistema de IA vem mantendo: um novo modelo do Google posicionado para agentes, o DeepSeek ampliando sua vantagem em benchmarks de engenharia de software, e dois grandes provedores encerrando serviços no mesmo dia. Para quem opera sistemas em produção, o item mais crítico desta edição é a auditoria de model IDs e endpoints — não porque a migração seja complexa, mas porque a janela de tempo está se fechando.</p>
+
+<p>No Java, o ecossistema está maduro o suficiente para projetos sérios. A chegada do Spring AI Agents este mês, se confirmada, vai reduzir a resistência interna de times que ainda hesitam em adotar LLMs porque "não é coisa de Java enterprise". É.</p>
+
+<p>Amanhã continuo acompanhando. Se você quiser debater algum ponto ou tem novidades do seu ecossistema, os comentários estão abertos.</p>
+
+<h2>Fontes consultadas</h2>
+<ol class="ra-refs">
+  <li><a href="https://rssdsaisection.substack.com/p/november-2026-newsletter">November 2026 Newsletter — Data Science and AI Section (Piers Stobbs)</a> (acesso em 02/11/2026)</li>
+  <li><a href="https://aiagentsdirectory.com/news/ai-agents-news-brief-3">AI Agents News Brief for November 1, 2026 — AI Agents Directory</a> (acesso em 02/11/2026)</li>
+  <li><a href="https://www.thehansindia.com/tech/upcoming-ai-updates-in-november-2026-major-developments-to-watch-1137527">Upcoming AI Updates in November 2026: Major Developments to Watch — The Hans India</a> (acesso em 02/11/2026)</li>
+  <li><a href="https://siliconangle.com/2026/11/01/agentic-ai-architecture-demands-real-time-databases-evolve26">Agentic AI architecture demands real-time databases — SiliconANGLE</a> (acesso em 02/11/2026)</li>
+  <li><a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0">Spring AI vs LangChain4j in October 2026: Both Shipped Big — DEV Community</a> (acesso em 02/11/2026)</li>
+</ol>
+
+<div class="ra-next" aria-label="Próximo artigo">
+<h2>Qual tema você gostaria de ver no próximo artigo?</h2>
+<ol>
+  <li><strong>Spring AI Agents na prática</strong> <span class="ra-rec">★ Recomendado para continuar</span><br>Como declarar, orquestrar e testar agentes Java com o novo módulo experimental do Spring AI — incluindo composição sequencial, condicional e paralela.</li>
+  <li><strong>Infraestrutura de banco de dados para agentes Java</strong><br>Como configurar pgvector, Redis e Chroma como backends de memória e contexto em sistemas agênticos com Spring Boot — com benchmarks de latência.</li>
+  <li><strong>Routing dinâmico de modelos LLM em produção</strong><br>Como substituir model IDs hardcoded por uma camada de roteamento que escolhe o modelo certo (custo, latência, capacidade) para cada tipo de requisição.</li>
+</ol>
+<p>Marque o tema que você mais gostaria de ver ou colocar em prática.</p>
+</div>
+
+</div></div>
