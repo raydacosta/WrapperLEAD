@@ -1,0 +1,232 @@
+<style>
+.ra-art{background:#0B1220;color:#E5E7EB;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.75;padding:40px 16px;border-radius:12px;overflow-wrap:anywhere}
+.ra-wrap{max-width:720px;margin:0 auto}
+.ra-art h2{color:#F8FAFC;font-size:1.55em;line-height:1.3;margin:2.2em 0 .6em;letter-spacing:-.01em}
+.ra-art h3{color:#F8FAFC;font-size:1.18em;line-height:1.35;margin:1.8em 0 .5em}
+.ra-art p{margin:0 0 1.1em}
+.ra-art strong{color:#F8FAFC}
+.ra-art a{color:#38BDF8;text-decoration:underline;text-underline-offset:3px}
+.ra-art a:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}
+.ra-art ul,.ra-art ol{margin:0 0 1.2em;padding-left:1.3em}
+.ra-art li{margin:.35em 0}
+.ra-art code{font-family:"JetBrains Mono",Consolas,monospace;font-size:.9em;background:#111827;border:1px solid #1E3A52;border-radius:4px;padding:.05em .35em}
+.ra-art pre{background:#111827;border:1px solid #1E3A52;border-radius:8px;padding:14px 16px;overflow-x:auto;margin:0 0 1.2em;line-height:1.55}
+.ra-art pre code{background:none;border:0;padding:0;font-size:.86em}
+.ra-lead{font-size:1.12em;color:#CBD5E1;border-left:3px solid #38BDF8;padding-left:16px;margin-bottom:1.6em}
+.ra-card{background:#13283A;border:1px solid #1E3A52;border-top:3px solid #38BDF8;border-radius:12px;padding:20px 22px;margin:1.8em 0}
+.ra-card h4{color:#38BDF8;font-size:.82em;text-transform:uppercase;letter-spacing:.08em;margin:0 0 .6em}
+.ra-card>:last-child{margin-bottom:0}
+.ra-card.ra-warn{border-top-color:#FBBF24}.ra-card.ra-warn h4{color:#FBBF24}
+.ra-card.ra-ok{border-top-color:#34D399}.ra-card.ra-ok h4{color:#34D399}
+.ra-card.ra-muted{border-top-color:#475569}.ra-card.ra-muted h4{color:#94A3B8;opacity:.8}
+.ra-card.ra-muted{opacity:.75}
+.ra-card.ra-java{border-top-color:#34D399;background:#0D1F1A}
+.ra-card.ra-java h4{color:#34D399}
+.ra-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:1.4em 0}
+.ra-grid .ra-card{margin:0}
+.ra-steps{counter-reset:s;list-style:none;padding-left:0!important}
+.ra-steps li{counter-increment:s;position:relative;padding-left:2.4em;margin:.7em 0}
+.ra-steps li::before{content:counter(s);position:absolute;left:0;top:.1em;width:1.7em;height:1.7em;border-radius:50%;background:#38BDF8;color:#0B1220;font-weight:700;font-size:.85em;display:flex;align-items:center;justify-content:center}
+.ra-badge{display:inline-block;padding:.15em .6em;border-radius:999px;font-size:.8em;font-weight:700;margin-bottom:.5em}
+.ra-badge.alta{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.ra-badge.media{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.3)}
+.ra-badge.baixa{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.3)}
+.ra-tbl{overflow-x:auto;margin:1.4em 0 1.6em;border:1px solid #1E3A52;border-radius:10px}
+.ra-tbl table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}
+.ra-tbl th{background:#13283A;color:#F8FAFC;text-align:left;padding:10px 12px;font-weight:600;border-bottom:1px solid #1E3A52}
+.ra-tbl td{color:#E5E7EB;padding:9px 12px;border-bottom:1px solid #1A2638;vertical-align:top}
+.ra-tbl tr:last-child td{border-bottom:none}
+.ra-note{font-size:.88em;color:#94A3B8}
+.ra-next ol{padding-left:1.3em}
+.ra-rec{display:inline-block;margin-left:.4em;padding:.05em .55em;border-radius:999px;background:#38BDF8;color:#0B1220;font-size:.78em;font-weight:700}
+.ra-refs{font-size:.86em;color:#94A3B8}
+.ra-refs a{color:#7DD3FC;word-break:break-all}
+@media (max-width:600px){.ra-art{font-size:16px;padding:28px 14px}.ra-card{padding:16px}.ra-art h2{font-size:1.4em}}
+</style>
+<div class="ra-art"><div class="ra-wrap">
+
+<p class="ra-lead">Hoje, 5 de novembro de 2026, o ecossistema de IA entregou pelo menos dois movimentos concretos que afetam diretamente quem trabalha com Java e APIs de LLM: a Anthropic abriu a beta pública de threads de mensagem na Messages API, e a Mistral disponibilizou os pesos abertos do Large 4. No Java, a semana fechou com Spring AI 2.0.2 e LangChain4j 1.23.0 consolidando funcionalidades que estavam em preview. Sem hype — apenas releases.</p>
+
+<div class="ra-card" aria-label="O que você vai aprender">
+  <h4>O que você vai aprender</h4>
+  <ul>
+    <li>O que são as Message Threads da Anthropic e por que reduzem custo de agentes</li>
+    <li>Como o Mistral Large 4 open-weights muda o cenário para dados sensíveis</li>
+    <li>Estado atual do Spring AI 2.0.2 e LangChain4j 1.23.0 para projetos Java</li>
+    <li>O que vale estudar e o que pode esperar nesta semana</li>
+  </ul>
+</div>
+
+<h2>🔴 Alta relevância: Anthropic abre beta de Message Threads na Messages API</h2>
+
+<div class="ra-card" aria-label="Detalhe: Anthropic Message Threads">
+  <span class="ra-badge alta">🔴 Alta Relevância</span>
+  <h4>Anthropic — 2 de novembro de 2026</h4>
+  <p>Em 2 de novembro, a Anthropic adicionou <strong>threads de mensagem</strong> à Messages API em beta público. A mudança é direta: em vez de retransmitir o histórico completo de conversa a cada turno, o agente envia apenas as mensagens novas. O serviço gerencia o contexto acumulado no lado do servidor.</p>
+  <p>Para quem constrói agentes com sessões longas, o impacto é triplo: <strong>menos tokens por requisição, latência menor e custo proporcional ao que é novo</strong>, não ao histórico total. Em integrações Java com LangChain4j ou Spring AI, isso muda a lógica do <code>ChatMemory</code> — você passa a delegar o buffer de contexto à API em vez de gerenciá-lo localmente.</p>
+  <p>É uma funcionalidade que a OpenAI disponibilizou antes, mas a Anthropic entrega com documentação mais detalhada sobre limites de janela por thread. Recomendo testar em ambientes de staging antes de migrar agentes em produção.</p>
+  <a href="https://releasebot.io/updates/anthropic" target="_blank" rel="noopener">🔗 Releasebot — Anthropic Release Notes</a>
+</div>
+
+<h2>🔴 Alta relevância: Mistral Large 4 open-weights no HuggingFace</h2>
+
+<div class="ra-card" aria-label="Detalhe: Mistral Large 4 open-weights">
+  <span class="ra-badge alta">🔴 Alta Relevância</span>
+  <h4>Mistral AI — 29 de outubro de 2026</h4>
+  <p>Em 29 de outubro, a Mistral publicou os pesos abertos do <strong>Mistral Large 4</strong> no HuggingFace. O modelo está disponível tanto via API (ID: <code>mistral-large-4</code>) quanto para auto-hospedagem. É um modelo frontier — comparável em desempenho ao topo de linha das plataformas fechadas — rodando on-premise.</p>
+  <p>Para equipes com restrições de <strong>LGPD, soberania de dados ou contratos que proíbem envio de dados para terceiros</strong>, essa é a notícia mais relevante da semana. Modelos dessa geração exigem hardware de ponta (múltiplas GPUs A100/H100 ou equivalente em VRAM), mas a possibilidade é real para grandes empresas e órgãos públicos.</p>
+  <p>No Java, a integração acontece via LangChain4j com <code>MistralAiChatModel</code> ou via Spring AI usando o starter de OpenAI-compatible endpoints — a Mistral expõe uma API compatível com o formato da OpenAI.</p>
+  <a href="https://dev.to/alexmercedcoder/ai-weekly-gemini-4-carbon-open-mistral-amds-surge-38j5" target="_blank" rel="noopener">🔗 DEV Community — AI Weekly: Gemini 4 Carbon, Open Mistral</a>
+</div>
+
+<h2>🟡 Relevância média: Gemini 4 Carbon e Akamai Inference</h2>
+
+<div class="ra-card" aria-label="Detalhe: Google Gemini 4 Carbon">
+  <span class="ra-badge media">🟡 Média Relevância</span>
+  <h4>Google — Gemini 4 Carbon (preview restrito)</h4>
+  <p>O Google anunciou o <strong>Gemini 4 Carbon</strong>, descrito internamente como o modelo mais capaz da empresa até o momento. O acesso é extremamente limitado — sem API pública disponível no momento da publicação deste diário. Monitore o changelog oficial da Gemini API antes de tomar qualquer decisão arquitetural baseada neste modelo.</p>
+  <a href="https://signaldrifts.substack.com/p/this-week-in-ai2" target="_blank" rel="noopener">🔗 Signal Drifts — This Week in AI, Oct 26–Nov 1</a>
+</div>
+
+<div class="ra-card" aria-label="Detalhe: Akamai Inference e Agent Sandbox">
+  <span class="ra-badge media">🟡 Média Relevância</span>
+  <h4>Akamai — Inference + Agent Sandbox</h4>
+  <p>A Akamai lançou dois produtos voltados a IA: o <strong>Akamai Inference</strong>, serviço gerenciado para servir modelos (12 open-source: NVIDIA Nemotron-3 Ultra, gpt-oss-120b, Gemma 4, entre outros, incluindo embeddings para RAG), e o <strong>Akamai Agent Sandbox</strong>, ambiente isolado de execução para agentes. A proposta de valor é latência de edge computing com LLMs — útil para casos em que a proximidade geográfica importa.</p>
+  <a href="https://www.datacenterdynamics.com/br/not%C3%ADcias/akamai-lan%C3%A7a-servi%C3%A7o-de-infer%C3%AAncia-de-ia-e-ambiente-de-execu%C3%A7%C3%A3o-para-agentes/" target="_blank" rel="noopener">🔗 Data Center Dynamics — Akamai lança serviço de inferência</a>
+</div>
+
+<h2>🟢 Baixa relevância: Gartner e regulação europeia</h2>
+
+<div class="ra-card" aria-label="Detalhe: IBM no Gartner e EU AI Act">
+  <span class="ra-badge baixa">🟢 Baixa Relevância (esta semana)</span>
+  <h4>IBM e EU AI Act</h4>
+  <p>A IBM foi nomeada líder no <strong>Gartner Magic Quadrant 2026</strong> para plataformas de gerenciamento de agentes. Relevante para decisões de procurement enterprise de longo prazo, mas não muda o dia a dia de desenvolvimento agora.</p>
+  <p>A União Europeia adiou novamente os prazos mais exigentes do <strong>AI Act</strong>: obrigações do Anexo III (alto risco) passam para 2 de dezembro de 2027; Anexo I vai para agosto de 2028. Quem estava com cronograma de conformidade apertado ganha mais tempo — mas não é sinal de que o tema pode ser ignorado.</p>
+  <a href="https://creati.ai/pt/ai-news/2026-11-03/" target="_blank" rel="noopener">🔗 Creati.ai — Notícias de IA, 3 nov 2026</a>
+</div>
+
+<h2>📚 O que vale estudar hoje</h2>
+
+<div class="ra-grid">
+  <div class="ra-card ra-ok" aria-label="Message Threads API">
+    <h4>📡 Message Threads (Anthropic API)</h4>
+    <p>Entenda como a nova beta muda a gestão de memória em agentes. A documentação oficial da Anthropic é o ponto de partida obrigatório antes de migrar qualquer agente em produção.</p>
+  </div>
+  <div class="ra-card ra-ok" aria-label="Mistral Large 4 on-premise">
+    <h4>🖥️ Mistral Large 4 on-premise</h4>
+    <p>Se você tem restrição de LGPD ou soberania de dados, agora vale estudar os requisitos de hardware e os guias de quantização do Mistral Large 4 para reduzir a pegada de VRAM.</p>
+  </div>
+  <div class="ra-card ra-ok" aria-label="Spring AI Agents experimental">
+    <h4>☕ Spring AI Agents (nov/2026)</h4>
+    <p>O projeto experimental de agentes para Spring AI está previsto para novembro. Acompanhe o repositório <code>spring-projects-experimental</code> — será a forma mais idiomática de construir agentes com Java e Spring Boot.</p>
+  </div>
+  <div class="ra-card ra-ok" aria-label="MCP no Spring AI 2.0">
+    <h4>🔌 MCP no Spring AI 2.0</h4>
+    <p>O suporte first-class ao Model Context Protocol via Boot Starters mudou a forma de expor ferramentas para agentes em Java. Se você ainda não migrou, agora é a hora — a DX melhorou bastante em relação ao 1.x.</p>
+  </div>
+</div>
+
+<h2>🔇 O que pode ser ignorado hoje</h2>
+
+<div class="ra-card ra-muted" aria-label="Rumores de IPO da Anthropic">
+  <h4>Rumores de IPO da Anthropic</h4>
+  <p>Uma fonte cita que a Anthropic estaria se preparando para abrir capital. Sem segunda fonte, sem comunicado oficial. Aguarde antes de dar peso a essa informação.</p>
+</div>
+
+<div class="ra-card ra-muted" aria-label="Benchmarks de GPT-6.1 Terra em blogs secundários">
+  <h4>Benchmarks de GPT-6.1 Terra de blogs secundários</h4>
+  <p>Vários blogs publicaram comparativos do GPT-6.1 Terra sem reprodutibilidade verificável. Os números variam entre fontes. Espere os benchmarks do OpenAI Evals ou avaliações de pesquisadores com metodologia publicada.</p>
+</div>
+
+<div class="ra-card ra-muted" aria-label="Relatórios de mercado de ética em IA 2025-2033">
+  <h4>Relatórios de mercado "ética em IA 2025–2033"</h4>
+  <p>Relatórios especulativos de mercado com projeções para 8 anos têm baixa utilidade operacional. Não os use como base para decisões de arquitetura ou investimento.</p>
+</div>
+
+<h2>☕ Radar Java + IA</h2>
+
+<div class="ra-card ra-java" aria-label="Radar Java com IA — 05/11/2026">
+  <h4>Versões atuais do ecossistema Java + IA</h4>
+
+  <div class="ra-tbl">
+    <table>
+      <thead>
+        <tr><th>Framework</th><th>Versão atual</th><th>Data</th><th>Destaque</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Spring AI</td><td>2.0.2</td><td>23/out/2026</td><td>7 CVEs corrigidos (do 2.0.1); MCP first-class</td></tr>
+        <tr><td>LangChain4j</td><td>1.23.0</td><td>28/out/2026</td><td>Human-in-the-loop agentico; hybrid search</td></tr>
+        <tr><td>Google ADK Java</td><td>1.13.0</td><td>out/2026</td><td>Tool confirmation; multi-agente</td></tr>
+        <tr><td>Embabel</td><td>1.5.4</td><td>out/2026</td><td>Estabilização de API</td></tr>
+        <tr><td>LangGraph4j</td><td>1.9.7</td><td>set/2026</td><td>Grafos de agentes para Java</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>O <strong>Spring AI 2.0.2</strong> exige Java 17 mínimo e Spring Boot 4.0 ou 4.1. O suporte a MCP via Boot Starters é o diferencial desta linha: você declara o servidor MCP como um <code>@Bean</code> e o framework cuida do wiring com o agente. Para quem vem do Spring Boot 3.x, a migração para o 4.x pode ser o maior custo de adoção.</p>
+
+  <p>O <strong>LangChain4j 1.23.0</strong> consolida o suporte a <strong>human-in-the-loop (HITL)</strong> em fluxos agênticos: o agente pode pausar e aguardar aprovação humana antes de executar uma ferramenta. Isso é crítico para qualquer processo com impacto financeiro ou regulado. O <code>ChatMemory</code> agora aceita stores plugáveis — Redis, banco relacional, ou mesmo o novo thread server da Anthropic.</p>
+
+  <p>Um ponto de atenção: com as Message Threads da Anthropic em beta, a integração ideal no LangChain4j ainda não tem suporte nativo. Você precisará de um wrapper manual sobre o <code>AnthropicChatModel</code> até que a biblioteca implemente o protocolo de threads. Fique atento às issues do repositório.</p>
+
+  <pre><code>// LangChain4j 1.23.0 — Human-in-the-loop com ferramenta de alto risco
+// Dependência: dev.langchain4j:langchain4j-core:1.23.0
+
+public class AprovarTransferencia implements Tool {
+
+    @Override
+    public ToolSpecification specification() {
+        return ToolSpecification.builder()
+            .name("transferir_fundos")
+            .description("Transfere fundos entre contas. Requer aprovação humana.")
+            .build();
+    }
+
+    @Override
+    public ToolExecutionRequest requiresConfirmation() {
+        return ToolExecutionRequest.REQUIRES_HUMAN_CONFIRMATION;
+    }
+}</code></pre>
+
+  <p class="ra-note">Nota: a API de HITL está marcada como <code>@Experimental</code> no 1.23.0. Sujeita a mudanças sem compatibilidade retroativa nas próximas releases menores.</p>
+</div>
+
+<h2>Conclusão</h2>
+
+<p>Esta quinta-feira foi daquelas em que o ecossistema avança de forma coordenada. A Anthropic resolve um problema real de custo em agentes longos, a Mistral democratiza um modelo frontier para ambientes on-premise, e o Java recebe versões de manutenção que consolidam o que já estava funcionando. Não há um único lançamento revolucionário — mas há progresso concreto em várias frentes ao mesmo tempo.</p>
+
+<p>Minha recomendação prática para esta semana: se você tem agentes em produção com sessões longas, avalie o impacto das Message Threads da Anthropic antes que a feature saia de beta. E se você tem dados sensíveis que hoje ficam fora do LLM por restrição contratual, o Mistral Large 4 merece um PoC.</p>
+
+<h2>Fontes consultadas</h2>
+<ol class="ra-refs">
+  <li><a href="https://releasebot.io/updates/anthropic" target="_blank" rel="noopener">Anthropic Release Notes — Releasebot</a> (acesso em 05/11/2026)</li>
+  <li><a href="https://dev.to/alexmercedcoder/ai-weekly-gemini-4-carbon-open-mistral-amds-surge-38j5" target="_blank" rel="noopener">AI Weekly: Gemini 4 Carbon, Open Mistral, AMD's Surge — DEV Community</a> (acesso em 05/11/2026)</li>
+  <li><a href="https://signaldrifts.substack.com/p/this-week-in-ai2" target="_blank" rel="noopener">This Week in AI Oct 26–Nov 1, 2026 — Signal Drifts</a> (acesso em 05/11/2026)</li>
+  <li><a href="https://www.datacenterdynamics.com/br/not%C3%ADcias/akamai-lan%C3%A7a-servi%C3%A7o-de-infer%C3%AAncia-de-ia-e-ambiente-de-execu%C3%A7%C3%A3o-para-agentes/" target="_blank" rel="noopener">Akamai lança serviço de inferência de IA — Data Center Dynamics</a> (acesso em 05/11/2026)</li>
+  <li><a href="https://cadenya.com/other-content/ai-agent-frameworks-in-java" target="_blank" rel="noopener">AI agent frameworks in Java (2026) — Cadenya</a> (acesso em 05/11/2026)</li>
+  <li><a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0" target="_blank" rel="noopener">Spring AI vs LangChain4j in October 2026 — DEV Community</a> (acesso em 05/11/2026)</li>
+  <li><a href="https://creati.ai/pt/ai-news/2026-11-03/" target="_blank" rel="noopener">Notícias de IA — 3 de novembro de 2026, Creati.ai</a> (acesso em 05/11/2026)</li>
+  <li><a href="https://llm-stats.com/llm-updates" target="_blank" rel="noopener">AI Updates Today (November 2026) — LLM Stats</a> (acesso em 05/11/2026)</li>
+</ol>
+
+<div class="ra-next" aria-label="Próximo artigo">
+  <h2>Qual tema você gostaria de ver no próximo artigo?</h2>
+  <ol>
+    <li>
+      <strong>Message Threads na prática com Java e Anthropic SDK</strong>
+      <span class="ra-rec">★ Recomendado para continuar</span><br>
+      Você aprenderá a integrar as novas threads de mensagem da Anthropic em um agente Java com LangChain4j, comparando o custo de tokens antes e depois da migração.
+    </li>
+    <li>
+      <strong>Mistral Large 4 on-premise: guia de deploy com quantização</strong><br>
+      Você aprenderá os requisitos mínimos de hardware, como aplicar quantização INT4/INT8 para reduzir VRAM e como expor o modelo como endpoint OpenAI-compatible para o seu projeto Java.
+    </li>
+    <li>
+      <strong>Human-in-the-loop com LangChain4j 1.23.0 em processos financeiros</strong><br>
+      Você aprenderá a implementar aprovação humana em fluxos agênticos com impacto financeiro, integrando o HITL do LangChain4j com um sistema de notificações e controle de auditoria.
+    </li>
+  </ol>
+  <p>Marque o tema que você mais gostaria de ver ou colocar em prática.</p>
+</div>
+
+</div></div>
