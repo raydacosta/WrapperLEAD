@@ -1,0 +1,24 @@
+METADADOS — DIÁRIO TECNOLÓGICO 06/11/2026
+==========================================
+
+TÍTULO: Diário Tecnológico — 06 de Novembro de 2026
+SLUG: diario-tecnologico-06-11-2026
+EXCERPT: LangChain4j 1.23.0 traz Confidence Cascade e Decision Models. DeepSeek V4 Flash 0731 chega com 138 tok/s e pressiona modelos proprietários.
+TAGS: IA, Java, LangChain4j, DeepSeek, Agentes, RAG
+CATEGORIA: Diário Tecnológico
+AUTOR: Ray da Costa
+FOTO_AUTOR: https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg
+DATA: 06/11/2026
+
+CAPA (alta resolução — expira em 7 dias):
+https://www.figma.com/api/mcp/asset/2136c0f6-356b-4915-b35a-1d68e1d6d3bc.png
+Dimensões: 1536x864 px, formato PNG
+
+ARQUIVO HTML DO ARTIGO:
+artigo-diario-tecnologico-06-11-2026.html
+
+STATUS: Pronto para publicação manual em https://www.raydacosta.com/create
+BLOQUEIO: Browser não disponível na sessão remota automatizada.
+
+BANNER_PROMPT (Bing Image Creator):
+Dark tech editorial blog header, deep navy blue background, electric cyan glowing accents, abstract Java code streams merging with AI neural network cascade nodes, confidence cascade flow shown as geometric light trails branching from small to large nodes, minimalist cinematic composition, no human faces, 16:9 ratio 1600x900, high contrast professional editorial aesthetic

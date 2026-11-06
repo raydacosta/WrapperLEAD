@@ -1,0 +1,221 @@
+<style>
+.ra-art{background:#0B1220;color:#E5E7EB;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.75;padding:40px 16px;border-radius:12px;overflow-wrap:anywhere}
+.ra-wrap{max-width:720px;margin:0 auto}
+.ra-art h2{color:#F8FAFC;font-size:1.55em;line-height:1.3;margin:2.2em 0 .6em;letter-spacing:-.01em}
+.ra-art h3{color:#F8FAFC;font-size:1.18em;line-height:1.35;margin:1.8em 0 .5em}
+.ra-art p{margin:0 0 1.1em}
+.ra-art strong{color:#F8FAFC}
+.ra-art a{color:#38BDF8;text-decoration:underline;text-underline-offset:3px}
+.ra-art a:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}
+.ra-art ul,.ra-art ol{margin:0 0 1.2em;padding-left:1.3em}
+.ra-art li{margin:.35em 0}
+.ra-art code{font-family:"JetBrains Mono",Consolas,monospace;font-size:.9em;background:#111827;border:1px solid #1E3A52;border-radius:4px;padding:.05em .35em}
+.ra-art pre{background:#111827;border:1px solid #1E3A52;border-radius:8px;padding:14px 16px;overflow-x:auto;margin:0 0 1.2em;line-height:1.55}
+.ra-art pre code{background:none;border:0;padding:0;font-size:.86em}
+.ra-lead{font-size:1.12em;color:#CBD5E1;border-left:3px solid #38BDF8;padding-left:16px;margin-bottom:1.6em}
+.ra-card{background:#13283A;border:1px solid #1E3A52;border-top:3px solid #38BDF8;border-radius:12px;padding:20px 22px;margin:1.8em 0}
+.ra-card h4{color:#38BDF8;font-size:.82em;text-transform:uppercase;letter-spacing:.08em;margin:0 0 .6em}
+.ra-card>:last-child{margin-bottom:0}
+.ra-card.ra-warn{border-top-color:#FBBF24}.ra-card.ra-warn h4{color:#FBBF24}
+.ra-card.ra-ok{border-top-color:#34D399}.ra-card.ra-ok h4{color:#34D399}
+.ra-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:1.4em 0}
+.ra-grid .ra-card{margin:0}
+.ra-steps{counter-reset:s;list-style:none;padding-left:0!important}
+.ra-steps li{counter-increment:s;position:relative;padding-left:2.4em;margin:.7em 0}
+.ra-steps li::before{content:counter(s);position:absolute;left:0;top:.1em;width:1.7em;height:1.7em;border-radius:50%;background:#38BDF8;color:#0B1220;font-weight:700;font-size:.85em;display:flex;align-items:center;justify-content:center}
+.ra-tbl{overflow-x:auto;margin:1.4em 0 1.6em;border:1px solid #1E3A52;border-radius:10px}
+.ra-tbl table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}
+.ra-tbl th{background:#13283A;color:#F8FAFC;text-align:left;padding:10px 12px;font-weight:600;border-bottom:1px solid #1E3A52}
+.ra-tbl td{color:#E5E7EB;padding:9px 12px;border-bottom:1px solid #1A2638;vertical-align:top}
+.ra-tbl tr:last-child td{border-bottom:none}
+.ra-art figure{margin:1.6em 0}.ra-art figcaption{font-size:.85em;color:#94A3B8;margin-top:.5em}
+.ra-note{font-size:.88em;color:#94A3B8}
+.ra-next ol{padding-left:1.3em}
+.ra-rec{display:inline-block;margin-left:.4em;padding:.05em .55em;border-radius:999px;background:#38BDF8;color:#0B1220;font-size:.78em;font-weight:700}
+.ra-refs{font-size:.86em;color:#94A3B8}
+.ra-refs a{color:#7DD3FC;word-break:break-all}
+.ra-badge{display:inline-block;padding:.2em .7em;border-radius:999px;font-size:.78em;font-weight:700;font-family:Inter,sans-serif;margin-bottom:.8em}
+.ra-badge.alta{background:rgba(239,68,68,.15);color:#F87171;border:1px solid rgba(239,68,68,.3)}
+.ra-badge.media{background:rgba(245,158,11,.15);color:#FBBF24;border:1px solid rgba(245,158,11,.3)}
+.ra-badge.baixa{background:rgba(16,185,129,.15);color:#34D399;border:1px solid rgba(16,185,129,.3)}
+.ra-muted{opacity:.65}
+.ra-muted .ra-card{border-top-color:#2d3748}
+.ra-muted .ra-card h4{color:#94A3B8}
+@media (max-width:600px){.ra-art{font-size:16px;padding:28px 14px}.ra-card{padding:16px}.ra-art h2{font-size:1.4em}}
+</style>
+<div class="ra-art"><div class="ra-wrap">
+
+<p class="ra-lead">Hoje, 6 de novembro de 2026, o ecossistema Java e IA apresenta movimentos concretos: o LangChain4j 1.23.0 chega com um padrão agêntico inédito, o DeepSeek pressiona os modelos proprietários com velocidade de inferência impressionante, e o prazo para aproveitar o preço promocional do Gemini 4 Argon está se aproximando. Aqui está o que importa, filtrado para quem trabalha com Java e IA aplicada em produção.</p>
+
+<div class="ra-card" aria-label="O que você vai aprender">
+  <h4>O que você vai aprender</h4>
+  <ul>
+    <li>O que mudou no LangChain4j 1.23.0 e como o padrão Confidence Cascade funciona</li>
+    <li>Por que o DeepSeek V4 Flash 0731 é relevante para times com restrição de custo</li>
+    <li>O que é Harness Engineering e por que substitui o Context Engineering</li>
+    <li>Qual prazo de precificação de API merece atenção esta semana</li>
+  </ul>
+</div>
+
+<h2>🔥 O que chamou minha atenção hoje</h2>
+
+<div class="ra-card" aria-label="LangChain4j 1.23.0">
+  <span class="ra-badge alta">🔴 Alta Relevância</span>
+  <h4>LangChain4j 1.23.0 — Confidence Cascade e Decision Models</h4>
+  <p>O LangChain4j 1.23.0 foi lançado em 28 de outubro de 2026 por Dmytro Liubarskyi <a href="https://github.com/langchain4j/langchain4j/releases/tag/1.23.0">[1]</a>. Para quem trabalha com agentes Java em produção, esta release tem três pontos que merecem atenção imediata.</p>
+  <p>O primeiro é o <strong>padrão Confidence Cascade</strong>. A ideia é simples: em vez de acionar diretamente um modelo caro e poderoso para toda tarefa, o agente começa com um modelo menor, avalia a confiança da resposta e, só se necessário, escala para o modelo seguinte. Isso reduz custo e latência sem abrir mão de qualidade nas decisões complexas. É exatamente o tipo de padrão que faz sentido em ambientes enterprise onde o custo por token importa.</p>
+  <p>O segundo é a consolidação dos <strong>Decision Models</strong>, agora com suporte a imagens via Ollama e conversa multi-turno em todos os provedores. Um Decision Model é um wrapper de modelo treinado especificamente para classificação e roteamento, não para geração de texto — o que reduz drasticamente alucinações nas decisões de orquestração.</p>
+  <p>O terceiro ponto é de observabilidade: o novo <strong>AiServiceInvocationSummaryEvent</strong> agrupa todos os eventos de uma única invocação de AI Service em um objeto, o que simplifica logging e rastreamento sem precisar correlacionar manualmente dezenas de eventos dispersos.</p>
+  <a class="ra-note" href="https://github.com/langchain4j/langchain4j/releases/tag/1.23.0" target="_blank" rel="noopener">🔗 Fonte: GitHub — LangChain4j Release 1.23.0</a>
+</div>
+
+<div class="ra-card" aria-label="DeepSeek V4 Flash 0731">
+  <span class="ra-badge alta">🔴 Alta Relevância</span>
+  <h4>DeepSeek V4 Flash 0731 — 138 tok/s e custo competitivo</h4>
+  <p>O DeepSeek V4 Flash na variante 0731, lançado em 5 de novembro de 2026, chama atenção por um motivo prático: velocidade. O Artificial Analysis reporta 138,5 tokens por segundo de saída <a href="https://artificialanalysis.ai/models/deepseek-v4-flash">[2]</a>, bem acima da mediana de modelos open-weight comparáveis. Para aplicações que precisam de resposta em tempo real — chatbots de suporte, copilots interativos — esse número é relevante.</p>
+  <p>No benchmark SWE-bench Verified (tarefas reais de engenharia de software), o modelo alcança 79,0%, e no DSBench-FullStack marca 68,7, contra 71,6 do Opus 4.8 <a href="https://artificialanalysis.ai/models/deepseek-v4-flash">[2]</a>. A diferença existe, mas é menor do que o gap de preço sugere. Para times que rodam inferência própria ou usam a API do DeepSeek, é uma opção séria para tarefas de código e raciocínio intermediário.</p>
+  <p>O ponto de atenção: os benchmarks vêm em grande parte do próprio DeepSeek e de agregadores de terceiros. Recomendo testar nos casos de uso reais do seu produto antes de migrar cargas de trabalho críticas.</p>
+  <a class="ra-note" href="https://artificialanalysis.ai/models/deepseek-v4-flash" target="_blank" rel="noopener">🔗 Fonte: Artificial Analysis — DeepSeek V4 Flash</a>
+</div>
+
+<div class="ra-card" aria-label="Gemini 4 Argon — prazo de preço">
+  <span class="ra-badge media">🟡 Média Relevância</span>
+  <h4>Gemini 4 Argon — preço dobra em 1º de dezembro</h4>
+  <p>O Gemini 4 Argon entrou em disponibilidade geral em 13 de outubro com preço introdutório de $2/$10 por milhão de tokens (entrada/saída) <a href="https://devtk.ai/en/blog/ai-api-pricing-comparison-2026/">[3]</a>. Em 1º de dezembro, esse valor dobra. Se você está avaliando o Gemini 4 Argon para algum projeto, o momento de testar e validar é agora — não em dezembro.</p>
+  <p>Para referência: Claude Sonnet 5.5 está em $2/$10 e GPT-6.1 Sol também em $2/$10 com preço promocional até 21 de novembro. Os três estão no mesmo patamar de custo agora, mas os prazos são diferentes. Fique de olho.</p>
+  <a class="ra-note" href="https://devtk.ai/en/blog/ai-api-pricing-comparison-2026/" target="_blank" rel="noopener">🔗 Fonte: DevTk.AI — AI API Pricing Comparison 2026</a>
+</div>
+
+<div class="ra-card" aria-label="Harness Engineering">
+  <span class="ra-badge media">🟡 Média Relevância</span>
+  <h4>Harness Engineering — a terceira fase da interação com LLMs</h4>
+  <p>Uma análise publicada pela Epsilla <a href="https://www.epsilla.com/blogs/harness-engineering-evolution-prompt-context-autonomous-agents">[4]</a> descreve uma mudança de paradigma que já está acontecendo nos times mais avançados: de Prompt Engineering (2022–24) para Context Engineering (2025) e agora para <strong>Harness Engineering</strong> (2026).</p>
+  <p>A diferença prática: no Harness Engineering, você não escreve apenas o prompt ou monta o contexto — você projeta o ambiente de execução completo do agente. Regras, limites de passos, callbacks, políticas de segurança em código, loops de verificação, identidades por agente com privilégio mínimo. O texto que vai para o modelo é apenas uma parte do sistema.</p>
+  <p>Para times Java, isso significa que frameworks como LangChain4j e Spring AI estão exatamente na direção certa: abstrair a orquestração e o harness, deixando o desenvolvedor focado na lógica de negócio. Quem ainda trata agentes como "prompt mais elaborado" vai ter dificuldade de operar em produção.</p>
+  <a class="ra-note" href="https://www.epsilla.com/blogs/harness-engineering-evolution-prompt-context-autonomous-agents" target="_blank" rel="noopener">🔗 Fonte: Epsilla — The Third Evolution: Harness Engineering</a>
+</div>
+
+<h2>📚 O que vale estudar hoje</h2>
+<p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar:</p>
+
+<div class="ra-grid">
+  <div class="ra-card" aria-label="Confidence Cascade Pattern">
+    <h4>📐 Confidence Cascade Pattern</h4>
+    <p>O padrão introduzido no LangChain4j 1.23.0. Estude a implementação no release notes oficial — é um padrão de orquestração com impacto direto em custo e latência de agentes em produção.</p>
+  </div>
+  <div class="ra-card" aria-label="Agentic RAG">
+    <h4>🔍 Agentic RAG com múltiplas chamadas</h4>
+    <p>O novo padrão usa de 1 a 6 chamadas de recuperação por turno, com reescrita de query e verificação de resposta. Um artigo do ArXiv de 2026 cobre os padrões de Reasoning RAG para desafios enterprise <a href="https://arxiv.org/pdf/2506.10408">[5]</a>.</p>
+  </div>
+  <div class="ra-card" aria-label="AiServiceInvocationSummaryEvent">
+    <h4>🔭 Observabilidade com LangChain4j</h4>
+    <p>O novo AiServiceInvocationSummaryEvent simplifica rastreamento de invocações. Hora de revisar como você está instrumentando seus AI Services — correlação manual de eventos não escala.</p>
+  </div>
+  <div class="ra-card" aria-label="Decision Models">
+    <h4>⚡ Decision Models vs modelos gerais</h4>
+    <p>A distinção entre modelos de decisão (classificação, roteamento) e modelos de geração é fundamental para arquiteturas eficientes. O LangChain4j formaliza isso agora. Vale entender o conceito antes de aplicar.</p>
+  </div>
+</div>
+
+<h2 class="ra-muted">🔇 O que pode ser ignorado hoje</h2>
+<p class="ra-muted">Nem tudo que aparece no feed merece atenção imediata. Hoje, estes temas podem esperar:</p>
+
+<div class="ra-muted">
+  <div class="ra-card" aria-label="GPT Image 2.6 Flare e Sunburst">
+    <h4>GPT Image 2.6 Flare e Sunburst (OpenAI)</h4>
+    <p>Dois novos modelos de geração de imagem lançados em 4 de novembro. Se você não trabalha com geração de imagem em produção, o impacto é zero agora. Hype de UI, não de arquitetura.</p>
+  </div>
+  <div class="ra-card" aria-label="Modelos chineses regionais">
+    <h4>Tencent Hy4 e Zhipu GLM 5.3 FlashX Legal</h4>
+    <p>Ambos são lançamentos de API de provedores chineses direcionados ao mercado regional. Sem SDKs Java maduros, sem documentação em inglês consolidada, e sem casos de uso enterprise relevantes fora do contexto asiático por enquanto.</p>
+  </div>
+</div>
+
+<h2>☕ Radar Java + IA</h2>
+
+<p>O ecossistema Java com IA está em um momento de consolidação de padrões, não de experimentação. O LangChain4j 1.23.0 é o maior destaque da semana: a adição do padrão Confidence Cascade, dos Decision Models com suporte a imagens e da melhoria de observabilidade indica que o framework está maduro para produção enterprise.</p>
+
+<p>O Spring AI 2.0.2, lançado em 23 de outubro, mantém o foco em integração com o ecossistema Spring Boot. Há uma expectativa de que o <strong>Spring AI Agents</strong> chegue como projeto experimental em novembro de 2026, mas até a data de hoje não há confirmação de release. Não planeje arquitetura com base nisso ainda.</p>
+
+<p>Um detalhe técnico do 1.23.0 que merece destaque: o cliente MCP agora usa o <code>HttpClient SPI</code> padrão do Java, o que facilita configuração de proxies, interceptadores e políticas de retry sem depender de bibliotecas externas. Para ambientes enterprise com políticas de rede rígidas, isso elimina um ponto de fricção real.</p>
+
+<p>Exemplo mínimo do padrão Confidence Cascade com LangChain4j 1.23.0 (conceitual — requer configuração de modelos e provedores no contexto do projeto):</p>
+
+<pre><code>// LangChain4j 1.23.0 — JDK 17+
+// Dependência: dev.langchain4j:langchain4j-bom:1.23.0
+
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.output.Response;
+
+public class ConfidenceCascadeExample {
+
+    private final ChatLanguageModel fastModel;   // ex.: Haiku 5.5 ou DeepSeek Flash
+    private final ChatLanguageModel powerModel;  // ex.: Sonnet 5.5 ou Opus 5.5
+
+    private static final double CONFIDENCE_THRESHOLD = 0.80;
+
+    public String answer(String question) {
+        // 1. Tenta com modelo rápido e barato
+        Response&lt;String&gt; fastResponse = fastModel.generate(question);
+        double confidence = extractConfidence(fastResponse);
+
+        // 2. Escala para modelo poderoso apenas se necessário
+        if (confidence &lt; CONFIDENCE_THRESHOLD) {
+            return powerModel.generate(question).content();
+        }
+        return fastResponse.content();
+    }
+
+    private double extractConfidence(Response&lt;String&gt; response) {
+        // Implementar extração de score de confiança
+        // via tokenLogprobs ou modelo de avaliação separado
+        return 0.0; // placeholder
+    }
+}</code></pre>
+
+<div class="ra-card ra-warn" aria-label="Pontos de atenção">
+  <h4>Pontos de atenção</h4>
+  <ul>
+    <li>O padrão Confidence Cascade é mais eficaz quando os modelos do cascade são treinados ou avaliados nas mesmas distribuições de tarefas</li>
+    <li>Extração de confiança via logprobs requer suporte do provedor — nem todos expõem isso na API</li>
+    <li>Meça latência ponta a ponta: dois modelos em sequência podem ser mais lentos que um modelo médio direto</li>
+  </ul>
+</div>
+
+<h2>Conclusão</h2>
+<p>O dia de hoje confirma uma tendência que acompanho há meses: o foco está migrando de "qual modelo usar" para "como arquitetar o sistema ao redor do modelo". O LangChain4j 1.23.0 é a prova mais concreta disso no ecossistema Java — padrões como Confidence Cascade e Decision Models não existem para escolher o melhor modelo, mas para usar o modelo certo em cada etapa do fluxo.</p>
+<p>O DeepSeek V4 Flash reforça que a janela de vantagem dos modelos proprietários em custo-benefício está se fechando para casos de uso intermediários. Se você ainda não testou modelos open-weight em produção, o momento é agora — não quando o mercado já tiver decidido.</p>
+<p>Para a semana: revise suas integrações antes do prazo do Gemini 4 Argon (30/11), atualize o LangChain4j para 1.23.0 e leia os release notes com atenção. O Confidence Cascade sozinho justifica a atualização.</p>
+
+<h2>Fontes consultadas</h2>
+<ol class="ra-refs">
+  <li><a href="https://github.com/langchain4j/langchain4j/releases/tag/1.23.0">LangChain4j Release 1.23.0 — GitHub (acesso em 06/11/2026)</a></li>
+  <li><a href="https://artificialanalysis.ai/models/deepseek-v4-flash">DeepSeek V4 Flash — Artificial Analysis (acesso em 06/11/2026)</a></li>
+  <li><a href="https://devtk.ai/en/blog/ai-api-pricing-comparison-2026/">AI API Pricing Comparison 2026 — DevTk.AI (acesso em 06/11/2026)</a></li>
+  <li><a href="https://www.epsilla.com/blogs/harness-engineering-evolution-prompt-context-autonomous-agents">The Third Evolution: Harness Engineering — Epsilla (acesso em 06/11/2026)</a></li>
+  <li><a href="https://arxiv.org/pdf/2506.10408">Reasoning RAG via System 1 or System 2 — ArXiv (acesso em 06/11/2026)</a></li>
+  <li><a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0">Spring AI vs LangChain4j in October 2026 — DEV Community (acesso em 06/11/2026)</a></li>
+  <li><a href="https://cadenya.com/other-content/ai-agent-frameworks-in-java">AI Agent Frameworks in Java 2026 — Cadenya (acesso em 06/11/2026)</a></li>
+</ol>
+
+<div class="ra-next" aria-label="Próximo artigo">
+  <h2>Qual tema você gostaria de ver no próximo artigo?</h2>
+  <ol>
+    <li>
+      <strong>Implementando Confidence Cascade em produção com LangChain4j 1.23.0</strong>
+      <span class="ra-rec">★ Recomendado para continuar</span><br>
+      Você aprenderá a configurar o padrão completo com dois modelos reais, extrair scores de confiança via logprobs e medir o impacto em custo e latência com dados reais.
+    </li>
+    <li>
+      <strong>Agentic RAG com múltiplas chamadas de recuperação em Java</strong><br>
+      Você aprenderá a construir um pipeline de recuperação com reescrita de query, verificação de resposta e orçamento de passos — tudo com LangChain4j e um vector store local.
+    </li>
+    <li>
+      <strong>Observabilidade de agentes Java com AiServiceInvocationSummaryEvent</strong><br>
+      Você aprenderá a instrumentar AI Services com o novo evento do LangChain4j 1.23.0, integrar com OpenTelemetry e construir dashboards de custo e latência por invocação.
+    </li>
+  </ol>
+  <p>Marque o tema que você mais gostaria de ver ou colocar em prática.</p>
+</div>
+
+</div></div>
