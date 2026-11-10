@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diário Tecnológico — 10/11/2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface-2: #252840;
+      --cyan: #00d4ff;
+      --violet: #7c3aed;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --green: #10b981;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3748;
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+      z-index: 999;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .article-header {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1d2e 50%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.05) 0%, transparent 60%);
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 24px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-title);
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+
+    .excerpt {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid transparent;
+      border-image: linear-gradient(90deg, transparent, var(--border), transparent) 1;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-icon {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,212,255,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--cyan); }
+
+    strong { color: #fff; font-weight: 600; }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .highlight-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,212,255,0.1);
+    }
+
+    .highlight-card.alta { border-left-color: var(--red); }
+    .highlight-card.media { border-left-color: var(--amber); }
+    .highlight-card.baixa { border-left-color: var(--green); }
+
+    .relevance-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+      margin-bottom: 12px;
+    }
+
+    .relevance-badge.alta { background: rgba(239,68,68,0.15); color: #f87171; }
+    .relevance-badge.media { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .relevance-badge.baixa { background: rgba(16,185,129,0.15); color: #34d399; }
+
+    .card-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: none;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+    }
+
+    .grid-card .card-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .grid-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .grid-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .radar-java {
+      background: linear-gradient(135deg, #0d1f1a 0%, #0f2318 100%);
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-top: 8px;
+    }
+
+    .radar-java h2 {
+      color: #34d399;
+    }
+
+    .radar-java h3 {
+      color: #6ee7b7;
+    }
+
+    .radar-java p {
+      color: #a7f3d0;
+      opacity: 0.85;
+    }
+
+    pre {
+      background: #0a0f0d;
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 14px;
+      color: #6ee7b7;
+      line-height: 1.6;
+    }
+
+    .ignore-section {
+      opacity: 0.7;
+    }
+
+    .ignore-section .highlight-card {
+      border-left-color: var(--border);
+      filter: grayscale(30%);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-title);
+    }
+
+    .tag-cyan { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.2); }
+    .tag-violet { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+    .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+    .tag-red { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-green { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    .article-footer {
+      background: linear-gradient(135deg, #1a1d2e 0%, #0f1117 100%);
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .author-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .author-info h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .author-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .footer-closing {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .footer-closing span {
+      color: var(--cyan);
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; text-align: center; }
+      .radar-java { padding: 24px; }
+      section { padding: 40px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar"></div>
+
+  <header class="article-header">
+    <div class="container">
+      <div class="header-badge">📡 Diário Tecnológico · 10 de novembro de 2026</div>
+      <h1>Diário Tecnológico — 10 de novembro de 2026</h1>
+      <p class="excerpt">O Web Summit 2026 coloca agentes autônomos com identidade digital no centro do debate; Anthropic consolida a família 5.5 com o Haiku mais barato da história; Akamai entra no mercado de inferência com sandbox para agentes.</p>
+      <div class="tags-row">
+        <span class="tag tag-cyan">IA</span>
+        <span class="tag tag-violet">Java</span>
+        <span class="tag tag-amber">LangChain4j</span>
+        <span class="tag tag-green">Spring AI</span>
+        <span class="tag tag-red">Agentes Autônomos</span>
+        <span class="tag tag-cyan">Web Summit</span>
+        <span class="tag tag-violet">Anthropic</span>
+        <span class="tag tag-amber">FinOps</span>
+        <span class="tag tag-green">Observabilidade</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section id="intro">
+      <p>Estou acompanhando o Web Summit 2026 de Lisboa com atenção particular ao que está sendo apresentado sobre agentes autônomos. Este é o evento em que o ecossistema de IA costuma tirar as máscaras das promessas do ano e mostrar o que de fato já funciona — e o que ainda é PowerPoint com sonho embutido. Esta edição, que vai até 12 de novembro no Altice Arena e na FIL, parece confirmar que entramos de vez na era pós-chatbot: a discussão não é mais sobre "quanto o modelo responde bem", e sim sobre "o que o agente pode fazer sem me perguntar toda hora".</p>
+
+      <p>Em paralelo, o mês de outubro consolidou a família 5.5 da Anthropic com o lançamento do Claude Haiku 5.5 — um modelo de alto volume, barato e rápido que claramente mira o mercado de automações em escala. No lado de infraestrutura, a Akamai surpreendeu ao entrar formalmente no mercado de inferência de IA com um produto dual: serviço de inferência em edge e um sandbox isolado para rodar agentes. Não é uma empresa que vejo normalmente nesse espaço, o que por si só é um sinal do quanto o mercado está se expandindo para fora dos grandes hiperescaladores.</p>
+
+      <p>No radar Java, o debate entre Spring AI 2.0 e LangChain4j continua quente — mas está ficando mais sofisticado. Já passamos da fase de "qual é melhor" para "qual resolve melhor este problema específico". Trago minha análise atualizada na seção dedicada.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="destaques">
+      <h2><span class="section-icon">🔥</span> O que chamou minha atenção hoje</h2>
+
+      <div class="highlight-card alta">
+        <span class="relevance-badge alta">🔴 Alta Relevância</span>
+        <h3>Manus AI 2.0 no Web Summit: agentes com identidade digital autônoma</h3>
+        <p>A Manus apresentou no palco do Web Summit 2026, em Lisboa, uma nova versão do seu agente com capacidades que ultrapassam qualquer demonstração anterior que acompanhei: o agente recebe número de telefone próprio, endereço de e-mail e uma carteira digital habilitada para compras. Em outras palavras, estão entregando <strong>identidade digital autônoma para agentes de IA</strong> — a capacidade de existir no mundo digital como um "ator" com credenciais próprias.</p>
+        <p>Do ponto de vista arquitetural, isso levanta questões sérias que eu acho que o mercado ainda não discute com profundidade suficiente: como rastrear responsabilidade legal quando um agente com e-mail e carteira própria toma uma decisão de compra errada? Qual é o modelo de auditoria? Dito isso, o potencial para automação de processos de negócio é enorme — especialmente em fluxos que hoje exigem intervenção humana apenas por causa de canais de comunicação. Se o agente pode receber um e-mail de confirmação, responder e fechar uma transação, eliminamos um gargalo real.</p>
+        <p>Para equipes Java que trabalham com automação de processos, o que a Manus está mostrando é o estado da arte de agentes com tool calling avançado. Vale entender a arquitetura mesmo que o produto em si não seja o que você vai usar.</p>
+        <a class="card-source" href="https://imasters.com.br/especial/web-summit-2026/c/jn7bw633pfnfzryjp5zwgfhk2x8hwq2p" target="_blank" rel="noopener">🔗 iMasters — Web Summit 2026</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Akamai Inference + Agent Sandbox: edge computing entra no jogo de IA</h3>
+        <p>A Akamai lançou no início de novembro dois produtos complementares: o <strong>Akamai Inference</strong>, para implantação de modelos abertos em infraestrutura edge, e o <strong>Agent Sandbox</strong>, um ambiente isolado para execução de agentes. O catálogo inicial traz 12 modelos, incluindo NVIDIA Nemotron-3 Ultra, gpt-oss-120b e Gemma 4. O que me chama atenção aqui não é o produto em si, mas o sinal estratégico: a Akamai claramente enxerga que latência de inferência em edge vai ser diferencial competitivo para agentes que precisam responder em tempo real.</p>
+        <p>Para aplicações Java que hoje chamam APIs de LLM centralizadas e sofrem com latência variável, isso abre uma alternativa interessante — especialmente para casos de uso onde o dado não pode sair da região ou onde latência sub-100ms é requisito. O sandbox de agentes também é relevante do ponto de vista de segurança: isolamento de execução é exatamente o que falta em muitas arquiteturas agenticas improvisadas que tenho visto.</p>
+        <a class="card-source" href="https://www.datacenterdynamics.com/br/not%C3%ADcias/akamai-lan%C3%A7a-servi%C3%A7o-de-infer%C3%AAncia-de-ia-e-ambiente-de-execu%C3%A7%C3%A3o-para-agentes/" target="_blank" rel="noopener">🔗 Data Center Dynamics</a>
+      </div>
+
+      <div class="highlight-card media">
+        <span class="relevance-badge media">🟡 Média Relevância</span>
+        <h3>Google AI Plus perde Gemini Pro em 13 de novembro: sinal de custos insustentáveis</h3>
+        <p>A partir de 13 de novembro, assinantes do plano Google AI Plus perdem o acesso aos modelos Gemini Pro, mantendo apenas Flash e Flash-Lite. O Google não deu uma explicação pública clara, mas o contexto é transparente para quem acompanha o mercado: Gemini Pro e as versões mais pesadas como Gemini 4 Argon e Gemini 4 Carbon têm custo computacional que simplesmente não é sustentável em planos de assinatura fixa de baixo valor.</p>
+        <p>Isso confirma uma tendência que venho observando: as grandes plataformas estão reposicionando seus modelos mais capazes para camadas de pagamento por uso ou enterprise, enquanto os planos de assinatura migram para modelos flash/mini/haiku. Para arquitetos de solução, o recado é direto: se você está desenhando uma aplicação que depende de Gemini Pro via plano de assinatura, precisa rever o modelo de custo agora antes que a migração seja forçada.</p>
+        <a class="card-source" href="https://www.spacemoney.com.br/tecnologia/gemini-pro-sai-do-ai-plus" target="_blank" rel="noopener">🔗 Space Money</a>
+      </div>
+
+      <div class="highlight-card baixa">
+        <span class="relevance-badge baixa">🟢 Baixa Relevância</span>
+        <h3>FinOps Agêntico: de monitoramento reativo a controle autônomo de custo</h3>
+        <p>O tema do FinOps para sistemas agênticos está ganhando corpo como disciplina. Um dado que me chamou atenção: agentes de IA costumam gerar entre 5 e 20 chamadas internas a LLMs por cada interação visível ao usuário — o que torna o custo real quase invisível para quem monitora apenas as chamadas externas. A resposta emergente do mercado é o "FinOps agêntico": usar agentes para monitorar e otimizar o gasto de outros agentes em tempo real, fechando o loop de forma autônoma.</p>
+        <p>O State of FinOps 2026 da FinOps Foundation indica que 98% das práticas já gerenciam gasto com IA como prioridade, e que o FinOps para agentes é o tema número um do ano. Para quem está construindo produtos em Java com LLMs, isso não é mais uma preocupação futura: é uma questão operacional que precisa de resposta arquitetural já na fase de design — trace IDs por chamada, teto de tokens por execução, profundidade máxima de loops.</p>
+        <a class="card-source" href="https://www.finout.io/blog/how-finops-must-evolve-for-the-agentic-era-of-ai" target="_blank" rel="noopener">🔗 Finout — FinOps for Agentic AI</a>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="estudar">
+      <h2><span class="section-icon">📚</span> O que vale estudar hoje</h2>
+      <p>Com base no que acompanhei hoje, estes são os temas e recursos que recomendo explorar:</p>
+      <div class="cards-grid">
+
+        <div class="grid-card">
+          <span class="card-icon">🤖</span>
+          <h3>Arquitetura de Agentes com Identidade Digital</h3>
+          <p>O que a Manus está mostrando no Web Summit é a próxima fronteira de tool calling. Entender como construir agentes com credenciais e canais próprios é habilidade de alto valor agora.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🧠</span>
+          <h3>Observabilidade de Pipelines RAG com Langfuse</h3>
+          <p>Com agentes gerando 5 a 20 chamadas internas por requisição, observabilidade granular por trace_id é mandatória. Langfuse é hoje a ferramenta mais madura para isso no ecossistema open source.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">☕</span>
+          <h3>LangChain4j 1.20.x: pipeline RAG granular em Java</h3>
+          <p>A série 1.20.x do LangChain4j traz o pipeline de RAG mais configurável do ecossistema Java — splitter, embedding store, retriever e ingestor como peças independentes. Vale explorar agora se você tem RAG customizado.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">💰</span>
+          <h3>FinOps para Agentes: teto de tokens e profundidade de loop</h3>
+          <p>Definir profundidade máxima de loops agenticos e teto de tokens por execução não é otimização — é governança. O artigo da Finout e o guia da FinOps Foundation são bons pontos de partida.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">⚡</span>
+          <h3>Claude Haiku 5.5: modelo para alto volume em Java</h3>
+          <p>Com ID claude-haiku-5-5 disponível na AWS, Azure e Google Cloud, o Haiku 5.5 é hoje o modelo de referência para automações de alto volume e baixo custo. Ideal para classificação, resumo e navegação web via agente.</p>
+        </div>
+
+        <div class="grid-card">
+          <span class="card-icon">🔒</span>
+          <h3>Agent Sandbox: isolamento de execução para agentes</h3>
+          <p>O lançamento do Agent Sandbox da Akamai traz à tona um gap que precisa ser endereçado em toda arquitetura agentica: isolamento de execução. Vale estudar os princípios de sandboxing mesmo que não use o produto da Akamai.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="ignorar" class="ignore-section">
+      <h2><span class="section-icon">🔇</span> O que pode ser ignorado hoje</h2>
+      <p>Nem tudo que aparece no feed merece atenção. Hoje, estes temas podem esperar — ou ser descartados:</p>
+
+      <div class="highlight-card">
+        <h3>Benchmarks comparativos de modelos sem contexto de caso de uso</h3>
+        <p>O ciclo de artigos "GPT-6 X vs Gemini Y vs Claude Z no benchmark ABC" está no pico do hype de comparação vazia. Sem um caso de uso real e um conjunto de dados representativo do seu problema, esses números não dizem nada sobre o que vai funcionar na sua aplicação.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Promessas de "AGI iminente" sem substância técnica</h3>
+        <p>A cada semana surgem declarações de CEOs ou artigos de opinião sobre inteligência geral artificial prestes a chegar. São distração. O que importa agora é o que os modelos fazem de forma confiável e como integrar isso de forma produtiva no seu contexto empresarial.</p>
+      </div>
+
+      <div class="highlight-card">
+        <h3>Novos frameworks de orquestração de agentes sem adoção real</h3>
+        <p>O ecossistema de frameworks para orquestração de agentes está fragmentado e instável. Antes de investir em aprender um novo framework obscuro, verifique se tem comunidade ativa, releases recentes e casos de uso em produção documentados.</p>
+      </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="radar-java">
+      <div class="radar-java">
+        <h2><span class="section-icon">☕</span> Radar Java + IA</h2>
+
+        <p>O debate Spring AI 2.0 versus LangChain4j 1.20.x amadureceu consideravelmente em 2026. Já não é mais questão de preferência — é questão de adequação arquitetural. O Spring AI 2.0 GA, lançado em junho, foi construído sobre Spring Boot 4 e Spring Framework 7, e traz uma API de chat cliente opinativa e integrada que acelera muito o time-to-market para RAG padrão e chat. Se a sua stack já é Spring, o Spring AI é o caminho natural: configuração automática, integração com todos os providers principais e curva de aprendizado mínima.</p>
+
+        <p>O LangChain4j, agora na linha 1.20.x com releases a cada duas a quatro semanas, se posiciona de forma diferente: é agnóstico de framework (funciona com Spring Boot, Quarkus, Micronaut, Helidon ou Java puro) e expõe o pipeline de RAG como peças independentes. Isso é exatamente o que você precisa quando o RAG é o coração do produto — quando você precisa controlar o chunking, a estratégia de embedding, o retriever e o ingestor de forma granular. Para times que trabalham com Quarkus em ambientes GraalVM nativo, o LangChain4j é hoje a única opção madura.</p>
+
+        <p>Uma combinação que tenho visto funcionar bem em produção: Spring AI para a camada de chat e RAG padrão, e LangChain4j apenas para a camada de agentes e tool calling complexo. O risco aqui é conflito de auto-configuração quando os dois coexistem no mesmo projeto — vale isolar em módulos separados ou usar um proxy de serviço.</p>
+
+        <p>No que diz respeito a FinOps Java, o ponto prático imediato é instrumentar todas as chamadas ao LLM com <code>request_id</code> e <code>trace_id</code> vinculados à tarefa do agente — sem isso, você não consegue atribuir custo por fluxo e perde visibilidade sobre quais agentes estão gastando o quê. O exemplo abaixo mostra um padrão simples com LangChain4j e Langfuse para rastreamento de custo:</p>
+
+<pre><code>// Padrão de rastreamento de custo por trace com LangChain4j
+ChatLanguageModel model = AnthropicChatModel.builder()
+    .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+    .modelName("claude-haiku-5-5")
+    .maxTokens(1024)
+    .build();
+
+// Registrar trace_id antes de cada chamada agentica
+String traceId = UUID.randomUUID().toString();
+String taskId  = "agent-task-compra-autonoma";
+
+TokenUsage usage = model.generate(messages).tokenUsage();
+
+// Enviar para Langfuse ou sistema de observabilidade
+observabilityClient.record(
+    TraceEvent.builder()
+        .traceId(traceId)
+        .taskId(taskId)
+        .inputTokens(usage.inputTokenCount())
+        .outputTokens(usage.outputTokenCount())
+        .model("claude-haiku-5-5")
+        .build()
+);</code></pre>
+
+        <p>Este padrão simples, aplicado consistentemente, dá visibilidade real sobre o custo por fluxo agentico — e é o primeiro passo para qualquer estratégia séria de FinOps com LLMs em Java.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="article-footer">
+    <div class="container">
+
+      <div class="author-card">
+        <img
+          class="author-avatar"
+          src="https://horizons-cdn.hostinger.com/760a8124-0ff6-484c-9823-b7c394fd0081/e1dabe2b8dc87975f139009d44f841df.jpg"
+          alt="Ray da Costa"
+        />
+        <div class="author-info">
+          <h4>Ray da Costa</h4>
+          <p>Fundador da Wrapper Sistemas · Arquiteto de Software · Especialista em Java e IA Aplicada</p>
+        </div>
+      </div>
+
+      <p>O que o Web Summit 2026 está mostrando com clareza é que a era dos agentes autônomos não é mais uma projeção de analista — é o presente que a indústria está colocando em produção agora. Para quem trabalha com Java e IA aplicada, o momento é de consolidar as bases: observabilidade desde o primeiro commit, FinOps como parte do design arquitetural, e escolha cuidadosa de framework conforme o problema — não conforme a moda. Amanhã, o Web Summit ainda tem dois dias de programação; vou continuar acompanhando e trazendo o que for relevante para o contexto enterprise Java.</p>
+
+      <div class="footer-closing">
+        <p>Até amanhã. <span>— Ray</span></p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
