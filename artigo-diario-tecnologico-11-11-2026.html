@@ -1,0 +1,195 @@
+<style>
+.ra-art{background:#0B1220;color:#E5E7EB;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.75;padding:40px 16px;border-radius:12px;overflow-wrap:anywhere}
+.ra-wrap{max-width:720px;margin:0 auto}
+.ra-art h2{color:#F8FAFC;font-size:1.55em;line-height:1.3;margin:2.2em 0 .6em;letter-spacing:-.01em}
+.ra-art h3{color:#F8FAFC;font-size:1.18em;line-height:1.35;margin:1.8em 0 .5em}
+.ra-art p{margin:0 0 1.1em}
+.ra-art strong{color:#F8FAFC}
+.ra-art a{color:#38BDF8;text-decoration:underline;text-underline-offset:3px}
+.ra-art a:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}
+.ra-art ul,.ra-art ol{margin:0 0 1.2em;padding-left:1.3em}
+.ra-art li{margin:.35em 0}
+.ra-art code{font-family:"JetBrains Mono",Consolas,monospace;font-size:.9em;background:#111827;border:1px solid #1E3A52;border-radius:4px;padding:.05em .35em}
+.ra-art pre{background:#111827;border:1px solid #1E3A52;border-radius:8px;padding:14px 16px;overflow-x:auto;margin:0 0 1.2em;line-height:1.55}
+.ra-art pre code{background:none;border:0;padding:0;font-size:.86em}
+.ra-lead{font-size:1.12em;color:#CBD5E1;border-left:3px solid #38BDF8;padding-left:16px;margin-bottom:1.6em}
+.ra-card{background:#13283A;border:1px solid #1E3A52;border-top:3px solid #38BDF8;border-radius:12px;padding:20px 22px;margin:1.8em 0}
+.ra-card h4{color:#38BDF8;font-size:.82em;text-transform:uppercase;letter-spacing:.08em;margin:0 0 .6em}
+.ra-card>:last-child{margin-bottom:0}
+.ra-card.ra-warn{border-top-color:#FBBF24}.ra-card.ra-warn h4{color:#FBBF24}
+.ra-card.ra-ok{border-top-color:#34D399}.ra-card.ra-ok h4{color:#34D399}
+.ra-card.ra-muted{border-top-color:#475569;opacity:.75}.ra-card.ra-muted h4{color:#94A3B8}
+.ra-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:1.4em 0}
+.ra-grid .ra-card{margin:0}
+.ra-steps{counter-reset:s;list-style:none;padding-left:0!important}
+.ra-steps li{counter-increment:s;position:relative;padding-left:2.4em;margin:.7em 0}
+.ra-steps li::before{content:counter(s);position:absolute;left:0;top:.1em;width:1.7em;height:1.7em;border-radius:50%;background:#38BDF8;color:#0B1220;font-weight:700;font-size:.85em;display:flex;align-items:center;justify-content:center}
+.ra-tbl{overflow-x:auto;margin:1.4em 0 1.6em;border:1px solid #1E3A52;border-radius:10px}
+.ra-tbl table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}
+.ra-tbl th{background:#13283A;color:#F8FAFC;text-align:left;padding:10px 12px;font-weight:600;border-bottom:1px solid #1E3A52}
+.ra-tbl td{color:#E5E7EB;padding:9px 12px;border-bottom:1px solid #1A2638;vertical-align:top}
+.ra-tbl tr:last-child td{border-bottom:none}
+.ra-art figure{margin:1.6em 0}.ra-art figcaption{font-size:.85em;color:#94A3B8;margin-top:.5em}
+.ra-note{font-size:.88em;color:#94A3B8}
+.ra-next ol{padding-left:1.3em}
+.ra-rec{display:inline-block;margin-left:.4em;padding:.05em .55em;border-radius:999px;background:#38BDF8;color:#0B1220;font-size:.78em;font-weight:700}
+.ra-refs{font-size:.86em;color:#94A3B8}
+.ra-refs a{color:#7DD3FC;word-break:break-all}
+.ra-badge{display:inline-block;padding:.15em .6em;border-radius:999px;font-size:.78em;font-weight:700;margin-left:.4em}
+.ra-badge-red{background:rgba(239,68,68,.15);color:#f87171}
+.ra-badge-yellow{background:rgba(245,158,11,.15);color:#fbbf24}
+.ra-badge-green{background:rgba(16,185,129,.15);color:#34d399}
+@media (max-width:600px){.ra-art{font-size:16px;padding:28px 14px}.ra-card{padding:16px}.ra-art h2{font-size:1.4em}}
+</style>
+<div class="ra-art"><div class="ra-wrap">
+
+<p class="ra-lead">O ecossistema de IA acelerou nesta segunda semana de novembro: dois grandes lançamentos simultâneos — Claude Fable 5.2 da Anthropic e Gemini 4 Carbon do Google — redefinem o custo de rodar agentes em produção. No lado Java, o LangChain4j 1.23 entrou no radar com padrões novos para decisão e observabilidade em agentes.</p>
+
+<div class="ra-card" aria-label="O que você vai aprender"><h4>O que você vai aprender</h4>
+<ul>
+  <li>O que muda com o Claude Fable 5.2 e por que o preço importa para quem roda agentes</li>
+  <li>Como o Gemini 4 Carbon está competindo com precificação agressiva e o recurso /swarm</li>
+  <li>O que traz o LangChain4j 1.23 de diferente para quem constrói agentes em Java</li>
+  <li>Uma análise objetiva do que é ruído e o que vale tempo agora</li>
+</ul>
+</div>
+
+<h2>🔴 Claude Fable 5.2 e Mythos 5.2 — Anthropic reduz preço e aumenta escala <span class="ra-badge ra-badge-red">Alta relevância</span></h2>
+
+<p>A Anthropic lançou em 9 de novembro dois modelos simultâneos: o <strong>Claude Fable 5.2</strong> e o <strong>Claude Mythos 5.2</strong>. Para quem usa agentes em produção, os números que mais importam são os de preço e janela de contexto.</p>
+
+<p>O Fable 5.2 chega a <strong>US$8 por milhão de tokens de entrada</strong> e <strong>US$40 por milhão de saída</strong> — uma queda de 20% em relação ao Fable 5.1 (US$10 e US$50). A janela de contexto vai a 1 milhão de tokens, e a saída máxima sobe para 128K tokens. No benchmark interno FrontierCode 2, a Anthropic reporta 49,1% de acerto, contra 32,4% do 5.1 — um salto considerável em tarefas de programação complexa. <a href="https://www.anthropic.com/claude/fable">[1]</a></p>
+
+<p>O Mythos 5.2 é a versão irmã com guardrails relaxados, acessível apenas por organizações que passam pelo programa de verificação de cibersegurança e ciências da vida da Anthropic. Não é relevante para o desenvolvimento cotidiano, mas é um sinal de que a empresa está segmentando cada vez mais o acesso por caso de uso.</p>
+
+<div class="ra-card" aria-label="Pontos de atenção do Fable 5.2"><h4>Pontos de atenção do Fable 5.2</h4>
+<ul>
+  <li><strong>Custo por tarefa no esforço máximo:</strong> relatórios apontam média de US$26,54 por tarefa — alto para workloads de alto volume. Avalie o tradeoff entre inteligência e custo.</li>
+  <li><strong>Modo rápido (2,5× velocidade):</strong> custa o dobro — US$16/M entrada e US$80/M saída. Use com critério.</li>
+  <li><strong>Batch API:</strong> 50% de desconto para tarefas assíncronas, o que faz sentido para pipelines que não exigem resposta em tempo real.</li>
+  <li><strong>Disponibilidade:</strong> AWS, Google Cloud e Microsoft Foundry, além da Claude Platform direta.</li>
+</ul>
+</div>
+
+<p>Minha leitura: o Fable 5.2 é relevante para cenários em que qualidade de raciocínio e orquestração de agentes complexos justificam o custo. Para volume alto com tarefas repetitivas, o Gemini 4 Carbon começa a parecer muito mais atraente — como veremos logo abaixo. <a href="https://www.marktechpost.com/2026/11/10/anthropic-claude-fable-5-2-mythos-5-2-release/">[2]</a></p>
+
+<h2>🔴 Gemini 4 Carbon — Google tenta dominar com preço e coordenação de agentes <span class="ra-badge ra-badge-red">Alta relevância</span></h2>
+
+<p>O <strong>Gemini 4 Carbon</strong> foi liberado publicamente em 10 de novembro pelo Google, com uma estratégia de entrada que chama atenção: <strong>US$2 por milhão de tokens de entrada</strong> e <strong>US$10 por milhão de saída</strong> — válidos até 30 de novembro. A partir de 1º de dezembro, os preços sobem para US$4 e US$20 respectivamente. Mesmo após a promoção, o Gemini 4 Carbon será 50% mais barato que o Claude Fable 5.2. <a href="https://venturebeat.com/technology/google-gemini-4-carbon-is-now-publicly-available-and-it-undercuts-claude-fable-5-2-and-opus-5-5-on-api-price">[3]</a></p>
+
+<p>Mas o dado mais estratégico é a funcionalidade <strong>/swarm no Antigravity</strong>, que permite distribuir uma tarefa entre múltiplos agentes coordenados. Por enquanto está em preview, não é uma API geral, mas o Google está claramente posicionando o Carbon como modelo para workloads agênticos de alta escala com custo controlado. <a href="https://mlq.ai/news/google-makes-gemini-4-carbon-widely-available-at-2-per-million-input-tokens-and-previews-agent-swarms/">[4]</a></p>
+
+<div class="ra-tbl"><table>
+  <thead><tr><th>Modelo</th><th>Entrada ($/M tokens)</th><th>Saída ($/M tokens)</th><th>Janela</th></tr></thead>
+  <tbody>
+    <tr><td>Claude Fable 5.2</td><td>$8,00</td><td>$40,00</td><td>1M tokens</td></tr>
+    <tr><td>Gemini 4 Carbon (promo)</td><td>$2,00</td><td>$10,00</td><td>—</td></tr>
+    <tr><td>Gemini 4 Carbon (após 1/12)</td><td>$4,00</td><td>$20,00</td><td>—</td></tr>
+  </tbody>
+</table></div>
+
+<p class="ra-note">Fonte: Anthropic Platform Docs e VentureBeat. Preços verificados em 11/11/2026. Janela de contexto do Gemini 4 Carbon não confirmada nas fontes acessadas.</p>
+
+<div class="ra-card ra-warn" aria-label="Aviso sobre o período promocional"><h4>Aviso: janela promocional curta</h4>
+<p>Se você está avaliando o Gemini 4 Carbon para produção, o preço promocional termina em 30 de novembro. Não deixe que a comparação de preço de hoje se torne a base de decisão de arquitetura para o ano que vem. Faça o benchmark com os preços pós-promoção.</p>
+</div>
+
+<h2>🟡 Anthropic: IPO, escritório e ferramentas corporativas <span class="ra-badge ra-badge-yellow">Média relevância</span></h2>
+
+<p>Além dos modelos, a Anthropic está em evidência pelo seu IPO previsto para novembro de 2026, com estimativas de avaliação em torno de US$1,5 trilhão. No campo de produtos, a empresa lançou um conjunto de ferramentas de escritório voltadas para empresas, posicionadas diretamente contra o Microsoft 365 Copilot e o Google Workspace com Gemini. <a href="https://cryptobriefing.com/anthropic-unveils-ai-office-tools-ahead-of-ipo-challenging-microsoft-google/">[5]</a></p>
+
+<p>Para nós, arquitetos de sistemas, o IPO sinaliza amadurecimento e pressão por margem — o que historicamente significa ajustes de preço e foco em enterprise. Vale acompanhar os termos de acesso da API à medida que a empresa entra nessa nova fase.</p>
+
+<h2>📚 O que vale estudar hoje</h2>
+
+<div class="ra-grid">
+  <div class="ra-card ra-ok" aria-label="Batch API da Anthropic"><h4>Batch API — Anthropic</h4>
+  <p>50% de desconto no Fable 5.2 para tarefas assíncronas. Se você já roda pipelines de processamento batch com IA, vale revisar a migração para esse endpoint. O custo pode cair pela metade sem mudança de modelo.</p>
+  </div>
+
+  <div class="ra-card ra-ok" aria-label="Confidence Cascade — LangChain4j 1.23"><h4>Confidence Cascade — LangChain4j 1.23</h4>
+  <p>Novo padrão de agente lançado em 28/10/2026 que escalona decisões por confiança: começa no modelo menor e eleva ao maior só se necessário. Economiza tokens e latência em fluxos que toleram respostas de qualidade variável.</p>
+  </div>
+
+  <div class="ra-card" aria-label="Comparação de custo por tarefa"><h4>FinOps com LLMs: custo por tarefa</h4>
+  <p>O Fable 5.2 custa em média US$26,54 por tarefa no esforço máximo. Calcular o custo médio por tarefa do seu fluxo é agora tão importante quanto o benchmark de qualidade. Sem essa métrica, você não consegue comparar modelos de forma honesta.</p>
+  </div>
+
+  <div class="ra-card" aria-label="Spring AI Agents experimental"><h4>Spring AI Agents — experimental</h4>
+  <p>Há indícios de que o módulo dedicado de agentes do Spring AI chegará como experimental em novembro 2026. Se você usa Spring Boot, vale monitorar o repositório spring-projects/spring-ai no GitHub para confirmar o lançamento.</p>
+  </div>
+</div>
+
+<h2>🔇 O que pode ser ignorado hoje</h2>
+
+<div class="ra-card ra-muted" aria-label="Meta Muse Ember 1.0"><h4>Meta Muse Ember 1.0</h4>
+<p>Lançado em 10/11, com afirmações de custo menor que o Claude Haiku 5.5. As fontes disponíveis são agregadores sem verificação independente. Aguarde avaliações com benchmarks reproduzíveis antes de considerar migração.</p>
+</div>
+
+<div class="ra-card ra-muted" aria-label="GPT-6 Cyber — OpenAI"><h4>GPT-6 Cyber — OpenAI</h4>
+<p>Exclusivo para red teams do programa Daybreak. Sem acesso público, sem API disponível. É pesquisa de segurança ofensiva, não um produto para desenvolvedores. Não há nada acionável aqui para a maioria dos times de engenharia agora.</p>
+</div>
+
+<div class="ra-card ra-muted" aria-label="GPT Image 2.6 — Flare e Sunburst"><h4>GPT Image 2.6 — Flare e Sunburst</h4>
+<p>Variantes de geração de imagem lançadas pela OpenAI em 04/11. Para quem já usa o modelo de imagem da OpenAI em produção, pode valer olhar as notas de release. Para quem não usa geração de imagem no produto, pode esperar.</p>
+</div>
+
+<h2>☕ Radar Java + IA</h2>
+
+<p>O LangChain4j <strong>1.23.0</strong>, lançado em 28 de outubro, é a atualização mais relevante para quem constrói agentes em Java hoje. Dois pontos me chamaram atenção:</p>
+
+<p>O primeiro é o <strong>Confidence Cascade</strong>: um padrão de decisão que classifica a confiança da resposta e redireciona para um modelo mais poderoso apenas quando o limiar não é atingido. Na prática, você começa com um modelo menor e barato, e só aciona o modelo caro se o anterior não for confiante o suficiente. Para workloads de classificação, triagem ou extração estruturada, isso pode reduzir custo de forma significativa. <a href="https://ai4jvm.com/">[6]</a></p>
+
+<p>O segundo é a adição de <strong>LLM judges e assertions em <code>langchain4j-test</code></strong>: agora dá para escrever testes de qualidade de resposta diretamente como asserções JUnit, usando um LLM como árbitro. Isso resolve um problema real de quem testa pipelines de IA: como você valida que a saída do agente está correta quando não há um resultado determinístico esperado?</p>
+
+<div class="ra-card" aria-label="Exemplo — Confidence Cascade em LangChain4j 1.23"><h4>Exemplo conceitual — Confidence Cascade</h4>
+<pre><code>// LangChain4j 1.23.0 — JDK 17+
+// Dependência: dev.langchain4j:langchain4j:1.23.0
+
+// Configuração de cascade: começa no modelo leve,
+// escalona para o poderoso se confiança < 0.75
+var cascade = ConfidenceCascade.builder()
+    .firstModel(haiku)             // modelo rápido e barato
+    .fallbackModel(fable52)        // modelo mais capaz
+    .confidenceThreshold(0.75)
+    .build();
+
+String result = cascade.generate("Classifique este contrato...");</code></pre>
+<p class="ra-note">Exemplo hipotético baseado na documentação do padrão. A API exata pode variar — consulte os releases do projeto.</p>
+</div>
+
+<p>No lado do <strong>Spring AI</strong>, a versão estável atual é a 2.0.2 (23/10/2026). Há menção não confirmada de um módulo experimental de agentes chegando em novembro 2026. Se você está em Spring Boot e quer agentes, o caminho hoje ainda é via <code>@Tool</code> com advisor loop — funciona, mas não tem a expressividade do LangChain4j para cenários mais complexos. <a href="https://github.com/spring-projects/spring-ai/releases">[7]</a></p>
+
+<p>Um dado prático importante para quem usa <strong>os dois frameworks juntos</strong>: há um problema conhecido de colisão de beans quando os dois starters coexistem no mesmo projeto. Se você está nessa situação, isole os contextos Spring ou escolha um dos dois por módulo.</p>
+
+<h2>Conclusão</h2>
+
+<p>A semana foi densa. O lançamento simultâneo do Fable 5.2 e do Gemini 4 Carbon cria uma escolha legítima entre qualidade máxima de raciocínio e controle de custo — e essa escolha já é decisão de arquitetura. Não existe resposta certa; existe a que faz sentido para o seu workload.</p>
+
+<p>No Java, o LangChain4j 1.23 segue entregando com consistência. O Confidence Cascade é o tipo de padrão que reduz custo sem sacrificar qualidade — vale incorporar no radar de qualquer time que já usa LLMs em produção.</p>
+
+<p>Amanhã acompanho se o Spring AI Agents experimental de fato se confirma. Se sair, vai merecer um artigo dedicado.</p>
+
+<h2>Fontes consultadas</h2>
+<ol class="ra-refs">
+  <li><a href="https://www.anthropic.com/claude/fable">Claude Fable 5.2 — Anthropic</a> (acesso em 11/11/2026)</li>
+  <li><a href="https://www.marktechpost.com/2026/11/10/anthropic-claude-fable-5-2-mythos-5-2-release/">Anthropic Launches Claude Fable 5.2 and Mythos 5.2 — MarkTechPost</a> (acesso em 11/11/2026)</li>
+  <li><a href="https://venturebeat.com/technology/google-gemini-4-carbon-is-now-publicly-available-and-it-undercuts-claude-fable-5-2-and-opus-5-5-on-api-price">Google Gemini 4 Carbon is now publicly available — VentureBeat</a> (acesso em 11/11/2026)</li>
+  <li><a href="https://mlq.ai/news/google-makes-gemini-4-carbon-widely-available-at-2-per-million-input-tokens-and-previews-agent-swarms/">Google makes Gemini 4 Carbon widely available — MLQ.ai</a> (acesso em 11/11/2026)</li>
+  <li><a href="https://cryptobriefing.com/anthropic-unveils-ai-office-tools-ahead-of-ipo-challenging-microsoft-google/">Anthropic unveils AI office tools ahead of IPO — CryptoBriefing</a> (acesso em 11/11/2026)</li>
+  <li><a href="https://ai4jvm.com/">LangChain4j 1.23.0 release notes — AI4JVM</a> (acesso em 11/11/2026)</li>
+  <li><a href="https://github.com/spring-projects/spring-ai/releases">Spring AI Releases — GitHub</a> (acesso em 11/11/2026)</li>
+  <li><a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0">Spring AI vs LangChain4j in October 2026 — DEV Community</a> (acesso em 11/11/2026)</li>
+  <li><a href="https://shattered.io/pt/claude-fable-5-2-mythos-5-2-preco-velocidade-2026/">Claude Fable 5.2: 30% mais rápido por $8/Milhão — Shattered.io</a> (acesso em 11/11/2026)</li>
+</ol>
+
+<div class="ra-next" aria-label="Próximo artigo"><h2>Qual tema você gostaria de ver no próximo artigo?</h2>
+<ol>
+  <li><strong>Confidence Cascade com LangChain4j 1.23 na prática</strong> <span class="ra-rec">★ Recomendado para continuar</span><br>Você aprenderá a implementar o padrão de cascata de confiança em um agente Java real, comparando custo e latência entre os modelos do cascade.</li>
+  <li><strong>FinOps com LLMs: como medir e controlar custo por tarefa em produção</strong><br>Você aprenderá a montar um dashboard de custo por operação, identificar os principais gargalos de tokens e aplicar estratégias de redução sem perder qualidade.</li>
+  <li><strong>Gemini 4 Carbon vs Claude Fable 5.2: benchmark prático para código Java</strong><br>Você aprenderá a montar um benchmark reproduzível para comparar os dois modelos no seu contexto, com métricas de qualidade, latência e custo por tarefa.</li>
+</ol>
+<p>Marque o tema que você mais gostaria de ver ou colocar em prática.</p>
+</div>
+
+</div></div>
