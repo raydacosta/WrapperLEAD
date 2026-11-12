@@ -1,0 +1,175 @@
+<style>
+.ra-art{background:#0B1220;color:#E5E7EB;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.75;padding:40px 16px;border-radius:12px;overflow-wrap:anywhere}
+.ra-wrap{max-width:720px;margin:0 auto}
+.ra-art h2{color:#F8FAFC;font-size:1.55em;line-height:1.3;margin:2.2em 0 .6em;letter-spacing:-.01em}
+.ra-art h3{color:#F8FAFC;font-size:1.18em;line-height:1.35;margin:1.8em 0 .5em}
+.ra-art p{margin:0 0 1.1em}
+.ra-art strong{color:#F8FAFC}
+.ra-art a{color:#38BDF8;text-decoration:underline;text-underline-offset:3px}
+.ra-art a:focus-visible{outline:2px solid #38BDF8;outline-offset:2px}
+.ra-art ul,.ra-art ol{margin:0 0 1.2em;padding-left:1.3em}
+.ra-art li{margin:.35em 0}
+.ra-art code{font-family:"JetBrains Mono",Consolas,monospace;font-size:.9em;background:#111827;border:1px solid #1E3A52;border-radius:4px;padding:.05em .35em}
+.ra-art pre{background:#111827;border:1px solid #1E3A52;border-radius:8px;padding:14px 16px;overflow-x:auto;margin:0 0 1.2em;line-height:1.55}
+.ra-art pre code{background:none;border:0;padding:0;font-size:.86em}
+.ra-lead{font-size:1.12em;color:#CBD5E1;border-left:3px solid #38BDF8;padding-left:16px;margin-bottom:1.6em}
+.ra-card{background:#13283A;border:1px solid #1E3A52;border-top:3px solid #38BDF8;border-radius:12px;padding:20px 22px;margin:1.8em 0}
+.ra-card h4{color:#38BDF8;font-size:.82em;text-transform:uppercase;letter-spacing:.08em;margin:0 0 .6em}
+.ra-card>:last-child{margin-bottom:0}
+.ra-card.ra-warn{border-top-color:#FBBF24}.ra-card.ra-warn h4{color:#FBBF24}
+.ra-card.ra-ok{border-top-color:#34D399}.ra-card.ra-ok h4{color:#34D399}
+.ra-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:1.4em 0}
+.ra-grid .ra-card{margin:0}
+.ra-steps{counter-reset:s;list-style:none;padding-left:0!important}
+.ra-steps li{counter-increment:s;position:relative;padding-left:2.4em;margin:.7em 0}
+.ra-steps li::before{content:counter(s);position:absolute;left:0;top:.1em;width:1.7em;height:1.7em;border-radius:50%;background:#38BDF8;color:#0B1220;font-weight:700;font-size:.85em;display:flex;align-items:center;justify-content:center}
+.ra-tbl{overflow-x:auto;margin:1.4em 0 1.6em;border:1px solid #1E3A52;border-radius:10px}
+.ra-tbl table{width:100%;border-collapse:collapse;font-size:.9em;min-width:520px}
+.ra-tbl th{background:#13283A;color:#F8FAFC;text-align:left;padding:10px 12px;font-weight:600;border-bottom:1px solid #1E3A52}
+.ra-tbl td{color:#E5E7EB;padding:9px 12px;border-bottom:1px solid #1A2638;vertical-align:top}
+.ra-tbl tr:last-child td{border-bottom:none}
+.ra-art figure{margin:1.6em 0}.ra-art figcaption{font-size:.85em;color:#94A3B8;margin-top:.5em}
+.ra-note{font-size:.88em;color:#94A3B8}
+.ra-next ol{padding-left:1.3em}
+.ra-rec{display:inline-block;margin-left:.4em;padding:.05em .55em;border-radius:999px;background:#38BDF8;color:#0B1220;font-size:.78em;font-weight:700}
+.ra-refs{font-size:.86em;color:#94A3B8}
+.ra-refs a{color:#7DD3FC;word-break:break-all}
+@media (max-width:600px){.ra-art{font-size:16px;padding:28px 14px}.ra-card{padding:16px}.ra-art h2{font-size:1.4em}}
+</style>
+<div class="ra-art"><div class="ra-wrap">
+
+<p class="ra-lead">12 de novembro de 2026. Uma quinta-feira que ficará marcada para o ecossistema de IA: a Anthropic abriu sua janela de IPO avaliada em até US$ 1,4 trilhão, trouxe dois novos modelos mais baratos e rápidos, e o Google finalizou o rollout do Gemini 4 Carbon para consumidores. No lado Java, o ecossistema de integração com LLMs segue maduro e acelerado — com lançamentos relevantes nas últimas semanas que merecem atenção de qualquer time que constrói software enterprise com IA.</p>
+
+<div class="ra-card" aria-label="O que você vai acompanhar hoje"><h4>O que você vai acompanhar hoje</h4><ul>
+<li>O IPO da Anthropic e o que ele significa para o mercado de IA</li>
+<li>Claude Fable 5.2 e Mythos 5.2: novos modelos mais baratos com ganhos técnicos reais</li>
+<li>Google Gemini 4 Carbon: o novo número 1 nos benchmarks e o recurso /swarm</li>
+<li>Radar Java + IA: Spring AI 2.1, LangChain4j 1.23 e Quarkus LangChain4j 1.15</li>
+<li>Observabilidade e FinOps para sistemas agentivos: o que está maduro e o que ainda falta</li>
+</ul></div>
+
+<h2>O que chamou minha atenção hoje</h2>
+
+<h3>🔴 Anthropic abre IPO com valuation de até US$ 1,4 trilhão</h3>
+
+<p>A Anthropic iniciou seu roadshow ontem, 10 de novembro, com uma faixa de preço proposta entre US$ 70 e US$ 78 por ação, cobrindo 825 milhões de ações. No preço máximo, o valuation em base totalmente diluída chega a US$ 1,4 trilhão — um número que coloca a empresa entre as maiores do setor de tecnologia antes mesmo de seu primeiro pregão. A previsão é que as ações comecem a ser negociadas na Nasdaq, sob o ticker <code>ANT</code>, entre 18 e 20 de novembro. <a href="https://finance.yahoo.com/technology/article/anthropic-ipo-what-we-know-143321078.html">[1]</a></p>
+
+<p>O que me chama atenção aqui não é o número em si — é o contexto. A empresa apresentou um prejuízo operacional de US$ 567 milhões no terceiro trimestre, revertendo um lucro de US$ 974 milhões no trimestre anterior. <a href="https://invezz.com/uk/news/2026/11/10/anthropic-releases-new-cheaper-and-faster-claude-models-ahead-of-ipo/">[2]</a> Ou seja, o mercado está precificando potencial de crescimento e posição estratégica, não rentabilidade imediata. Para times que tomam decisões de plataforma — qual LLM usar em produção — isso importa: a Anthropic precisará gerar receita de forma agressiva após o IPO, o que geralmente se traduz em pressão de preço e novos planos empresariais.</p>
+
+<div class="ra-card" aria-label="Impacto para decisões de plataforma"><h4>Impacto para decisões de plataforma</h4><p>Empresas pré-IPO negociam contratos agressivamente. Empresas pós-IPO têm compromissos com acionistas. Se você está avaliando migrar infraestrutura de IA para Claude, o próximo trimestre pode ser a melhor janela para negociar termos de longo prazo — antes que a pressão por margens chegue.</p></div>
+
+<h3>🔴 Claude Fable 5.2 e Mythos 5.2: mais barato, mais rápido, mantendo profundidade técnica</h3>
+
+<p>Junto ao anúncio do IPO, a Anthropic lançou Claude Fable 5.2 e Claude Mythos 5.2 em 10 de novembro. Os dois modelos são apresentados como versões mais baratas e rápidas com ganhos em codificação, raciocínio e visão. O Mythos 5.2 é descrito por trackers como equivalente ao Fable 5.2 em capacidade, mas com salvaguardas reduzidas para organizações verificadas — ele mantém o perfil de acesso restrito que a série Mythos sempre teve. <a href="https://www.techtarget.com/news/with-ipo-looming-anthropic-launches-new-ai-models-workplace-tools/874410/">[3]</a></p>
+
+<p>Para quem usa a API Anthropic em produção: essa redução de preço em relação ao 5.1 é o sinal mais importante do dia. Arquiteturas RAG e pipelines multiagente consomem tokens em escala — qualquer redução de custo aqui tem impacto direto no P&L de produtos com IA. Vale revisar contratos e rodar seus workloads atuais contra os novos preços antes do IPO, enquanto a janela de negociação ainda está aberta.</p>
+
+<div class="ra-card ra-ok" aria-label="O que testar agora"><h4>O que testar agora</h4><ul>
+<li>Execute seus benchmarks internos contra o Fable 5.2 — ele pode substituir o 5.1 sem degradação perceptível em casos de uso técnicos padrão</li>
+<li>Compare latência em chamadas de função (tool use) — a versão .2 promete melhorias aqui</li>
+<li>Se você usa visão (imagens + texto), os ganhos do 5.2 são mais visíveis nessa modalidade</li>
+</ul></div>
+
+<h3>🟡 Google Gemini 4 Carbon: número 1 nos benchmarks, com ressalva importante</h3>
+
+<p>O Google finalizou o rollout do Gemini 4 Carbon para consumidores em 10 de novembro, primeiramente para assinantes AI Ultra no aplicativo Gemini, Antigravity e AI Mode. O Carbon foi anunciado em 28 de outubro como substituto para tarefas mais complexas do que o Argon — especialmente codificação multi-etapa e pesquisa científica aberta. O Google afirma que o modelo alcançou a posição número 1 no Artificial Analysis Intelligence Index v5.0, com score de 59. <a href="https://venturebeat.com/technology/google-unveils-gemini-4-carbon-retaking-the-worlds-no-1-spot-on-updated-harder-benchmarks-but-access-is-limited">[4]</a></p>
+
+<p>Mas há um detalhe operacional importante: o Carbon usa mais tokens do que o Argon para produzir suas respostas, mesmo com o mesmo preço por token. Para workloads de alto volume, o custo efetivo pode ser maior. The Decoder capturou bem esse ponto: <em>"Carbon arrives just in time to feel like yesterday's news in the fastest model cycle yet."</em> <a href="https://the-decoder.com/gemini-4-carbon-arrives-just-in-time-to-feel-like-yesterdays-news-in-the-fastest-model-cycle-yet/">[5]</a> O ciclo de lançamentos está tão acelerado que o planejamento de migração mal acompanha.</p>
+
+<p>O recurso que mais me interessa no Carbon é o <strong>/swarm no Antigravity</strong>, que transforma um único prompt em um time de agentes rastreáveis em tempo real com janela de contexto de 1 milhão de tokens via API. Isso sinaliza uma aposta do Google na orquestração multiagente como interface de produto — não apenas como infraestrutura. <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/">[6]</a></p>
+
+<h3>🟡 Observabilidade e FinOps para agentes: 89% das equipes monitoram, mas apenas 52% avaliam</h3>
+
+<p>Uma pesquisa da LangChain (citada em fontes secundárias) aponta que 89% das equipes com agentes em produção já têm alguma forma de observabilidade implementada, mas apenas 52% têm sistemas de avaliação estruturados. É um dado preocupante: você sabe que o agente está rodando, mas não sabe se está rodando bem. <a href="https://dev.to/serifcolakel/observability-for-ai-agents-tracing-evaluation-and-cost-control-in-production-1ln">[7]</a></p>
+
+<p>No lado de ferramentas: o Redis anunciou seis novas capacidades para seu Agent Context Engine, incluindo roteamento, procedimentos reutilizáveis, contexto persistente, observabilidade e mensageria entre agentes. O OpenTelemetry GenAI ainda está em status <em>Development</em> (desde 2 de novembro), mas já é o padrão de exportação dominante — o que torna a troca de ferramentas de observabilidade relativamente indolor. O CrowdStrike adicionou um "AI Kill Switch" no Falcon Guardian que permite a equipes de segurança interromper um agente em execução. <a href="https://www.moderndata101.com/blogs/top-trends-of-enterprise-ai-observability">[8]</a></p>
+
+<div class="ra-card ra-warn" aria-label="Gap crítico em produção"><h4>Gap crítico em produção</h4><p>Observabilidade sem avaliação é só log. Você sabe que o agente chamou 47 ferramentas, mas não sabe se o resultado foi correto. Implante evals antes de considerar um sistema agentivo estável — no mínimo uma suite de regressão noturna com LLM-as-judge.</p></div>
+
+<h2>O que vale estudar hoje</h2>
+
+<div class="ra-grid">
+<div class="ra-card" aria-label="Agentic RAG"><h4>Agentic RAG — Arquiteturas e Avaliação</h4><p>Um paper de 2026 no arXiv (SoK) faz uma revisão sistemática das taxonomias, arquiteturas e métodos de avaliação de RAG agentivo. É o mapa mais completo do estado da arte hoje. <a href="https://arxiv.org/pdf/2603.07379">[9]</a></p></div>
+<div class="ra-card" aria-label="Spring AI Decision API"><h4>Spring AI 2.1 — DecisionModel API</h4><p>A documentação do Spring AI 2.1 já documenta a API DecisionModel com implementações para Ollama e System One. Vale explorar como essa abstração se encaixa em fluxos de roteamento de agentes. <a href="https://docs.spring.io/spring-ai/reference/2.1/api/decision.html">[10]</a></p></div>
+<div class="ra-card" aria-label="FinOps com LLMs"><h4>FinOps com LLMs — Tokens de reasoning</h4><p>Com os modelos 5.2 da Anthropic, agora é o momento de rever como você contabiliza tokens de reasoning (thinking) no seu orçamento. Muitos times subestimam o custo dos tokens intermediários em pipelines de agentes.</p></div>
+<div class="ra-card" aria-label="Quarkus LangChain4j 1.15"><h4>Quarkus LangChain4j 1.15.0</h4><p>Lançado em 7 de novembro, traz updates no schema do Gemini e melhorias no MCP header handling. Se você roda LangChain4j em Quarkus, esta atualização é direta e vale aplicar. <a href="https://github.com/langchain4j">[11]</a></p></div>
+</div>
+
+<h2>O que pode ser ignorado hoje</h2>
+
+<p>Com tanto sinal no ar, é fácil se perder em ruído. Hoje, posso recomendar ignorar o seguinte:</p>
+
+<div class="ra-card" aria-label="GPT-6 Cyber"><h4>GPT-6 Cyber (OpenAI)</h4><p>Trackers automáticos listam um "GPT-6 Cyber" com data de lançamento em 5 de novembro, mas não há anúncio oficial da OpenAI confirmando esse modelo. Aguarde comunicação direta antes de qualquer avaliação ou migração.</p></div>
+
+<div class="ra-card" aria-label="Rankings de benchmark como verdade absoluta"><h4>Rankings de benchmark como verdade absoluta</h4><p>O Google reivindica o número 1 no Artificial Analysis Index com o Carbon. A Anthropic vai contra-argumentar com o Mythos 5.2. Esses números medem proxies, não seu caso de uso real. Benchmarks servem para orientar testes internos — nunca para substituí-los.</p></div>
+
+<h2>☕ Radar Java + IA</h2>
+
+<p>O ecossistema Java para IA está em um momento de consolidação. Os dois frameworks dominantes — Spring AI e LangChain4j — tiveram movimentos relevantes nas últimas semanas, e vale ter clareza sobre onde cada um está.</p>
+
+<p><strong>LangChain4j 1.23.0</strong> foi lançado em 28 de outubro e introduz dois padrões relevantes: <strong>Confidence Cascade</strong> (encadear chamadas de modelo do mais barato ao mais caro conforme o nível de confiança da resposta) e <strong>Decision Agent</strong> (agente que seleciona entre ferramentas com base em raciocínio explícito). Também chegou o <code>AiServiceInvocationSummaryEvent</code>, que facilita a coleta de métricas de observabilidade a partir dos AiServices. <a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0">[12]</a></p>
+
+<p><strong>Spring AI 2.1.0-RC1</strong> está em desenvolvimento ativo — o M1 saiu em 25 de setembro com a DecisionModel API, suporte ao protocolo MCP revisão 2026-07-28 e streaming de deltas de argumentos de tool calls. Para times em Spring Boot 3+, a migração do 2.0 para o 2.1 tem breaking changes menores mas traz ganhos importantes na abstração de agentes. <a href="https://spring.io/blog/2026/09/25/spring-ai-2-1-0-M1-available-now/">[13]</a></p>
+
+<p><strong>Quarkus LangChain4j 1.15.0</strong>, lançado em 7 de novembro, resolve problemas de compatibilidade com o Gemini schema e corrige o handling de headers MCP. Se você usa Quarkus + LangChain4j em qualquer pipeline que consome a API Gemini, esta atualização é obrigatória.</p>
+
+<div class="ra-card ra-ok" aria-label="Padrão Confidence Cascade em Java"><h4>Padrão Confidence Cascade com LangChain4j 1.23</h4><p>A ideia é simples e economicamente relevante: tente primeiro com um modelo leve (ex.: Haiku 5.5). Se a confiança retornada for baixa, escale para um modelo mais capaz (ex.: Fable 5.2). Só use o modelo pesado quando necessário. Para workloads de classificação ou extração em larga escala, isso pode reduzir custos em 60–80%.</p></div>
+
+<pre><code>// LangChain4j 1.23.0 — Java 21+
+// Dependência: dev.langchain4j:langchain4j:1.23.0
+
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.confidence.ConfidenceCascade;
+
+ChatLanguageModel cheap  = AnthropicChatModel.builder()
+    .modelName("claude-haiku-5-5")
+    .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+    .build();
+
+ChatLanguageModel capable = AnthropicChatModel.builder()
+    .modelName("claude-fable-5-2")
+    .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+    .build();
+
+// Cascade: usa cheap; se confidence < 0.75, escalona para capable
+ConfidenceCascade cascade = ConfidenceCascade.builder()
+    .add(cheap,   0.75)
+    .add(capable, 0.0)
+    .build();
+
+String result = cascade.generate("Classifique o sentimento: 'O produto é ok.'");
+// Exemplo hipotético — confirme a API exata na documentação do LangChain4j 1.23
+</code></pre>
+
+<div class="ra-card ra-warn" aria-label="Atenção na escolha do framework"><h4>Atenção: Spring AI vs LangChain4j</h4><p>Se você está num projeto Spring Boot existente, o Spring AI oferece integração nativa com o ecossistema (injeção de dependência, autoconfigure, Actuator). Se você está num projeto Quarkus ou precisa de portabilidade entre frameworks, o LangChain4j é a escolha mais madura. Não migre por hype — avalie pela sua stack atual.</p></div>
+
+<h2>Conclusão</h2>
+
+<p>O dia de hoje foi denso. Um IPO de US$ 1,4 trilhão com novos modelos mais baratos, um modelo do Google que reivindica o topo dos benchmarks com um recurso de multiagentes integrado ao produto, e um ecossistema Java que está claramente em modo de execução — não mais de experimentação. Para equipes que estão construindo produtos com IA, o sinal mais claro é este: o custo de inferência está caindo de forma consistente, o que remove a última barreira econômica para colocar LLMs em produção em fluxos que antes eram inviáveis. A questão agora é de arquitetura e observabilidade — não mais de viabilidade.</p>
+
+<h2>Fontes consultadas</h2>
+<ol class="ra-refs">
+<li><a href="https://finance.yahoo.com/technology/article/anthropic-ipo-what-we-know-143321078.html">Everything you need to know ahead of Anthropic's IPO — Yahoo Finance</a> (acesso em 12/11/2026)</li>
+<li><a href="https://invezz.com/uk/news/2026/11/10/anthropic-releases-new-cheaper-and-faster-claude-models-ahead-of-ipo/">Anthropic releases new 'cheaper and faster' Claude models ahead of IPO — Invezz</a> (acesso em 12/11/2026)</li>
+<li><a href="https://www.techtarget.com/news/with-ipo-looming-anthropic-launches-new-ai-models-workplace-tools/874410/">With IPO looming, Anthropic launches new AI models, workplace tools — TechTarget</a> (acesso em 12/11/2026)</li>
+<li><a href="https://venturebeat.com/technology/google-unveils-gemini-4-carbon-retaking-the-worlds-no-1-spot-on-updated-harder-benchmarks-but-access-is-limited">Google unveils Gemini 4 Carbon, retaking the world's no. 1 spot — VentureBeat</a> (acesso em 12/11/2026)</li>
+<li><a href="https://the-decoder.com/gemini-4-carbon-arrives-just-in-time-to-feel-like-yesterdays-news-in-the-fastest-model-cycle-yet/">Gemini 4 Carbon arrives just in time to feel like yesterday's news — The Decoder</a> (acesso em 12/11/2026)</li>
+<li><a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/">Gemini 4 Carbon is now available — Google Blog</a> (acesso em 12/11/2026)</li>
+<li><a href="https://dev.to/serifcolakel/observability-for-ai-agents-tracing-evaluation-and-cost-control-in-production-1ln">Observability for AI Agents: Tracing, Evaluation and Cost Control — DEV Community</a> (acesso em 12/11/2026)</li>
+<li><a href="https://www.moderndata101.com/blogs/top-trends-of-enterprise-ai-observability">Enterprise AI Observability Trends of 2026 — ModernData101</a> (acesso em 12/11/2026)</li>
+<li><a href="https://arxiv.org/pdf/2603.07379">SoK: Agentic Retrieval-Augmented Generation (RAG) — ArXiv</a> (acesso em 12/11/2026)</li>
+<li><a href="https://docs.spring.io/spring-ai/reference/2.1/api/decision.html">Spring AI 2.1 — DecisionModel API — spring.io</a> (acesso em 12/11/2026)</li>
+<li><a href="https://github.com/langchain4j">LangChain4j — GitHub</a> (acesso em 12/11/2026)</li>
+<li><a href="https://dev.to/jamilxt/spring-ai-vs-langchain4j-in-october-2026-both-shipped-big-here-is-how-to-pick-3bm0">Spring AI vs LangChain4j in October 2026 — DEV Community</a> (acesso em 12/11/2026)</li>
+<li><a href="https://spring.io/blog/2026/09/25/spring-ai-2-1-0-M1-available-now/">Spring AI 2.1.0-M1 Available Now — spring.io</a> (acesso em 12/11/2026)</li>
+</ol>
+
+<div class="ra-next" aria-label="Próximo artigo"><h2>Qual tema você gostaria de ver no próximo artigo?</h2>
+<ol>
+<li><strong>Confidence Cascade em produção: como calibrar limiares e medir economia real</strong> <span class="ra-rec">★ Recomendado para continuar</span><br>Você aprenderá a construir e tunar um pipeline de Confidence Cascade com LangChain4j, medir a redução de custo em workloads reais e integrar observabilidade para monitorar a qualidade das respostas em cada camada.</li>
+<li><strong>Spring AI 2.1 vs LangChain4j 1.23: guia prático de migração para times enterprise</strong><br>Você entenderá as diferenças arquiteturais entre os dois frameworks, quando migrar faz sentido e como conduzir uma prova de conceito controlada antes de tomar uma decisão de plataforma.</li>
+<li><strong>Construindo um sistema de avaliação (evals) para agentes Java em produção</strong><br>Você aprenderá a montar uma suite de evals com LLM-as-judge integrada ao seu pipeline de CI/CD, com métricas de qualidade, cobertura e custo que fazem sentido para times de engenharia.</li>
+</ol>
+<p>Marque o tema que você mais gostaria de ver ou colocar em prática.</p></div>
+
+</div></div>
